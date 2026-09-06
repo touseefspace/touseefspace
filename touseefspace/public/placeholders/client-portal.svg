@@ -1,0 +1,56 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" rx="16" fill="#0c0d10"/>
+  <rect x="0.5" y="0.5" width="1199" height="749" rx="15.5" stroke="#22252c"/>
+
+  <!-- Top bar -->
+  <rect width="1200" height="48" rx="16" fill="#15171e"/>
+  <circle cx="28" cy="24" r="6" fill="#303542"/>
+  <circle cx="48" cy="24" r="6" fill="#303542"/>
+  <circle cx="68" cy="24" r="6" fill="#303542"/>
+  <text x="96" y="28" fill="#8d94a5" font-family="monospace" font-size="11">CLIENT COLLABORATION &amp; TELEMETRY PORTAL</text>
+
+  <!-- Metrics Grid -->
+  <g transform="translate(60, 80)">
+    <rect x="0" y="0" width="340" height="110" rx="10" fill="#15171e" stroke="#2a2e3a"/>
+    <text x="24" y="36" fill="#8d94a5" font-family="sans-serif" font-size="12">ACTIVE SERVICE USERS</text>
+    <text x="24" y="74" fill="#ffffff" font-family="sans-serif" font-size="28" font-weight="700">48,290</text>
+    <text x="24" y="96" fill="#4ade80" font-family="monospace" font-size="11">↑ +35% QoQ retention</text>
+
+    <rect x="370" y="0" width="340" height="110" rx="10" fill="#15171e" stroke="#2a2e3a"/>
+    <text x="394" y="36" fill="#8d94a5" font-family="sans-serif" font-size="12">P99 TELEMETRY LATENCY</text>
+    <text x="394" y="74" fill="#ffffff" font-family="sans-serif" font-size="28" font-weight="700">182ms</text>
+    <text x="394" y="96" fill="#4ade80" font-family="monospace" font-size="11">Edge computing &amp; Redis</text>
+
+    <rect x="740" y="0" width="340" height="110" rx="10" fill="#15171e" stroke="#2a2e3a"/>
+    <text x="764" y="36" fill="#8d94a5" font-family="sans-serif" font-size="12">SUPPORT TICKETS REDUCTION</text>
+    <text x="764" y="74" fill="#ffffff" font-family="sans-serif" font-size="28" font-weight="700">-76%</text>
+    <text x="764" y="96" fill="#4ade80" font-family="monospace" font-size="11">Self-service transparency</text>
+  </g>
+
+  <!-- Main Chart Section -->
+  <g transform="translate(60, 220)">
+    <rect width="1080" height="460" rx="12" fill="#15171e" stroke="#2a2e3a"/>
+    <text x="32" y="44" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="600">Enterprise Service Telemetry &amp; SLA Tracking</text>
+    <text x="32" y="68" fill="#8d94a5" font-family="monospace" font-size="11">Sub-second updates via Server-Sent Events (SSE)</text>
+
+    <!-- Simulated Chart Bars / Curves -->
+    <line x1="32" y1="120" x2="1048" y2="120" stroke="#22252c"/>
+    <line x1="32" y1="200" x2="1048" y2="200" stroke="#22252c"/>
+    <line x1="32" y1="280" x2="1048" y2="280" stroke="#22252c"/>
+    <line x1="32" y1="360" x2="1048" y2="360" stroke="#22252c"/>
+
+    <path d="M 60 380 Q 200 320 340 340 T 620 220 T 900 180 T 1020 140" fill="none" stroke="#ffffff" stroke-width="3"/>
+    <circle cx="1020" cy="140" r="5" fill="#ffffff"/>
+
+    <rect x="60" y="400" width="80" height="24" rx="4" fill="#22252c"/>
+    <text x="76" y="416" fill="#8d94a5" font-family="monospace" font-size="10">JAN</text>
+    <rect x="220" y="400" width="80" height="24" rx="4" fill="#22252c"/>
+    <text x="236" y="416" fill="#8d94a5" font-family="monospace" font-size="10">APR</text>
+    <rect x="500" y="400" width="80" height="24" rx="4" fill="#22252c"/>
+    <text x="516" y="416" fill="#8d94a5" font-family="monospace" font-size="10">JUL</text>
+    <rect x="800" y="400" width="80" height="24" rx="4" fill="#222222"/>
+    <text x="816" y="416" fill="#ffffff" font-family="monospace" font-size="10">OCT</text>
+    <rect x="980" y="400" width="80" height="24" rx="4" fill="#ffffff"/>
+    <text x="996" y="416" fill="#0a0a0a" font-family="monospace" font-size="10" font-weight="700">NOW</text>
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+# ==========================================
+# Root .gitignore — touseefspace Monorepo
+# ==========================================
+
+# Dependencies
+**/node_modules/
+/.pnp
+.pnp.*
+
+# Next.js build artifacts
+**/.next/
+**/out/
+**/build/
+
+# Sanity Studio build artifacts
+**/dist/
+**/.sanity/
+
+# Environment files and credentials (keep safe!)
+.env*
+*.local
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+**/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+**/next-env.d.ts

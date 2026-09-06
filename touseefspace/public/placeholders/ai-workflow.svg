@@ -1,0 +1,61 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="750" rx="16" fill="#0a0a0a"/>
+  <rect x="0.5" y="0.5" width="1199" height="749" rx="15.5" stroke="#262626"/>
+
+  <!-- Top bar -->
+  <rect width="1200" height="48" rx="16" fill="#141414"/>
+  <circle cx="28" cy="24" r="6" fill="#333333"/>
+  <circle cx="48" cy="24" r="6" fill="#333333"/>
+  <circle cx="68" cy="24" r="6" fill="#333333"/>
+  <text x="96" y="28" fill="#888888" font-family="monospace" font-size="11">AI PIPELINE — AUTOMATED EXTRACTION ENGINE</text>
+
+  <!-- Flow Visualizer -->
+  <g transform="translate(100, 160)">
+    <!-- Node 1: Ingestion -->
+    <rect x="0" y="80" width="220" height="150" rx="12" fill="#141414" stroke="#333333" stroke-width="1.5"/>
+    <rect x="16" y="96" width="188" height="24" rx="4" fill="#222222"/>
+    <text x="28" y="112" fill="#ffffff" font-family="sans-serif" font-size="11" font-weight="600">01 / DOCUMENT INTAKE</text>
+    <text x="16" y="145" fill="#a0a0a0" font-family="monospace" font-size="11">Raw PDF / Image / XML</text>
+    <text x="16" y="165" fill="#666666" font-family="monospace" font-size="11">Multi-page vendor bills</text>
+    <rect x="16" y="190" width="80" height="20" rx="4" fill="#1c2b1e"/>
+    <text x="24" y="204" fill="#4ade80" font-family="monospace" font-size="10">OCR: 300DPI</text>
+
+    <!-- Connector 1 -->
+    <path d="M 220 155 L 290 155" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4"/>
+    <polygon points="290,150 300,155 290,160" fill="#ffffff"/>
+
+    <!-- Node 2: LLM Validation & Classification -->
+    <rect x="300" y="50" width="260" height="210" rx="12" fill="#141414" stroke="#ffffff" stroke-width="1.5"/>
+    <rect x="316" y="66" width="228" height="24" rx="4" fill="#222222"/>
+    <text x="328" y="82" fill="#ffffff" font-family="sans-serif" font-size="11" font-weight="600">02 / LLM PARSER &amp; VALIDATOR</text>
+    <text x="316" y="115" fill="#a0a0a0" font-family="monospace" font-size="11">• JSON Schema Enforcement</text>
+    <text x="316" y="135" fill="#a0a0a0" font-family="monospace" font-size="11">• Line-Item Reconciliation</text>
+    <text x="316" y="155" fill="#a0a0a0" font-family="monospace" font-size="11">• Tax &amp; Currency Conversion</text>
+    <text x="316" y="175" fill="#a0a0a0" font-family="monospace" font-size="11">• Confidence Score: 99.2%</text>
+    <rect x="316" y="210" width="130" height="24" rx="4" fill="#ffffff"/>
+    <text x="326" y="226" fill="#0a0a0a" font-family="sans-serif" font-size="11" font-weight="700">PARSED &amp; VERIFIED</text>
+
+    <!-- Connector 2 -->
+    <path d="M 560 155 L 630 155" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4"/>
+    <polygon points="630,150 640,155 630,160" fill="#ffffff"/>
+
+    <!-- Node 3: Database & ERP Sync -->
+    <rect x="640" y="80" width="220" height="150" rx="12" fill="#141414" stroke="#333333" stroke-width="1.5"/>
+    <rect x="656" y="96" width="188" height="24" rx="4" fill="#222222"/>
+    <text x="668" y="112" fill="#ffffff" font-family="sans-serif" font-size="11" font-weight="600">03 / DATABASE SYNC</text>
+    <text x="656" y="145" fill="#a0a0a0" font-family="monospace" font-size="11">PostgreSQL + Ledger</text>
+    <text x="656" y="165" fill="#666666" font-family="monospace" font-size="11">Automatic journal entry</text>
+    <rect x="656" y="190" width="90" height="20" rx="4" fill="#1c2b1e"/>
+    <text x="664" y="204" fill="#4ade80" font-family="monospace" font-size="10">STATUS: COMMITTED</text>
+  </g>
+
+  <!-- Live Output Log Terminal -->
+  <g transform="translate(100, 470)">
+    <rect width="1000" height="190" rx="8" fill="#111111" stroke="#262626"/>
+    <text x="24" y="32" fill="#888888" font-family="monospace" font-size="11">PIPELINE AUDIT LOGS [REAL-TIME]</text>
+    <text x="24" y="65" fill="#4ade80" font-family="monospace" font-size="12">✓ [20:01:14] Extracted 42 invoice lines from Vendor_Statement_AE.pdf</text>
+    <text x="24" y="95" fill="#4ade80" font-family="monospace" font-size="12">✓ [20:01:15] Validated tax calculations against UAE FTA compliance schemas</text>
+    <text x="24" y="125" fill="#ffffff" font-family="monospace" font-size="12">→ [20:01:16] Saved 15.2 hours of manual entry | Dispatched webhook notification to Slack</text>
+    <text x="24" y="155" fill="#888888" font-family="monospace" font-size="12">---------------------------------------------------------------------------------------------------------</text>
+  </g>
+</svg>
