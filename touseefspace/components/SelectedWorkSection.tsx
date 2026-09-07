@@ -139,7 +139,7 @@ export default function SelectedWorkSection({
       </div>
 
       {/* Center-Top Counter Status Pill */}
-      <div className="mt-8 sm:mt-10 flex justify-center">
+      <div className="mt-4 sm:mt-7 flex justify-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-(--border-subtle) bg-(--bg-surface)/80 px-4 py-1 backdrop-blur-md font-mono text-xs text-(--ink-muted) shadow-xs select-none">
           <span className="text-(--ink-primary) font-semibold">{formattedActive}</span>
           <span className="opacity-40">/</span>
@@ -152,7 +152,7 @@ export default function SelectedWorkSection({
         onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        className="relative mt-4 sm:mt-6 w-full h-155 sm:h-160 md:h-165 flex items-center justify-center perspective-[1400px]"
+        className="relative mt-2 sm:mt-4 w-full h-118 sm:h-135 md:h-165 flex items-center justify-center perspective-[1400px]"
       >
         {/* Spatial Spotlight Glow Behind the Center Stage */}
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
@@ -164,9 +164,9 @@ export default function SelectedWorkSection({
           onClick={handlePrev}
           aria-label="Previous system"
           title="Previous system (Circular)"
-          className="absolute left-1 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-40 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-surface)/85 hover:bg-(--bg-surface) hover:border-(--border-strong) backdrop-blur-md text-(--ink-primary) shadow-lg transition-all active:scale-95 cursor-pointer"
+          className="flex absolute left-0 sm:left-2 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-40 h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-surface)/90 hover:bg-(--bg-surface) hover:border-(--border-strong) backdrop-blur-md text-(--ink-primary) shadow-lg transition-all active:scale-95 cursor-pointer"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Right Flank Navigation Arrow */}
@@ -174,9 +174,9 @@ export default function SelectedWorkSection({
           onClick={handleNext}
           aria-label="Next system"
           title="Next system (Circular)"
-          className="absolute right-1 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-40 flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-surface)/85 hover:bg-(--bg-surface) hover:border-(--border-strong) backdrop-blur-md text-(--ink-primary) shadow-lg transition-all active:scale-95 cursor-pointer"
+          className="flex absolute right-0 sm:right-2 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-40 h-8 w-8 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-(--border-subtle) bg-(--bg-surface)/90 hover:bg-(--bg-surface) hover:border-(--border-strong) backdrop-blur-md text-(--ink-primary) shadow-lg transition-all active:scale-95 cursor-pointer"
         >
-          <ChevronRight size={20} />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {/* Circular 3D Carousel Stage */}
@@ -251,7 +251,7 @@ export default function SelectedWorkSection({
                   pointerEvents: isFar ? "none" : "auto",
                   cursor: isCenter ? "default" : "pointer",
                 }}
-                className={`absolute w-[90%] sm:w-135 md:w-145 rounded-[28px] overflow-hidden border transition-all duration-300 transform-3d backface-hidden isolate select-none ${
+                className={`absolute w-[88%] sm:w-135 md:w-145 rounded-[28px] overflow-hidden border transition-all duration-300 transform-3d backface-hidden isolate select-none ${
                   isCenter
                     ? "border-(--border-strong) bg-(--bg-surface) shadow-2xl shadow-black/25 dark:shadow-black/70 ring-1 ring-white/15"
                     : "border-(--border-card) dark:border-white/10 bg-(--bg-surface) shadow-xl shadow-black/15 hover:border-(--border-strong) hover:opacity-80"
@@ -274,7 +274,7 @@ export default function SelectedWorkSection({
       </div>
 
       {/* Stage Bottom Navigation & Circular Indicators */}
-      <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-(--border-subtle) pt-6">
+      <div className="mt-4 sm:mt-8 flex items-center justify-between gap-3 border-t border-(--border-subtle) pt-3.5 sm:pt-6">
         {/* Pagination Pill Indicators */}
         <div className="flex items-center gap-1">
           {projects.map((_, i) => (
@@ -283,12 +283,12 @@ export default function SelectedWorkSection({
               type="button"
               onClick={() => setActiveIndex(i)}
               aria-label={`Jump to system ${i + 1} of ${projects.length}`}
-              className="h-10 w-10 flex items-center justify-center cursor-pointer -mx-1"
+              className="h-9 w-7 sm:w-10 flex items-center justify-center cursor-pointer -mx-0.5 sm:-mx-1"
             >
               <span
                 className={`h-2 rounded-full transition-all duration-300 ${
                   i === activeIndex
-                    ? "w-8 bg-(--ink-primary)"
+                    ? "w-6 sm:w-8 bg-(--ink-primary)"
                     : "w-2 bg-(--border-strong) hover:bg-(--ink-muted)"
                 }`}
               />
@@ -296,12 +296,12 @@ export default function SelectedWorkSection({
           ))}
         </div>
 
-        {/* Archive Link */}
+        {/* Projects Link */}
         <Link
           href="/projects"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--ink-muted) hover:text-(--ink-primary) transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-(--ink-muted) hover:text-(--ink-primary) transition-colors shrink-0"
         >
-          All projects archive <ArrowRight size={13} aria-hidden="true" />
+          All projects <ArrowRight size={13} aria-hidden="true" />
         </Link>
       </div>
     </section>
@@ -329,13 +329,13 @@ function StageCardContent({
     project.metrics && project.metrics.length > 0 ? project.metrics[0] : null;
 
   return (
-    <div className="flex flex-col p-5 sm:p-7 md:p-8 h-full rounded-[28px]">
+    <div className="flex flex-col p-4 sm:p-7 md:p-8 h-full rounded-[28px]">
       {/* Top Meta Bar */}
-      <div className="flex items-center justify-between gap-3 pb-3 border-b border-(--border-subtle)">
-        <div className="flex items-center gap-2 font-mono text-[11px] text-(--ink-muted) uppercase tracking-wider">
+      <div className="flex items-center justify-between gap-2 pb-3 border-b border-(--border-subtle)">
+        <div className="flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] text-(--ink-muted) uppercase tracking-wider min-w-0">
           <span className="font-bold text-(--ink-primary)">{formattedIndex}</span>
           <span>·</span>
-          <span className="truncate max-w-45 sm:max-w-55">
+          <span className="truncate max-w-28 sm:max-w-55">
             {project.client || "Client Architecture"}
           </span>
           {project.period && (
@@ -347,8 +347,8 @@ function StageCardContent({
         </div>
 
         {heroMetric && (
-          <div className="shrink-0 flex items-center gap-1 rounded-full border border-emerald-600/30 dark:border-emerald-500/30 bg-emerald-500/10 dark:bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">
-            <Zap size={11} className="text-emerald-700 dark:text-emerald-400" />
+          <div className="shrink-0 flex items-center gap-1 rounded-full border border-emerald-600/30 dark:border-emerald-500/30 bg-emerald-500/10 dark:bg-emerald-500/10 px-2 sm:px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold text-emerald-800 dark:text-emerald-300">
+            <Zap size={10} className="text-emerald-700 dark:text-emerald-400" />
             <span>{heroMetric.value}</span>
             <span className="hidden sm:inline opacity-80 font-normal">
               {heroMetric.label}
@@ -358,8 +358,8 @@ function StageCardContent({
       </div>
 
       {/* Title & 1-Line Elevator Pitch */}
-      <div className="mt-4 space-y-1.5">
-        <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-(--ink-primary) truncate">
+      <div className="mt-3.5 sm:mt-4 space-y-1 sm:space-y-1.5">
+        <h3 className="text-lg sm:text-2xl font-bold tracking-tight text-(--ink-primary) line-clamp-2 leading-snug">
           {project.title}
         </h3>
         <p className="text-xs sm:text-sm text-(--ink-secondary) line-clamp-2 leading-relaxed">
@@ -437,7 +437,7 @@ function StageCardContent({
             href={`/work/${project.slug}`}
             tabIndex={isCenter ? 0 : -1}
             aria-label={`Explore ${project.title} case study`}
-            className="btn-primary h-8 px-3.5 text-xs font-semibold rounded-lg inline-flex items-center gap-1.5 shadow-xs"
+            className="btn-primary h-7! sm:h-8! px-3! sm:px-3.5! text-[11px]! sm:text-xs! font-semibold rounded-lg inline-flex items-center gap-1.5 shadow-xs"
           >
             <span>Explore</span>
             <ArrowRight size={13} aria-hidden="true" />
