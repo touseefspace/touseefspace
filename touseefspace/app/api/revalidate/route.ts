@@ -4,7 +4,7 @@ import { parseBody } from "next-sanity/webhook";
 
 type WebhookPayload = {
   _type?: string;
-  slug?: string;
+  slug?: string | { current?: string };
 };
 
 const TAG_MAP: Record<string, string> = {
@@ -37,7 +37,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { _type, slug } = body;
+    const _type = body._type;
+    const slug = typeof body.slug === "string" ? body.slug : body.slug?.current;
     const revalidatedTags: string[] = [];
     const revalidatedPaths: string[] = [];
 
