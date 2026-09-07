@@ -32,12 +32,20 @@ export default function ProjectSpotlightList({ projects }: { projects: Project[]
   return (
     <div className="mt-12 flex flex-col gap-8 md:gap-10" ref={containerRef}>
       {projects.length > 0 ? (
-        projects.map((project) => (
-          <ProjectCard 
-            key={project.id} 
-            project={project} 
-          />
-        ))
+        projects.map((project, index) => {
+          const projectKey =
+            project.id ||
+            (project as any)._id ||
+            (typeof project.slug === "string" ? project.slug : project.slug?.current) ||
+            `project-${index}`;
+          return (
+            <ProjectCard 
+              key={projectKey} 
+              project={project} 
+              priority={index === 0}
+            />
+          );
+        })
       ) : (
         <div className="rounded-3xl p-12 flex flex-col items-center justify-center text-center bg-(--bg-surface) border border-(--border-card)">
           <div className="h-14 w-14 rounded-2xl bg-(--bg-subtle) border border-(--border-subtle) flex items-center justify-center mb-5">
@@ -55,8 +63,10 @@ export default function ProjectSpotlightList({ projects }: { projects: Project[]
 
 function ProjectCard({ 
   project, 
+  priority = false,
 }: { 
   project: Project; 
+  priority?: boolean;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +114,9 @@ function ProjectCard({
                   src={imageUrl} 
                   alt={imageAlt} 
                   fill
-                  sizes="(max-width: 1024px) 100vw, 560px"
+                  priority={priority}
+                  sizes="(max-width: 640px) 94vw, (max-width: 1024px) 500px, 560px"
+                  quality={85}
                   className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover/mockup:scale-[1.03]"
                 />
               ) : (
@@ -125,7 +137,9 @@ function ProjectCard({
                   src={imageUrl} 
                   alt={imageAlt} 
                   fill
-                  sizes="(max-width: 1024px) 100vw, 560px"
+                  priority={priority}
+                  sizes="(max-width: 640px) 94vw, (max-width: 1024px) 500px, 560px"
+                  quality={85}
                   className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
               ) : (

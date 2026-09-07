@@ -138,203 +138,238 @@ export default function LiquidBackground({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    // 1. Feature Detection for WebGL
-    const gl = (canvas.getContext("webgl2", { powerPreference: "default", alpha: true }) ||
-      canvas.getContext("webgl", { powerPreference: "default", alpha: true }) ||
-      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+    let gl: WebGLRenderingContext | null = null;
+    let program: WebGLProgram | null = null;
+    let positionBuffer: WebGLBuffer | null = null;
+    let vertexShader: WebGLShader | null = null;
+    let fragmentShader: WebGLShader | null = null;
 
-    if (!gl) {
-      setIsSupported(false);
-      return;
-    }
-    setIsSupported(true);
-
-    // 2. Compile Shaders
-    function createShader(type: number, source: string) {
-      const shader = gl!.createShader(type);
-      if (!shader) return null;
-      gl!.shaderSource(shader, source);
-      gl!.compileShader(shader);
-      if (!gl!.getShaderParameter(shader, gl!.COMPILE_STATUS)) {
-        console.error("LiquidBackground shader error:", gl!.getShaderInfoLog(shader));
-        gl!.deleteShader(shader);
-        return null;
-      }
-      return shader;
-    }
-
-    const vertexShader = createShader(gl.VERTEX_SHADER, VERTEX_SHADER_SOURCE);
-    const fragmentShader = createShader(gl.FRAGMENT_SHADER, FRAGMENT_SHADER_SOURCE);
-
-    if (!vertexShader || !fragmentShader) return;
-
-    const program = gl.createProgram();
-    if (!program) return;
-
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error("LiquidBackground program link error:", gl.getProgramInfoLog(program));
-      return;
-    }
-
-    gl.useProgram(program);
-
-    // 3. Fullscreen Quad Geometry
-    const positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-        -1.0, -1.0,
-         1.0, -1.0,
-        -1.0,  1.0,
-        -1.0,  1.0,
-         1.0, -1.0,
-         1.0,  1.0,
-      ]),
-      gl.STATIC_DRAW
-    );
-
-    const aPosition = gl.getAttribLocation(program, "a_position");
-    gl.enableVertexAttribArray(aPosition);
-    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
-
-    // 4. Cache Uniform Locations
-    const uResolution = gl.getUniformLocation(program, "u_resolution");
-    const uTime = gl.getUniformLocation(program, "u_time");
-    const uTheme = gl.getUniformLocation(program, "u_theme");
-    const uIntensity = gl.getUniformLocation(program, "u_intensity");
-    const uSpeed = gl.getUniformLocation(program, "u_speed");
-
-    // 5. Robust Theme Synchronization
-    const getTargetTheme = () => {
-      const themeAttr = document.documentElement.getAttribute("data-theme");
-      if (themeAttr === "light") return 0.0;
-      if (themeAttr === "dark") return 1.0;
-      return window.matchMedia("(prefers-color-scheme: light)").matches ? 0.0 : 1.0;
-    };
-
-    let targetTheme = getTargetTheme();
-    let currentTheme = targetTheme;
-
-    const onThemeChange = () => {
-      targetTheme = getTargetTheme();
-    };
-
-    const themeObserver = new MutationObserver(onThemeChange);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-
-    window.addEventListener("theme-change", onThemeChange);
-    const mediaQueryDark = window.matchMedia("(prefers-color-scheme: dark)");
-    mediaQueryDark.addEventListener("change", onThemeChange);
-
-    // 6. Responsive Resize with Resolution Optimization
-    const resizeCanvas = () => {
-      if (!canvas) return;
-      const width = window.innerWidth || canvas.clientWidth;
-      const height = window.innerHeight || canvas.clientHeight;
-      if (width === 0 || height === 0) return;
-
-      const scale = Math.min(0.65, 1080 / Math.max(width, 1));
-      const displayWidth = Math.max(320, Math.floor(width * scale));
-      const displayHeight = Math.max(180, Math.floor(height * scale));
-
-      if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
-        canvas.width = displayWidth;
-        canvas.height = displayHeight;
-      }
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    };
-
-    const resizeObserver = new ResizeObserver(resizeCanvas);
-    resizeObserver.observe(document.documentElement);
-    resizeCanvas();
-
-    // 7. Reduced motion check
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let isReducedMotion = motionQuery.matches;
-
-    const handleMotionChange = (e: MediaQueryListEvent) => {
-      isReducedMotion = e.matches;
-    };
-    motionQuery.addEventListener("change", handleMotionChange);
-
-    // 8. Animation Loop
     let animationFrameId: number | null = null;
-    let startTime = performance.now();
     let isRunning = false;
-
-    const render = (now: number) => {
-      // Smooth theme cross-fade
-      currentTheme += (targetTheme - currentTheme) * 0.18;
-      if (Math.abs(currentTheme - targetTheme) < 0.004) {
-        currentTheme = targetTheme;
-      }
-
-      // If reduced motion is requested, use very slow serene drift rather than freezing theme transitions
-      const elapsedSeconds = isReducedMotion
-        ? (now - startTime) * 0.0001
-        : (now - startTime) * 0.001;
-
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uResolution, canvas.width, canvas.height);
-      gl.uniform1f(uTime, elapsedSeconds);
-      gl.uniform1f(uTheme, currentTheme);
-
-      const { intensity: curIntensity, speed: curSpeed } = propsRef.current;
-      gl.uniform1f(uIntensity, curIntensity);
-      gl.uniform1f(uSpeed, curSpeed);
-
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-      if (isRunning) {
-        animationFrameId = requestAnimationFrame(render);
-      }
-    };
-
-    const startLoop = () => {
-      if (!isRunning && !document.hidden) {
-        isRunning = true;
-        animationFrameId = requestAnimationFrame(render);
-      }
-    };
-
-    const stopLoop = () => {
-      isRunning = false;
-      if (animationFrameId !== null) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-    };
-
-    const onVisibilityChange = () => {
-      if (document.hidden) {
-        stopLoop();
-      } else {
-        startLoop();
-      }
-    };
-
-    document.addEventListener("visibilitychange", onVisibilityChange);
-
     let idleId: any = null;
     let timerId: any = null;
+    let resizeObserver: ResizeObserver | null = null;
+    let themeObserver: MutationObserver | null = null;
 
-    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      idleId = (window as any).requestIdleCallback(
-        () => {
-          startLoop();
-        },
-        { timeout: 350 }
+    let targetTheme = 1.0;
+    let currentTheme = 1.0;
+    let isReducedMotion = false;
+    let startTime = performance.now();
+    let lastFrameTime = 0;
+
+    const isMobileDevice = () => {
+      if (typeof window === "undefined") return false;
+      return window.innerWidth < 768;
+    };
+
+    // Strongly reduces the likelihood of WebGL competing with the initial critical rendering path
+    const initWebGL = () => {
+      if (!canvas) return;
+
+      // 1. Feature Detection for WebGL
+      gl = (canvas.getContext("webgl2", { powerPreference: "default", alpha: true }) ||
+        canvas.getContext("webgl", { powerPreference: "default", alpha: true }) ||
+        canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+
+      if (!gl) {
+        setIsSupported(false);
+        return;
+      }
+      setIsSupported(true);
+
+      // 2. Compile Shaders
+      function createShader(type: number, source: string) {
+        const shader = gl!.createShader(type);
+        if (!shader) return null;
+        gl!.shaderSource(shader, source);
+        gl!.compileShader(shader);
+        if (!gl!.getShaderParameter(shader, gl!.COMPILE_STATUS)) {
+          console.error("LiquidBackground shader error:", gl!.getShaderInfoLog(shader));
+          gl!.deleteShader(shader);
+          return null;
+        }
+        return shader;
+      }
+
+      vertexShader = createShader(gl.VERTEX_SHADER, VERTEX_SHADER_SOURCE);
+      fragmentShader = createShader(gl.FRAGMENT_SHADER, FRAGMENT_SHADER_SOURCE);
+
+      if (!vertexShader || !fragmentShader) return;
+
+      program = gl.createProgram();
+      if (!program) return;
+
+      gl.attachShader(program, vertexShader);
+      gl.attachShader(program, fragmentShader);
+      gl.linkProgram(program);
+
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.error("LiquidBackground program link error:", gl.getProgramInfoLog(program));
+        return;
+      }
+
+      gl.useProgram(program);
+
+      // 3. Fullscreen Quad Geometry
+      positionBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+          -1.0, -1.0,
+           1.0, -1.0,
+          -1.0,  1.0,
+          -1.0,  1.0,
+           1.0, -1.0,
+           1.0,  1.0,
+        ]),
+        gl.STATIC_DRAW
       );
+
+      const aPosition = gl.getAttribLocation(program, "a_position");
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+      // 4. Cache Uniform Locations
+      const uResolution = gl.getUniformLocation(program, "u_resolution");
+      const uTime = gl.getUniformLocation(program, "u_time");
+      const uTheme = gl.getUniformLocation(program, "u_theme");
+      const uIntensity = gl.getUniformLocation(program, "u_intensity");
+      const uSpeed = gl.getUniformLocation(program, "u_speed");
+
+      // 5. Robust Theme Synchronization
+      const getTargetTheme = () => {
+        const themeAttr = document.documentElement.getAttribute("data-theme");
+        if (themeAttr === "light") return 0.0;
+        if (themeAttr === "dark") return 1.0;
+        return window.matchMedia("(prefers-color-scheme: light)").matches ? 0.0 : 1.0;
+      };
+
+      targetTheme = getTargetTheme();
+      currentTheme = targetTheme;
+
+      const onThemeChange = () => {
+        targetTheme = getTargetTheme();
+      };
+
+      themeObserver = new MutationObserver(onThemeChange);
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+
+      window.addEventListener("theme-change", onThemeChange);
+      const mediaQueryDark = window.matchMedia("(prefers-color-scheme: dark)");
+      mediaQueryDark.addEventListener("change", onThemeChange);
+
+      // 6. Responsive Resize with Resolution Optimization
+      const resizeCanvas = () => {
+        if (!canvas || !gl) return;
+        const width = window.innerWidth || canvas.clientWidth;
+        const height = window.innerHeight || canvas.clientHeight;
+        if (width === 0 || height === 0) return;
+
+        // On mobile, scale resolution down to 0.48x (~77% fewer fragment ops, smoothly interpolated by GPU)
+        const mobile = width < 768;
+        const scale = mobile ? 0.48 : Math.min(0.65, 1080 / Math.max(width, 1));
+        const displayWidth = Math.max(280, Math.floor(width * scale));
+        const displayHeight = Math.max(160, Math.floor(height * scale));
+
+        if (canvas.width !== displayWidth || canvas.height !== displayHeight) {
+          canvas.width = displayWidth;
+          canvas.height = displayHeight;
+        }
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      };
+
+      resizeObserver = new ResizeObserver(resizeCanvas);
+      resizeObserver.observe(document.documentElement);
+      resizeCanvas();
+
+      // 7. Reduced motion check
+      const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      isReducedMotion = motionQuery.matches;
+
+      const handleMotionChange = (e: MediaQueryListEvent) => {
+        isReducedMotion = e.matches;
+      };
+      motionQuery.addEventListener("change", handleMotionChange);
+
+      // 8. Animation Loop with Time-Based 30 FPS Limiter on Mobile
+      const render = (timestamp: number) => {
+        if (!isRunning || !gl) return;
+
+        animationFrameId = requestAnimationFrame(render);
+
+        const mobile = isMobileDevice();
+        const frameInterval = mobile ? 1000 / 30 : 0; // 30 FPS on mobile, full refresh on desktop
+        const delta = timestamp - lastFrameTime;
+
+        if (frameInterval > 0 && delta < frameInterval) {
+          return;
+        }
+
+        // Keep frame pacing consistent without time drift
+        lastFrameTime = timestamp - (frameInterval > 0 ? delta % frameInterval : 0);
+
+        // Smooth theme cross-fade
+        currentTheme += (targetTheme - currentTheme) * 0.18;
+        if (Math.abs(currentTheme - targetTheme) < 0.004) {
+          currentTheme = targetTheme;
+        }
+
+        // Fluid wave formula progresses based on physical clock elapsed time,
+        // ensuring fluid motion remains identical at both 30 FPS and 60 FPS
+        const elapsedSeconds = isReducedMotion
+          ? (timestamp - startTime) * 0.0001
+          : (timestamp - startTime) * 0.001;
+
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.uniform2f(uResolution, canvas.width, canvas.height);
+        gl.uniform1f(uTime, elapsedSeconds);
+        gl.uniform1f(uTheme, currentTheme);
+
+        const { intensity: curIntensity, speed: curSpeed } = propsRef.current;
+        gl.uniform1f(uIntensity, curIntensity);
+        gl.uniform1f(uSpeed, curSpeed);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      };
+
+      const startLoop = () => {
+        if (!isRunning && !document.hidden && gl) {
+          isRunning = true;
+          startTime = performance.now();
+          lastFrameTime = startTime;
+          animationFrameId = requestAnimationFrame(render);
+        }
+      };
+
+      const stopLoop = () => {
+        isRunning = false;
+        if (animationFrameId !== null) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      };
+
+      const onVisibilityChange = () => {
+        if (document.hidden) {
+          stopLoop();
+        } else {
+          startLoop();
+        }
+      };
+
+      document.addEventListener("visibilitychange", onVisibilityChange);
+      startLoop();
+    };
+
+    // Schedule initialization when browser is idle to protect critical render path
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleId = (window as any).requestIdleCallback(initWebGL, { timeout: 1500 });
     } else {
-      timerId = setTimeout(startLoop, 150);
+      timerId = setTimeout(initWebGL, 400);
     }
 
     // 9. Cleanup
@@ -345,19 +380,19 @@ export default function LiquidBackground({
       if (timerId) {
         clearTimeout(timerId);
       }
-      stopLoop();
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      motionQuery.removeEventListener("change", handleMotionChange);
-      themeObserver.disconnect();
-      resizeObserver.disconnect();
-      window.removeEventListener("theme-change", onThemeChange);
-      mediaQueryDark.removeEventListener("change", onThemeChange);
+      isRunning = false;
+      if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      if (themeObserver) themeObserver.disconnect();
+      if (resizeObserver) resizeObserver.disconnect();
 
       if (gl) {
-        gl.deleteBuffer(positionBuffer);
-        gl.deleteProgram(program);
-        gl.deleteShader(vertexShader);
-        gl.deleteShader(fragmentShader);
+        if (positionBuffer) gl.deleteBuffer(positionBuffer);
+        if (program) gl.deleteProgram(program);
+        if (vertexShader) gl.deleteShader(vertexShader);
+        if (fragmentShader) gl.deleteShader(fragmentShader);
       }
     };
   }, []);

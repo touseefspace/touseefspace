@@ -1,8 +1,6 @@
 import HomeScrollShowcase from "@/components/HomeScrollShowcase";
 import { Metadata } from "next";
 import { getProjects, getExperiences, getSkillCategories, getHomeGlobalData } from "@/lib/queries";
-import { Suspense } from "react";
-import { HomeSkeleton } from "@/components/Skeletons";
 
 export const metadata: Metadata = {
   title: "touseefspace | AI Systems and Software Developer",
@@ -10,11 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return (
-    <Suspense fallback={<HomeSkeleton />}>
-      <HomeContainer />
-    </Suspense>
-  );
+  return <HomeContainer />;
 }
 
 async function HomeContainer() {

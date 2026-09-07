@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
-import React, { useEffect, useState, useRef } from "react";
+import { ArrowRight } from "lucide-react";
+import React from "react";
 import SelectedWorkSection from "./SelectedWorkSection";
 
 export default function HomeScrollShowcase({
@@ -18,8 +17,6 @@ export default function HomeScrollShowcase({
   skillCategories?: any;
   homeData?: any;
 }) {
-  const [isMobile, setIsMobile] = useState(false);
-
   // Hero content defaults - supports both root homeData and legacy nested .hero
   const heroData = homeData?.hero || homeData || {};
   const portraitUrl =
@@ -35,27 +32,6 @@ export default function HomeScrollShowcase({
     heroData.description ||
     "Developing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.";
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  const heroRef = useRef<HTMLElement | null>(null);
-
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const heroY = useTransform(
-    heroScrollProgress,
-    [0, 1],
-    [0, isMobile ? 0 : -48]
-  );
-
-  const railScale = useTransform(heroScrollProgress, [0, 1], [0.12, 1]);
-
   // Data Normalization - Memoized to prevent unnecessary effect resets
   const featuredProjects = React.useMemo(() => {
     return cmsProjects?.length ? cmsProjects : [];
@@ -70,17 +46,8 @@ export default function HomeScrollShowcase({
   return (
     <div className="relative pt-14 sm:pt-16">
       {/* Bounded, fixed-height responsive Hero Section */}
-      <section
-        ref={heroRef}
-        className="relative pt-6 pb-12 sm:pt-8 sm:pb-14 lg:pt-10 lg:pb-16"
-      >
-        <motion.div
-          style={{
-            y: heroY,
-            willChange: "transform",
-          }}
-          className="page-shell grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center"
-        >
+      <section className="relative pt-6 pb-12 sm:pt-8 sm:pb-14 lg:pt-10 lg:pb-16">
+        <div className="page-shell grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
           <div className="max-w-3xl">
             {/* Top Eyebrow */}
             <div className="flex items-center gap-2.5 sm:gap-3">
@@ -105,7 +72,7 @@ export default function HomeScrollShowcase({
             </div>
           </div>
 
-          <motion.div className="relative mx-auto w-full max-w-105">
+          <div className="relative mx-auto w-full max-w-105">
             <div className="relative h-96 sm:h-105 w-full overflow-hidden rounded-2xl border border-(--border-card) bg-(--bg-surface) shadow-md group transition-colors">
               {portraitUrl ? (
                 <>
@@ -113,7 +80,8 @@ export default function HomeScrollShowcase({
                     src={portraitUrl}
                     alt="Touseef Ahmed"
                     fill={true}
-                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 420px"
+                    sizes="(max-width: 480px) 345px, (max-width: 768px) 400px, 420px"
+                    quality={85}
                     className="object-cover object-center transition-all duration-700 group-hover:scale-[1.02]"
                     priority
                   />
@@ -131,8 +99,8 @@ export default function HomeScrollShowcase({
                 </div>
               )}
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
 
       {/* Section 02: Phase 5 Selected Work (Standalone 3D Perspective Carousel Stage) */}
@@ -144,22 +112,14 @@ export default function HomeScrollShowcase({
       <section className="page-shell relative grid gap-8 py-16 sm:py-20 lg:grid-cols-[220px_minmax(0,1fr)]">
         <div className="relative hidden lg:block">
           <div className="absolute left-8 top-0 h-full w-px bg-(--border-subtle)" />
-          <motion.div
-            style={{ scaleY: railScale }}
-            className="absolute left-8 top-0 h-full w-px origin-top bg-(--ink-primary)"
-          />
+          <div className="absolute left-8 top-0 h-32 w-px bg-(--ink-primary)/40" />
         </div>
 
         <div className="grid gap-20 sm:gap-24">
 
           {/* Section 03: Experience */}
           {activeExperience ? (
-            <motion.article
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]"
-            >
+            <article className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]">
               <div>
                 <p className="section-label">03 / Experience</p>
                 <h2 className="text-2xl font-bold text-(--ink-primary) sm:text-3xl md:text-4xl">
@@ -204,14 +164,9 @@ export default function HomeScrollShowcase({
                   </Link>
                 </div>
               </div>
-            </motion.article>
+            </article>
           ) : (
-            <motion.article
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]"
-            >
+            <article className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]">
               <div>
                 <p className="section-label">03 / Experience</p>
                 <h2 className="text-2xl font-bold text-(--ink-primary) sm:text-3xl md:text-4xl opacity-30">
@@ -226,17 +181,12 @@ export default function HomeScrollShowcase({
                   Populate the Experiences collection in Sanity to show your journey.
                 </p>
               </div>
-            </motion.article>
+            </article>
           )}
 
           {/* Section 04: Toolbelt */}
           {highlightedSkills.length > 0 ? (
-            <motion.article
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]"
-            >
+            <article className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]">
               <div>
                 <p className="section-label">04 / Toolbelt</p>
                 <h2 className="mt-3 text-2xl font-bold text-(--ink-primary) sm:text-3xl md:text-4xl">
@@ -268,14 +218,9 @@ export default function HomeScrollShowcase({
                   </div>
                 ))}
               </div>
-            </motion.article>
+            </article>
           ) : (
-            <motion.article
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]"
-            >
+            <article className="grid gap-6 lg:grid-cols-[0.85fr_minmax(0,1fr)]">
               <div>
                 <p className="section-label">04 / Toolbelt</p>
                 <h2 className="mt-3 text-2xl font-bold text-(--ink-primary) sm:text-3xl md:text-4xl opacity-30">
@@ -290,7 +235,7 @@ export default function HomeScrollShowcase({
                   Add Skill Categories and link skills to see your toolbelt in action.
                 </p>
               </div>
-            </motion.article>
+            </article>
           )}
         </div>
       </section>
