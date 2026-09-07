@@ -18,6 +18,7 @@
 
 # Environment files and credentials (keep safe!)
 .env*
+!.env.example
 *.local
 
 # IDE & Editor files
