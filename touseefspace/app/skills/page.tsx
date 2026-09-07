@@ -53,7 +53,12 @@ async function SkillsContainer() {
                     <div className="h-2 w-2 bg-(--ink-primary) rounded-full" />
                   )}
                 </span>
-                <h2 className="text-base sm:text-lg font-bold text-(--ink-primary) tracking-tight">{category.title}</h2>
+                <div>
+                  <h2 className="text-base sm:text-lg font-bold text-(--ink-primary) tracking-tight">{category.title}</h2>
+                  {category.description && (
+                    <p className="mt-0.5 text-xs text-(--ink-muted) leading-relaxed">{category.description}</p>
+                  )}
+                </div>
               </div>
               <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {category.skills?.map((skill: any) => {

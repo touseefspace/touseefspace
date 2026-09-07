@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
     }
 
     // 2. Revalidate paths
-    // Home page relies on projects, experiences, skills, and homePage data
+    // Root page and global layout (which renders footer and navigation)
+    revalidatePath("/", "layout");
     revalidatePath("/");
     revalidatedPaths.push("/");
 
@@ -58,8 +59,8 @@ export async function POST(req: NextRequest) {
       revalidatePath("/projects");
       revalidatedPaths.push("/projects");
       if (slug) {
-        revalidatePath(`/projects/${slug}`);
-        revalidatedPaths.push(`/projects/${slug}`);
+        revalidatePath(`/work/${slug}`);
+        revalidatedPaths.push(`/work/${slug}`);
       }
     } else if (_type === "post") {
       revalidatePath("/blog");
@@ -74,6 +75,9 @@ export async function POST(req: NextRequest) {
     } else if (_type === "skillCategory") {
       revalidatePath("/skills");
       revalidatedPaths.push("/skills");
+    } else if (_type === "socialLink") {
+      revalidatePath("/contact");
+      revalidatedPaths.push("/contact");
     }
 
     return NextResponse.json({

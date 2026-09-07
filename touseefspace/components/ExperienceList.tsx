@@ -12,7 +12,10 @@ interface Experience {
   category?: "work" | "education";
   description?: string;
   logo?: {
-    url: string;
+    url?: string;
+    asset?: {
+      url?: string;
+    };
   };
   tasks?: {
     task: string;
@@ -20,7 +23,10 @@ interface Experience {
   skillStack?: {
     skill: string;
     icon?: {
-      url: string;
+      url?: string;
+      asset?: {
+        url?: string;
+      };
     };
   }[];
   attachments?: {
@@ -55,6 +61,7 @@ export default function ExperienceList({ experiences }: { experiences: Experienc
 
 function ExperienceCard({ exp }: { exp: Experience }) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const logoUrl = exp.logo?.url || exp.logo?.asset?.url;
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -82,8 +89,8 @@ function ExperienceCard({ exp }: { exp: Experience }) {
           <div className="flex gap-4 sm:gap-5">
             {/* Logo */}
             <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-2xl bg-(--bg-subtle) border border-(--border-subtle) p-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
-              {exp.logo?.url ? (
-                <img src={exp.logo.url} alt={exp.company} className="h-full w-full object-contain" />
+              {logoUrl ? (
+                <img src={logoUrl} alt={exp.company} className="h-full w-full object-contain" />
               ) : (
                 <span className="text-xl font-bold text-(--ink-muted)">{exp.company.charAt(0)}</span>
               )}
@@ -137,14 +144,17 @@ function ExperienceCard({ exp }: { exp: Experience }) {
             <div className="space-y-2.5">
               <p className="text-[11px] font-mono uppercase tracking-wider text-(--ink-muted) border-b border-(--border-subtle) pb-1.5">Technologies Used</p>
               <div className="flex flex-wrap gap-2">
-                {exp.skillStack.map((skill, i) => (
-                  <div key={i} className="tech-tag">
-                    {skill.icon?.url && (
-                      <img src={skill.icon.url} alt="" className="h-3.5 w-3.5 object-contain" />
-                    )}
-                    <span>{skill.skill}</span>
-                  </div>
-                ))}
+                {exp.skillStack.map((skill, i) => {
+                  const skillIconUrl = skill.icon?.url || skill.icon?.asset?.url;
+                  return (
+                    <div key={i} className="tech-tag">
+                      {skillIconUrl && (
+                        <img src={skillIconUrl} alt="" className="h-3.5 w-3.5 object-contain" />
+                      )}
+                      <span>{skill.skill}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

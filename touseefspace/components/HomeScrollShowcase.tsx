@@ -20,22 +20,20 @@ export default function HomeScrollShowcase({
 }) {
   const [isMobile, setIsMobile] = useState(false);
 
-  // Hero content defaults
-  const heroData = homeData?.hero || {};
-  const portraitUrl = heroData.portrait?.url || "/touseef.png";
+  // Hero content defaults - supports both root homeData and legacy nested .hero
+  const heroData = homeData?.hero || homeData || {};
+  const portraitUrl =
+    heroData.portrait?.asset?.url ||
+    heroData.portrait?.url ||
+    (typeof heroData.portrait === "string" ? heroData.portrait : null) ||
+    "/touseef.png";
+  const heroRole = heroData.role || "AI Systems & Software Developer";
+  const heroLocation = heroData.location || "United Arab Emirates";
   const heroTitle =
-    heroData.title &&
-    heroData.title !== "Full stack developer building calm, useful digital systems." &&
-    heroData.title !== "I turn messy workflows into simple, reliable software." &&
-    heroData.title !== "I turn messy workflows into simple, reliable software spaces." &&
-    heroData.title !== "I turn messy workflows into simple & reliable software or AI based automations." &&
-    heroData.title !== "I turn messy workflows into simple & reliable software spaces or AI based automations."
-      ? heroData.title
-      : "I turn messy workflows into simple & reliable software spaces.";
+    heroData.title || "I turn messy workflows into simple & reliable software spaces.";
   const heroDescription =
-    heroData.description && !heroData.description.includes("make work feel lighter")
-      ? heroData.description
-      : "Developing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.";
+    heroData.description ||
+    "Developing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.";
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -88,18 +86,14 @@ export default function HomeScrollShowcase({
             <div className="flex items-center gap-2.5 sm:gap-3">
               <span className="section-label">01 / Overview</span>
               <span className="h-1 w-1 rounded-full bg-(--ink-muted) opacity-50" />
-              <span className="font-mono text-xs text-(--ink-muted)">United Arab Emirates</span>
+              <span className="font-mono text-xs text-(--ink-muted)">{heroLocation}</span>
             </div>
 
             <h1 className="mt-5 text-3xl font-bold leading-[1.08] tracking-tight text-(--ink-primary) sm:text-5xl lg:text-5xl">
               {heroTitle}
             </h1>
             <p className="mt-5 max-w-2xl text-base sm:text-lg leading-relaxed text-(--ink-secondary)">
-              Developing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the{" "}
-              <span className="inline-block rounded px-1.5 py-0.5 font-medium bg-(--ink-primary) text-(--bg-primary)">
-                space
-              </span>{" "}
-              to scale with calm, dependable reliability.
+              {heroDescription}
             </p>
             <div className="mt-8 flex flex-row items-center gap-2.5 sm:gap-3.5">
               <Link href="/projects" className="btn-primary flex-1 sm:flex-initial text-xs sm:text-sm px-3.5 sm:px-5 text-center justify-center">
@@ -128,7 +122,7 @@ export default function HomeScrollShowcase({
                       <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-xs font-mono font-semibold text-(--ink-primary)">Touseef Ahmed</span>
                     </div>
-                    <span className="text-[11px] font-mono text-(--ink-muted)">AI Systems & Software Developer</span>
+                    <span className="text-[11px] font-mono text-(--ink-muted)">{heroRole}</span>
                   </div>
                 </>
               ) : (

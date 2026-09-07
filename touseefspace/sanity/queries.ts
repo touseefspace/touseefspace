@@ -42,7 +42,7 @@ export const PROJECTS_QUERY = `*[_type == "project"] | order(order asc, _created
   featured
 }`;
 
-export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true] | order(order asc, _createdAt desc)[0...3] {
+export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true] | order(order asc, _createdAt desc)[0...8] {
   _id,
   title,
   "slug": slug.current,
@@ -171,6 +171,7 @@ export const EXPERIENCES_QUERY = `*[_type == "experience"] | order(order asc, _c
   location,
   description,
   logo {
+    "url": asset->url,
     asset-> {
       _id,
       url
@@ -184,6 +185,7 @@ export const EXPERIENCES_QUERY = `*[_type == "experience"] | order(order asc, _c
     _key,
     skill,
     icon {
+      "url": asset->url,
       asset-> {
         _id,
         url
