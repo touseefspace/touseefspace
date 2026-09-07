@@ -54,7 +54,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
             <button
               onClick={() => reset()}
               type="button"
-              className="inline-flex items-center gap-2 rounded-xl bg-(--btn-primary-bg) px-5 py-2.5 text-sm font-semibold text-(--btn-primary-fg) transition-all duration-200 hover:opacity-90 active:scale-[0.98] shadow-xs cursor-pointer"
+              className="btn-primary h-9! sm:h-10! px-4! sm:px-5! text-xs! sm:text-sm font-semibold rounded-xl inline-flex items-center gap-2 shadow-xs cursor-pointer"
             >
               <RotateCcw size={15} />
               <span>Try Again</span>
@@ -62,7 +62,7 @@ export default function GlobalError({ error, reset }: ErrorProps) {
 
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-xl border border-(--border-subtle) bg-(--bg-subtle)/60 px-5 py-2.5 text-sm font-medium text-(--ink-primary) transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl border border-(--border-subtle) bg-(--bg-subtle)/60 px-4! sm:px-5 py-2! sm:py-2.5 text-xs! sm:text-sm font-medium text-(--ink-primary) transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) active:scale-[0.98]"
             >
               <Home size={15} />
               <span>Return Home</span>

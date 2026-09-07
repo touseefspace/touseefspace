@@ -48,7 +48,7 @@ export default function NotFound() {
           <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-xl bg-(--btn-primary-bg) px-5 py-2.5 text-sm font-semibold text-(--btn-primary-fg) transition-all duration-200 hover:opacity-90 active:scale-[0.98] shadow-xs"
+              className="btn-primary h-9! sm:h-10! px-4! sm:px-5! text-xs! sm:text-sm font-semibold rounded-xl inline-flex items-center gap-2 shadow-xs"
             >
               <Home size={15} />
               <span>Return Home</span>
@@ -56,7 +56,7 @@ export default function NotFound() {
 
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 rounded-xl border border-(--border-subtle) bg-(--bg-subtle)/60 px-5 py-2.5 text-sm font-medium text-(--ink-primary) transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl border border-(--border-subtle) bg-(--bg-subtle)/60 px-4! sm:px-5 py-2! sm:py-2.5 text-xs! sm:text-sm font-medium text-(--ink-primary) transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) active:scale-[0.98]"
             >
               <FileCode2 size={15} />
               <span>View Projects</span>
@@ -64,7 +64,7 @@ export default function NotFound() {
 
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl border border-(--border-subtle) bg-(--bg-subtle)/60 px-5 py-2.5 text-sm font-medium text-(--ink-primary) transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-xl border border-(--border-subtle) bg-(--bg-subtle)/60 px-4! sm:px-5 py-2! sm:py-2.5 text-xs! sm:text-sm font-medium text-(--ink-primary) transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) active:scale-[0.98]"
             >
               <Mail size={15} />
               <span>Contact</span>

@@ -203,7 +203,7 @@ html[data-theme="light"] .light-only {
   justify-content: center;
   gap: 0.5rem;
   background-color: var(--btn-primary-bg);
-  color: var(--btn-primary-fg);
+  color: var(--btn-primary-fg) !important;
   font-weight: 600;
   font-size: 0.875rem;
   height: 2.75rem;
@@ -214,6 +214,9 @@ html[data-theme="light"] .light-only {
 .btn-primary:hover {
   opacity: 0.92;
   transform: translateY(-1px);
+}
+.btn-primary * {
+  color: var(--btn-primary-fg) !important;
 }
 
 .btn-secondary {
