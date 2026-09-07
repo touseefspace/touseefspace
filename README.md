@@ -1,14 +1,43 @@
 # 🪐 touseefspace — Developer Portfolio & Case Study Engine
 
-> A high-craft, editorial portfolio and systems architecture showcase engineered with **Next.js 16 (Turbopack)**, **TypeScript**, **Tailwind CSS**, and **Sanity CMS v3**, featuring an ambient **WebGL living fluid canvas**.
+> **Live Production Website:** 🌐 **[https://touseefspace.com](https://touseefspace.com)**
 
-[![Version](https://img.shields.io/badge/Version-v4.0.0-emerald)](#)
+[![Live Website](https://img.shields.io/badge/Live-touseefspace.com-000000?style=flat&logo=safari&logoColor=white)](https://touseefspace.com)
+[![Version](https://img.shields.io/badge/Version-v4.1.1-emerald)](#)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
 [![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f?logo=sanity)](https://www.sanity.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Turbopack](https://img.shields.io/badge/Bundler-Turbopack-000000?logo=vercel)](https://turbo.build/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+## 👋 About Me
+
+Hey! I'm **Touseef Ahmed**, an **AI Systems & Software Developer** based in the United Arab Emirates. 
+
+I turn messy workflows into simple, reliable software spaces — engineering custom full-stack web applications, automated business pipelines, and AI systems designed to eliminate operational clutter and give ambitious teams the room to scale with calm, dependable reliability.
+
+- 🌐 **Live Website**: [https://touseefspace.com](https://touseefspace.com)
+- 💼 **LinkedIn**: [linkedin.com/in/touseefspace](https://linkedin.com/in/touseefspace)
+- 🐙 **GitHub**: [@touseefspace](https://github.com/touseefspace)
+- 🐦 **X / Twitter**: [@touseefspace](https://x.com/touseefspace)
+- 📬 **Email**: [contact@touseefspace.com](mailto:contact@touseefspace.com)
+
+---
+
+## 🌟 Open Source & Architecture
+
+This repository is **100% open source** under the [MIT License](https://opensource.org/licenses/MIT). 
+
+I built this project not just to serve as my personal portfolio, but to provide an open-source, production-grade **case study engine and portfolio architecture** for developers, systems engineers, and technical creators who want to showcase their work with editorial visual craft without sacrificing performance or accessibility.
+
+### Why It's Open Source
+- **Real-World Next.js 16 Patterns**: Built on App Router with modern `"use cache"`, `cacheTag`, and `cacheLife` cache primitives, eliminating slow database hits while keeping content fresh.
+- **Zero-Contention WebGL Living Canvas**: Features a continuous GLSL fluid simulation background that initializes during browser idle time and runs at a throttled 30 FPS on mobile to protect your Core Web Vitals (LCP, TBT, INP).
+- **Ready for Forking & Rebranding**: Completely decoupled frontend and CMS. You can clone it, customize your schemas, and deploy in minutes.
+- **AI-Agent Ready**: Includes ready-to-copy prompts in **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** that allow AI coding assistants (Antigravity, Cursor, Claude Code, Copilot) to personalize and rebrand the entire portfolio in one pass.
 
 ---
 
