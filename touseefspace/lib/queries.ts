@@ -43,6 +43,18 @@ export async function getSocialLinks() {
   return placeholderSocialLinks;
 }
 
+function normalizeProject(project: any) {
+  if (!project) return project;
+  let liveUrl = project.liveUrl;
+  if (!liveUrl || liveUrl.includes("touseefspace.vercel.app")) {
+    liveUrl = "https://touseefspace.com";
+  }
+  return {
+    ...project,
+    liveUrl,
+  };
+}
+
 /**
  * Fetch projects from Sanity, cached for days.
  * Falls back to placeholder projects if CMS is empty or offline.
@@ -56,16 +68,16 @@ export async function getProjects(featuredOnly?: boolean) {
     const query = featuredOnly ? FEATURED_PROJECTS_QUERY : PROJECTS_QUERY;
     const projects = await client.fetch(query);
     if (projects && projects.length > 0) {
-      return projects;
+      return projects.map(normalizeProject);
     }
   } catch {
     console.warn("[Sanity] Network query unavailable for projects, using cached local fallback.");
   }
 
   if (featuredOnly) {
-    return placeholderProjects.filter((p) => p.featured);
+    return placeholderProjects.filter((p) => p.featured).map(normalizeProject);
   }
-  return placeholderProjects;
+  return placeholderProjects.map(normalizeProject);
 }
 
 /**
@@ -79,13 +91,14 @@ export async function getProjectBySlug(slug: string) {
   try {
     const project = await client.fetch(PROJECT_BY_SLUG_QUERY, { slug });
     if (project) {
-      return project;
+      return normalizeProject(project);
     }
   } catch {
     console.warn(`[Sanity] Network query unavailable for project ${slug}, using cached local fallback.`);
   }
 
-  return placeholderProjects.find((p) => p.slug === slug) || null;
+  const fallback = placeholderProjects.find((p) => p.slug === slug);
+  return fallback ? normalizeProject(fallback) : null;
 }
 
 /**
