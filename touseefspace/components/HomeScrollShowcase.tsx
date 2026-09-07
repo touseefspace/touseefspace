@@ -101,12 +101,12 @@ export default function HomeScrollShowcase({
               </span>{" "}
               to scale with calm, dependable reliability.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3.5">
-              <Link href="/projects" className="btn-primary">
-                View projects <ArrowRight className="h-4 w-4" />
+            <div className="mt-8 flex flex-row items-center gap-2.5 sm:gap-3.5">
+              <Link href="/projects" className="btn-primary flex-1 sm:flex-initial text-xs sm:text-sm px-3.5 sm:px-5 text-center justify-center">
+                View projects <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
               </Link>
-              <Link href="/contact" className="btn-secondary">
-                Start a conversation
+              <Link href="/contact" className="btn-secondary flex-1 sm:flex-initial text-xs sm:text-sm px-3.5 sm:px-5 text-center justify-center whitespace-nowrap">
+                Let's Talk
               </Link>
             </div>
           </div>
@@ -119,10 +119,9 @@ export default function HomeScrollShowcase({
                     src={portraitUrl}
                     alt="Touseef Ahmed"
                     fill={true}
-                    sizes="(max-width: 1024px) 100vw, 420px"
+                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 420px"
                     className="object-cover object-center transition-all duration-700 group-hover:scale-[1.02]"
                     priority
-                    fetchPriority="high"
                   />
                   <div className="absolute inset-x-0 bottom-0 border-t border-(--border-subtle) bg-(--header-bg) p-4 backdrop-blur-md flex items-center justify-between">
                     <div className="flex items-center gap-2">
