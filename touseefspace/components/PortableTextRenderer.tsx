@@ -18,7 +18,7 @@ function CodeBlockComponent({ value }: { value: any }) {
   };
 
   return (
-    <div className="my-6 overflow-hidden rounded-2xl border border-(--border-card) bg-(--bg-surface) shadow-xs">
+    <div className="my-6 overflow-hidden rounded-2xl border border-(--border-card) bg-(--bg-surface) shadow-xs min-w-0 max-w-full">
       <div className="flex items-center justify-between border-b border-(--border-subtle) bg-(--bg-subtle) px-4 py-2 text-xs font-mono text-(--ink-muted)">
         <span>{value?.filename || value?.language || "code"}</span>
         <button
@@ -28,8 +28,8 @@ function CodeBlockComponent({ value }: { value: any }) {
         >
           {copied ? (
             <>
-              <Check className="h-3.5 w-3.5 text-emerald-400" />
-              <span className="text-emerald-400">Copied</span>
+              <Check className="h-3.5 w-3.5 text-(--ink-primary)" />
+              <span className="text-(--ink-primary)">Copied</span>
             </>
           ) : (
             <>
@@ -39,8 +39,8 @@ function CodeBlockComponent({ value }: { value: any }) {
           )}
         </button>
       </div>
-      <div className="overflow-x-auto p-4 sm:p-5 font-mono text-xs sm:text-sm leading-relaxed text-(--ink-primary)">
-        <pre>
+      <div className="overflow-x-auto p-4 sm:p-5 font-mono text-xs sm:text-sm leading-relaxed text-(--ink-primary) min-w-0 max-w-full">
+        <pre className="min-w-0 max-w-full">
           <code>{value?.code}</code>
         </pre>
       </div>

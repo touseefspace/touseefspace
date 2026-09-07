@@ -69,7 +69,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
     "/placeholders/aunvu-dashboard.svg";
 
   return (
-    <article className="page-shell pt-24 pb-20 sm:pt-32 sm:pb-28">
+    <article className="page-shell pt-24 pb-20 sm:pt-32 sm:pb-28 min-w-0 max-w-full">
       {/* Top Breadcrumb */}
       <nav className="mb-10">
         <Link
@@ -95,7 +95,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           )}
         </div>
 
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-(--ink-primary) leading-[1.1]">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-(--ink-primary) leading-[1.1] wrap-break-word">
           {project.title}
         </h1>
 
@@ -104,21 +104,21 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </p>
 
         {/* Metadata Details Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-6 border-t border-(--border-subtle) font-mono text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-(--border-subtle) font-mono text-xs min-w-0">
           {project.client && (
-            <div>
+            <div className="min-w-0">
               <span className="text-(--ink-muted) block mb-1">CLIENT / DOMAIN</span>
-              <span className="text-(--ink-primary) font-semibold">{project.client}</span>
+              <span className="text-(--ink-primary) font-semibold wrap-break-word">{project.client}</span>
             </div>
           )}
           {project.role && (
-            <div>
+            <div className="min-w-0">
               <span className="text-(--ink-muted) block mb-1">ENGINEERING ROLE</span>
-              <span className="text-(--ink-primary) font-semibold">{project.role}</span>
+              <span className="text-(--ink-primary) font-semibold wrap-break-word">{project.role}</span>
             </div>
           )}
           {project.period && (
-            <div>
+            <div className="min-w-0">
               <span className="text-(--ink-muted) block mb-1">TIMELINE</span>
               <span className="text-(--ink-primary) font-semibold">{project.period}</span>
             </div>
@@ -126,14 +126,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-3.5 pt-2">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3.5 pt-2">
           {project.liveUrl && (
             <Link
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Explore live app for ${project.title}`}
-              className="btn-primary h-8.5! sm:h-10! px-3.5! sm:px-5! text-[11px]! sm:text-xs! font-semibold rounded-lg sm:rounded-xl inline-flex items-center gap-1.5"
+              className="btn-primary h-9! sm:h-10! px-4! sm:px-5! text-xs! font-semibold rounded-xl inline-flex items-center justify-center gap-1.5 w-full sm:w-auto"
             >
               Explore Live App <ArrowUpRight size={14} aria-hidden="true" />
             </Link>
@@ -144,14 +144,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`View source code for ${project.title} on GitHub`}
-              className="btn-secondary h-8.5! sm:h-10! px-3.5! sm:px-5! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center gap-1.5"
+              className="btn-secondary h-9! sm:h-10! px-4! sm:px-5! text-xs! font-medium rounded-xl inline-flex items-center justify-center gap-1.5 w-full sm:w-auto"
             >
               Source Code <ArrowUpRight size={14} aria-hidden="true" />
             </Link>
           )}
           <Link
             href="/contact"
-            className="btn-secondary h-8.5! sm:h-10! px-3.5! sm:px-5! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center gap-1.5"
+            className="btn-secondary h-9! sm:h-10! px-4! sm:px-5! text-xs! font-medium rounded-xl inline-flex items-center justify-center gap-1.5 w-full sm:w-auto"
           >
             Discuss a Similar Project <ArrowRight size={14} aria-hidden="true" />
           </Link>
@@ -174,16 +174,16 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
       {/* Quantified Metrics Highlight */}
       {project.metrics && project.metrics.length > 0 && (
-        <section className="mt-12 grid gap-4 sm:grid-cols-3">
+        <section className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 min-w-0">
           {project.metrics.map((m: any, i: number) => (
             <div
               key={i}
-              className="rounded-2xl border border-(--border-card) bg-(--bg-surface) p-6 text-center space-y-1"
+              className="rounded-2xl border border-(--border-subtle) bg-(--bg-surface)/65 backdrop-blur-xs p-6 text-center space-y-1.5 shadow-xs transition-colors duration-200 hover:border-(--border-strong)"
             >
-              <div className="text-3xl sm:text-4xl font-black text-emerald-400 font-mono">
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-(--ink-primary) font-mono">
                 {m.value}
               </div>
-              <div className="text-xs sm:text-sm font-medium text-(--ink-secondary)">
+              <div className="text-xs sm:text-sm font-medium text-(--ink-muted) tracking-wide">
                 {m.label}
               </div>
             </div>
@@ -192,16 +192,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
       )}
 
       {/* Problem, Solution, Outcome Narrative Section */}
-      <section className="mt-16 grid gap-10 lg:grid-cols-12">
-        <div className="lg:col-span-8 space-y-12">
+      <section className="mt-16 grid gap-10 lg:grid-cols-12 min-w-0">
+        <div className="lg:col-span-8 space-y-12 min-w-0 max-w-full">
           {/* Problem Breakdown */}
           {project.problem && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <h2 className="rounded bg-rose-500/10 px-2.5 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-rose-400 border border-rose-500/20 inline-block">
-                  The Operational Friction & Bottleneck
-                </h2>
+                <span className="section-label">01 / Operational Friction</span>
               </div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-(--ink-primary)">
+                The Operational Bottleneck
+              </h2>
               <p className="text-base sm:text-lg leading-relaxed text-(--ink-secondary)">
                 {project.problem}
               </p>
@@ -210,12 +211,13 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
           {/* Solution Breakdown */}
           {project.solution && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <h2 className="rounded bg-emerald-500/10 px-2.5 py-1 font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400 border border-emerald-500/20 inline-block">
-                  Key Engineered Solutions & Architecture
-                </h2>
+                <span className="section-label">02 / Engineered Architecture</span>
               </div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-(--ink-primary)">
+                System Architecture & Solution
+              </h2>
               <p className="text-base sm:text-lg leading-relaxed text-(--ink-secondary)">
                 {project.solution}
               </p>
@@ -224,14 +226,11 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
           {/* Outcome Breakdown */}
           {project.outcome && (
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-6 space-y-2">
+            <div className="rounded-2xl border border-(--border-strong) bg-(--bg-surface)/80 backdrop-blur-md p-6 sm:p-7 space-y-3 shadow-xs">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-400" />
-                <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-emerald-400">
-                  Measurable Business Impact
-                </h2>
+                <span className="section-label text-(--ink-primary)">03 / Measurable Outcome</span>
               </div>
-              <p className="text-base sm:text-lg leading-relaxed text-(--ink-primary) font-medium">
+              <p className="text-base sm:text-xl leading-relaxed text-(--ink-primary) font-medium">
                 {project.outcome}
               </p>
             </div>
@@ -239,14 +238,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
           {/* Portable Text Body (Full Case Study Writeup) */}
           {project.body && (
-            <div className="pt-8 border-t border-(--border-subtle)">
+            <div className="pt-8 border-t border-(--border-subtle) min-w-0 max-w-full">
               <PortableTextRenderer value={project.body} />
             </div>
           )}
         </div>
 
         {/* Sidebar: Stack & Key Features */}
-        <aside className="lg:col-span-4 space-y-8" aria-label="Project details">
+        <aside className="lg:col-span-4 space-y-8 min-w-0 max-w-full" aria-label="Project details">
           {/* Technologies */}
           {project.technologies && project.technologies.length > 0 && (
             <div className="rounded-2xl border border-(--border-card) bg-(--bg-surface) p-6 space-y-4">
@@ -271,8 +270,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
               </h2>
               <ul className="space-y-3 text-sm text-(--ink-secondary)">
                 {project.features.map((feature: any, i: number) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-emerald-400 font-bold">✓</span>
+                  <li key={i} className="flex items-start gap-2.5">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-(--ink-muted)" aria-hidden="true" />
                     <span>{typeof feature === "string" ? feature : feature.feature}</span>
                   </li>
                 ))}
@@ -299,7 +298,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       </section>
 
       {/* Footer Navigation */}
-      <footer className="mt-20 pt-10 border-t border-(--border-subtle) flex items-center justify-between">
+      <footer className="mt-20 pt-10 border-t border-(--border-subtle) flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
         <Link
           href="/#selected-work"
           className="inline-flex items-center gap-2 text-sm font-semibold text-(--ink-muted) hover:text-(--ink-primary) transition-colors"
