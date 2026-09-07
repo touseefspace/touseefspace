@@ -297,7 +297,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </p>
             <Link
               href="/contact"
-              className="btn-primary w-full h-9 text-xs font-semibold rounded-xl inline-flex items-center justify-center gap-1.5 mt-2"
+              className="btn-primary w-full h-9! text-xs! font-semibold rounded-xl inline-flex items-center justify-center gap-1.5 mt-2"
             >
               Discuss a Project <ArrowRight size={13} aria-hidden="true" />
             </Link>

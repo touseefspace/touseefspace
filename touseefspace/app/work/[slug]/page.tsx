@@ -133,7 +133,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Explore live app for ${project.title}`}
-              className="btn-primary h-10 px-5 text-xs font-semibold rounded-xl inline-flex items-center gap-1.5"
+              className="btn-primary h-8.5! sm:h-10! px-3.5! sm:px-5! text-[11px]! sm:text-xs! font-semibold rounded-lg sm:rounded-xl inline-flex items-center gap-1.5"
             >
               Explore Live App <ArrowUpRight size={14} aria-hidden="true" />
             </Link>
@@ -144,14 +144,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`View source code for ${project.title} on GitHub`}
-              className="btn-secondary h-10 px-5 text-xs font-medium rounded-xl inline-flex items-center gap-1.5"
+              className="btn-secondary h-8.5! sm:h-10! px-3.5! sm:px-5! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center gap-1.5"
             >
               Source Code <ArrowUpRight size={14} aria-hidden="true" />
             </Link>
           )}
           <Link
             href="/contact"
-            className="btn-secondary h-10 px-5 text-xs font-medium rounded-xl inline-flex items-center gap-1.5"
+            className="btn-secondary h-8.5! sm:h-10! px-3.5! sm:px-5! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center gap-1.5"
           >
             Discuss a Similar Project <ArrowRight size={14} aria-hidden="true" />
           </Link>
@@ -290,7 +290,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             </p>
             <Link
               href="/contact"
-              className="btn-primary w-full h-10 text-xs font-semibold rounded-xl inline-flex items-center justify-center gap-1.5 mt-2"
+              className="btn-primary w-full h-9! sm:h-10! text-xs! font-semibold rounded-xl inline-flex items-center justify-center gap-1.5 mt-2"
             >
               Start a Conversation <ArrowRight size={14} />
             </Link>
