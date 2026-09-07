@@ -238,7 +238,7 @@ html[data-theme="light"] .light-only {
 
 /* Navbar Action Button with bulletproof theme hover contrast */
 .btn-nav-cta {
-  display: inline-flex;
+  display: none;
   height: 2rem;
   align-items: center;
   justify-content: center;
@@ -254,6 +254,11 @@ html[data-theme="light"] .light-only {
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
+@media (min-width: 1024px) {
+  .btn-nav-cta {
+    display: inline-flex;
+  }
+}
 .btn-nav-cta:hover {
   background-color: var(--ink-primary) !important;
   color: var(--bg-primary) !important;
@@ -261,6 +266,38 @@ html[data-theme="light"] .light-only {
 }
 .btn-nav-cta * {
   color: inherit !important;
+}
+
+@media (max-width: 1023px) {
+  .desktop-nav-only {
+    display: none !important;
+  }
+}
+
+/* Mobile Drawer Full-Width Action Button */
+.btn-mobile-cta {
+  display: flex;
+  width: 100%;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-fg) !important;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-mobile-cta:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+.btn-mobile-cta * {
+  color: var(--btn-primary-fg) !important;
 }
 
 /* Distinctive brand accent for 'space' */

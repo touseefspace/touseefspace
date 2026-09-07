@@ -8,6 +8,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const navItems = [
+  { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Blog", href: "/blog" },
   { name: "Experience", href: "/experiences" },
@@ -44,7 +45,6 @@ export default function Navbar() {
                 width={36}
                 height={36}
                 className="dark-only object-contain transition-transform duration-200 group-hover:scale-105"
-                priority
               />
               {/* Light mode logo (bgless dark) */}
               <Image
@@ -53,7 +53,6 @@ export default function Navbar() {
                 width={36}
                 height={36}
                 className="light-only object-contain transition-transform duration-200 group-hover:scale-105"
-                priority
               />
             </div>
             <span className="font-semibold tracking-tight text-(--ink-primary) text-sm sm:text-base">
@@ -64,7 +63,7 @@ export default function Navbar() {
           {/* Center Navigation Links - Desktop Classic */}
           <nav
             aria-label="Main Navigation"
-            className="hidden md:flex items-center gap-7 lg:gap-9"
+            className="hidden md:flex items-center gap-7 lg:gap-8"
           >
             {navItems.map((item) => {
               const isActive = pathname === item.href;
@@ -96,7 +95,7 @@ export default function Navbar() {
               href="https://github.com/touseefspace"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-mono text-(--ink-muted) hover:text-(--ink-primary) transition-colors hidden sm:flex items-center gap-1"
+              className="text-xs font-mono text-(--ink-muted) hover:text-(--ink-primary) transition-colors hidden lg:flex items-center gap-1 desktop-nav-only"
               aria-label="GitHub Profile"
             >
               GitHub <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
@@ -104,13 +103,13 @@ export default function Navbar() {
 
             <Link
               href="/contact"
-              className="hidden sm:inline-flex btn-nav-cta"
+              className="btn-nav-cta desktop-nav-only"
             >
               Let's Talk <span aria-hidden="true">→</span>
             </Link>
 
             {/* Visual separator */}
-            <span className="h-3.5 w-px bg-(--border-subtle) mx-0.5" aria-hidden="true" />
+            <span className="desktop-nav-only h-3.5 w-px bg-(--border-subtle) mx-0.5" aria-hidden="true" />
 
             {/* Dark / Light Mode Switcher */}
             <ThemeToggle />
@@ -137,17 +136,24 @@ export default function Navbar() {
           <div className="md:hidden border-t border-(--border-subtle) bg-(--header-bg) backdrop-blur-xl px-4 py-6 transition-all duration-200">
             <div className="page-shell flex flex-col gap-4">
               <nav aria-label="Mobile Navigation" className="flex flex-col gap-3">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between py-2 text-sm font-mono tracking-wider uppercase text-(--ink-primary) hover:opacity-75 transition-opacity"
-                  >
-                    <span>{item.name}</span>
-                    <span className="text-xs text-(--ink-muted)">→</span>
-                  </Link>
-                ))}
+                {navItems.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between py-2 text-sm font-mono tracking-wider uppercase transition-opacity ${
+                        isActive
+                          ? "font-bold text-(--ink-primary)"
+                          : "text-(--ink-secondary) hover:opacity-75"
+                      }`}
+                    >
+                      <span>{item.name}</span>
+                      <span className="text-xs text-(--ink-muted)">→</span>
+                    </Link>
+                  );
+                })}
               </nav>
 
               <div className="pt-4 border-t border-(--border-subtle) flex flex-col gap-3">
@@ -164,7 +170,7 @@ export default function Navbar() {
                 <Link
                   href="/contact"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="mt-2 flex h-9 w-full items-center justify-center gap-2 rounded-full border border-(--border-strong) bg-(--ink-primary) text-xs font-medium text-(--bg-primary)"
+                  className="btn-mobile-cta mt-2"
                 >
                   Let's Talk <span aria-hidden="true">→</span>
                 </Link>
