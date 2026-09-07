@@ -39,6 +39,8 @@ export function Footer({ socialLinks = [] }: { socialLinks?: any[] }) {
                   alt="touseefspace logo"
                   width={28}
                   height={28}
+                  style={{ width: "28px", height: "28px" }}
+                  loading="lazy"
                   className="dark-only object-contain"
                 />
                 <Image
@@ -46,6 +48,8 @@ export function Footer({ socialLinks = [] }: { socialLinks?: any[] }) {
                   alt="touseefspace logo"
                   width={28}
                   height={28}
+                  style={{ width: "28px", height: "28px" }}
+                  loading="lazy"
                   className="light-only object-contain"
                 />
               </div>
@@ -69,77 +73,68 @@ export function Footer({ socialLinks = [] }: { socialLinks?: any[] }) {
             <p className="font-mono text-xs uppercase tracking-widest text-(--ink-muted)">
               Navigation
             </p>
-            <ul className="space-y-2.5">
+            <nav aria-label="Footer navigation" className="flex flex-col gap-2">
               {footerNavLinks.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    prefetch={false}
-                    className="text-sm text-(--ink-secondary) hover:text-(--ink-primary) transition-colors font-mono"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-              <li>
                 <Link
-                  href="https://github.com/touseefspace"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-(--ink-secondary) hover:text-(--ink-primary) transition-colors font-mono"
+                  key={item.name}
+                  href={item.href}
+                  className="text-sm text-(--ink-secondary) hover:text-(--ink-primary) transition-colors"
                 >
-                  GitHub <ArrowUpRight className="h-3 w-3 opacity-60" aria-hidden="true" />
+                  {item.name}
                 </Link>
-              </li>
-            </ul>
+              ))}
+            </nav>
           </div>
 
-          {/* Connect & Social */}
+          {/* Direct Line & Socials */}
           <div className="space-y-3.5">
             <p className="font-mono text-xs uppercase tracking-widest text-(--ink-muted)">
-              Connect
+              Direct Channel
             </p>
-            <div>
-              <a
+            <div className="space-y-2 text-sm text-(--ink-secondary)">
+              <Link
                 href="mailto:hello@touseefspace.com"
-                className="inline-flex items-center gap-1.5 text-xs font-mono text-(--ink-primary) hover:underline"
+                className="inline-flex items-center gap-2 hover:text-(--ink-primary) transition-colors"
               >
-                <Mail className="h-3.5 w-3.5 text-(--ink-muted)" aria-hidden="true" />
-                hello@touseefspace.com
-              </a>
+                <Mail className="h-4 w-4 text-(--ink-muted)" aria-hidden="true" />
+                <span>hello@touseefspace.com</span>
+              </Link>
             </div>
-            <p className="text-xs text-(--ink-muted) leading-relaxed">
-              Available for bespoke engineering, architecture consults, and high-impact digital products.
+
+            <p className="font-mono text-xs uppercase tracking-widest text-(--ink-muted) pt-2">
+              Presence
             </p>
-            {/* Naturally Coloured Social Icons */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              {displayLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-transform duration-200 hover:scale-110"
-                  aria-label={link.name}
-                >
-                  {link.iconDark?.url ? (
-                    <img
-                      src={link.iconDark.url}
-                      alt=""
-                      aria-hidden="true"
-                      className="h-7 w-7 object-contain"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center" aria-hidden="true">
-                      <BrandIcon
-                        name={link.name}
-                        url={link.url}
-                        size={28}
+              {displayLinks.map((link) => {
+                const iconUrl = link.iconDark?.url || link.iconDark?.asset?.url || (typeof link.iconDark === "string" ? link.iconDark : null);
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-transform duration-200 hover:scale-110"
+                    aria-label={link.name}
+                  >
+                    {iconUrl ? (
+                      <img
+                        src={iconUrl}
+                        alt=""
+                        aria-hidden="true"
+                        className="h-7 w-7 object-contain"
                       />
-                    </div>
-                  )}
-                </Link>
-              ))}
+                    ) : (
+                      <div className="flex items-center justify-center" aria-hidden="true">
+                        <BrandIcon
+                          name={link.name}
+                          url={link.url}
+                          size={28}
+                        />
+                      </div>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>

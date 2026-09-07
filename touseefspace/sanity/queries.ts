@@ -196,32 +196,36 @@ export const SKILL_CATEGORIES_QUERY = `*[_type == "skillCategory"] | order(order
   _id,
   title,
   description,
-  iconDark {
-    asset-> {
-      _id,
-      url
+  "iconDark": {
+    "url": iconDark.asset->url,
+    "asset": {
+      "_id": iconDark.asset->_id,
+      "url": iconDark.asset->url
     }
   },
-  iconLight {
-    asset-> {
-      _id,
-      url
+  "iconLight": {
+    "url": iconLight.asset->url,
+    "asset": {
+      "_id": iconLight.asset->_id,
+      "url": iconLight.asset->url
     }
   },
   skills[] {
     _key,
     name,
     proficiency,
-    iconDark {
-      asset-> {
-        _id,
-        url
+    "iconDark": {
+      "url": iconDark.asset->url,
+      "asset": {
+        "_id": iconDark.asset->_id,
+        "url": iconDark.asset->url
       }
     },
-    iconLight {
-      asset-> {
-        _id,
-        url
+    "iconLight": {
+      "url": iconLight.asset->url,
+      "asset": {
+        "_id": iconLight.asset->_id,
+        "url": iconLight.asset->url
       }
     }
   }
@@ -232,16 +236,18 @@ export const SOCIAL_LINKS_QUERY = `*[_type == "socialLink"] | order(order asc, n
   name,
   username,
   url,
-  iconDark {
-    asset-> {
-      _id,
-      url
+  "iconDark": {
+    "url": iconDark.asset->url,
+    "asset": {
+      "_id": iconDark.asset->_id,
+      "url": iconDark.asset->url
     }
   },
-  iconLight {
-    asset-> {
-      _id,
-      url
+  "iconLight": {
+    "url": iconLight.asset->url,
+    "asset": {
+      "_id": iconLight.asset->_id,
+      "url": iconLight.asset->url
     }
   }
 }`;

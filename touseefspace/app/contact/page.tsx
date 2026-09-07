@@ -49,8 +49,13 @@ async function SocialsContainer() {
           <div className="flex items-center gap-4 min-w-0">
             {/* Unboxed Social Icon */}
             <div className="shrink-0 flex items-center justify-center transition-transform duration-300 group-hover:scale-110" aria-hidden="true">
-              {social.iconDark?.url ? (
-                <img src={social.iconDark.url} alt="" aria-hidden="true" className="h-7 w-7 object-contain" />
+              {(social.iconDark?.url || social.iconDark?.asset?.url || (typeof social.iconDark === "string" ? social.iconDark : null)) ? (
+                <img 
+                  src={social.iconDark?.url || social.iconDark?.asset?.url || social.iconDark} 
+                  alt="" 
+                  aria-hidden="true" 
+                  className="h-7 w-7 object-contain" 
+                />
               ) : (
                 <BrandIcon 
                   name={social.name}

@@ -38,41 +38,43 @@ async function SkillsContainer() {
   return (
     <div className="mt-10 grid gap-6 lg:grid-cols-2">
       {skillCategories.length > 0 ? (
-        skillCategories.map((category: any) => (
-          <section 
-            key={category.id} 
-            className="group rounded-3xl p-6 sm:p-7 bg-(--bg-surface) border border-(--border-card) shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:shadow-md"
-          >
-            <div className="flex items-center gap-3.5 pb-3 border-b border-(--border-subtle)">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-(--bg-subtle)/70 border border-(--border-subtle) text-(--ink-primary)">
-                {category.iconDark?.url ? (
-                  <img src={category.iconDark.url} alt="" className="h-5 w-5 object-contain" />
-                ) : (
-                  <div className="h-2 w-2 bg-(--ink-primary) rounded-full" />
-                )}
-              </span>
-              <h2 className="text-base sm:text-lg font-bold text-(--ink-primary) tracking-tight">{category.title}</h2>
-            </div>
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {category.skills?.map((skill: any) => (
-                <div 
-                  key={skill.id} 
-                  className="group/skill rounded-2xl border border-(--border-subtle) bg-(--bg-subtle)/40 p-3.5 transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) hover:scale-[1.02]"
-                >
-                  <div className="flex items-center gap-2.5">
-                    {skill.iconDark?.url && (
-                      <Image
-                        src={skill.iconDark.url}
-                        alt=""
-                        aria-hidden="true"
-                        width={22}
-                        height={22}
-                        className="h-5 w-5 rounded-sm object-contain shrink-0"
-                      />
-                    )}
-                    <span className="min-w-0 text-xs sm:text-sm font-medium text-(--ink-primary) truncate">{skill.name}</span>
-                  </div>
-                  <div className="mt-3 flex items-center gap-2.5">
+        skillCategories.map((category: any) => {
+          const categoryIcon = category.iconDark?.url || category.iconDark?.asset?.url || (typeof category.iconDark === "string" ? category.iconDark : null);
+          return (
+            <section 
+              key={category.id || category._id || category.title} 
+              className="group rounded-3xl p-5 sm:p-7 bg-(--bg-surface) border border-(--border-card) shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:shadow-md"
+            >
+              <div className="flex items-center gap-3.5 pb-3 border-b border-(--border-subtle)">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-(--bg-subtle)/70 border border-(--border-subtle) text-(--ink-primary)">
+                  {categoryIcon ? (
+                    <img src={categoryIcon} alt="" aria-hidden="true" className="h-5 w-5 object-contain" />
+                  ) : (
+                    <div className="h-2 w-2 bg-(--ink-primary) rounded-full" />
+                  )}
+                </span>
+                <h2 className="text-base sm:text-lg font-bold text-(--ink-primary) tracking-tight">{category.title}</h2>
+              </div>
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {category.skills?.map((skill: any) => {
+                  const skillIcon = skill.iconDark?.url || skill.iconDark?.asset?.url || (typeof skill.iconDark === "string" ? skill.iconDark : null);
+                  return (
+                    <div 
+                      key={skill.id || skill._key || skill.name} 
+                      className="group/skill rounded-2xl border border-(--border-subtle) bg-(--bg-subtle)/40 p-3.5 transition-all duration-200 hover:bg-(--bg-subtle) hover:border-(--border-strong) hover:scale-[1.02]"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        {skillIcon && (
+                          <img
+                            src={skillIcon}
+                            alt=""
+                            aria-hidden="true"
+                            className="h-5 w-5 rounded-sm object-contain shrink-0"
+                          />
+                        )}
+                        <span className="min-w-0 text-xs sm:text-sm font-medium text-(--ink-primary) truncate">{skill.name}</span>
+                      </div>
+                      <div className="mt-3 flex items-center gap-2.5">
                     <div 
                       role="progressbar"
                       aria-valuenow={skill.proficiency || 0}
@@ -86,10 +88,12 @@ async function SkillsContainer() {
                     <span className="text-[10px] font-mono text-(--ink-muted) tabular-nums group-hover/skill:text-(--ink-primary) transition-colors">{skill.proficiency || 0}%</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </section>
-        ))
+              );
+            })}
+          </div>
+        </section>
+      );
+    })
       ) : (
         <div className="lg:col-span-2">
           <EmptyState
