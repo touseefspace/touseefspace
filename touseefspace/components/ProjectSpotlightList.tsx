@@ -182,9 +182,9 @@ function ProjectCard({
           )}
 
           {/* Action Links */}
-          <div className="flex items-center justify-between gap-2.5 sm:gap-3 pt-4 border-t border-(--border-subtle)">
-            {/* Left Icons (Live Demo & Source Code - icon-only on mobile, full text on sm+) */}
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 pt-4 border-t border-(--border-subtle)">
+            {/* Mobile: Left icons | Desktop: View Live & Source Code full buttons (ordered after Case Study) */}
+            <div className="flex items-center gap-2 sm:gap-3 order-1 sm:order-2">
               {project.liveUrl && (
                 <Link 
                   href={project.liveUrl} 
@@ -192,9 +192,9 @@ function ProjectCard({
                   rel="noopener noreferrer"
                   aria-label={`View live demo of ${project.title}`}
                   title={`View live demo of ${project.title}`}
-                  className="btn-secondary h-8! sm:h-9! w-8! sm:w-auto px-0! sm:px-3.5! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center justify-center gap-1.5"
+                  className="btn-secondary h-8! w-8! p-0! sm:h-9! sm:w-auto! sm:px-4! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap"
                 >
-                  <ArrowUpRight className="h-4 w-4 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
+                  <ArrowUpRight className="h-4 w-4 sm:h-3.5 sm:w-3.5 shrink-0" aria-hidden="true" />
                   <span className="hidden sm:inline">View Live</span>
                 </Link>
               )}
@@ -205,22 +205,22 @@ function ProjectCard({
                   rel="noopener noreferrer"
                   aria-label={`View source code for ${project.title} on GitHub`}
                   title={`View source code for ${project.title} on GitHub`}
-                  className="btn-secondary h-8! sm:h-9! w-8! sm:w-auto px-0! sm:px-3.5! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center justify-center gap-1.5"
+                  className="btn-secondary h-8! w-8! p-0! sm:h-9! sm:w-auto! sm:px-4! text-[11px]! sm:text-xs! font-medium rounded-lg sm:rounded-xl inline-flex items-center justify-center gap-1.5 shrink-0 whitespace-nowrap"
                 >
-                  <SiGithub className="h-3.5 w-3.5" aria-hidden="true" />
+                  <SiGithub className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   <span className="hidden sm:inline">Source Code</span>
                 </Link>
               )}
             </div>
 
-            {/* Right: Case Study CTA */}
+            {/* Mobile: Right button | Desktop: Primary first button */}
             {projectSlug && (
               <Link 
                 href={`/work/${projectSlug}`}
                 aria-label={`Explore ${project.title} case study`}
-                className="btn-primary h-8! sm:h-9! px-3! sm:px-4! text-[11px]! sm:text-xs! font-semibold rounded-lg sm:rounded-xl inline-flex items-center gap-1.5 shadow-xs shrink-0"
+                className="btn-primary h-8! sm:h-9! px-3! sm:px-4! text-[11px]! sm:text-xs! font-semibold rounded-lg sm:rounded-xl inline-flex items-center gap-1.5 shadow-xs shrink-0 whitespace-nowrap order-2 sm:order-1"
               >
-                <span>Case Study</span> <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Case Study</span> <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               </Link>
             )}
           </div>
