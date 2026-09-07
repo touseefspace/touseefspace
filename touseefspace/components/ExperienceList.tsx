@@ -69,13 +69,13 @@ function ExperienceCard({ exp }: { exp: Experience }) {
     <div 
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      className="experience-card group relative p-6 sm:p-8 md:p-9 rounded-3xl border border-(--border-card) bg-(--bg-surface) shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:shadow-md"
+      className="experience-card glass-line group relative p-5 sm:p-8 md:p-9 rounded-3xl border border-(--border-subtle) bg-(--bg-surface)/65 backdrop-blur-xl shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:bg-(--bg-surface)/80 hover:shadow-md"
     >
       {/* Spotlight Glow */}
       <div className="spotlight-glow" />
 
-      {/* Timeline Dot */}
-      <div className="absolute left-[-31px] md:left-[-55px] top-7 h-3.5 w-3.5 rounded-full bg-(--bg-primary) border-2 border-(--ink-primary) z-10 transition-transform duration-200 group-hover:scale-125" />
+      {/* Timeline Dot (Desktop Only) */}
+      <div className="hidden md:block absolute -left-13.75 top-7 h-3.5 w-3.5 rounded-full bg-(--bg-primary) border-2 border-(--ink-primary) z-10 transition-transform duration-200 group-hover:scale-125" />
 
       <div className="grid lg:grid-cols-10 gap-8 relative z-10">
         <div className="lg:col-span-6 space-y-6">

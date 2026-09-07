@@ -17,8 +17,8 @@ export default function ExperiencePage() {
       {/* Editorial Header */}
       <div className="max-w-4xl mb-12 md:mb-16">
         <p className="section-label mb-4">Trajectory</p>
-        <h1 className="text-3xl font-bold text-(--ink-primary) md:text-5xl tracking-tight leading-[1.05] mb-6">
-          The Journey <br/> So Far.
+        <h1 className="text-3xl font-bold text-(--ink-primary) md:text-5xl tracking-tight leading-tight mb-6">
+          The Journey So Far.
         </h1>
         <p className="text-base md:text-lg leading-relaxed text-(--ink-secondary) max-w-2xl">
           A chronicle of technical growth, from foundational computer science to professional full-stack delivery.
@@ -63,18 +63,20 @@ async function ExperiencesContainer() {
           {/* Left Header - Sticky */}
           <div className="md:col-span-4 lg:col-span-3">
             <div className="md:sticky md:top-28 space-y-3">
-              <div className="h-10 w-10 rounded-xl bg-(--bg-subtle)/70 flex items-center justify-center text-(--ink-primary) border border-(--border-subtle)">
-                <BriefcaseIcon size={18} />
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle)/70 flex items-center justify-center text-(--ink-primary) border border-(--border-subtle)">
+                  <BriefcaseIcon size={18} />
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Professional Experience</h2>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Professional Experience</h2>
-              <p className="text-sm text-(--ink-muted) leading-relaxed max-w-55">
+              <p className="text-sm text-(--ink-muted) leading-relaxed">
                 Real-world delivery, freelance consulting, and engineering projects.
               </p>
             </div>
           </div>
           
           {/* Right Timeline */}
-          <div className="md:col-span-8 lg:col-span-9 relative border-l border-(--border-subtle) pl-6 md:pl-12 ml-4 md:ml-0">
+          <div className="md:col-span-8 lg:col-span-9 relative border-l-0 md:border-l border-(--border-subtle) pl-0 md:pl-12 ml-0">
             <ExperienceList experiences={workExp as any} />
           </div>
         </section>
@@ -86,18 +88,20 @@ async function ExperiencesContainer() {
           {/* Left Header - Sticky */}
           <div className="md:col-span-4 lg:col-span-3">
             <div className="md:sticky md:top-28 space-y-3">
-              <div className="h-10 w-10 rounded-xl bg-(--bg-subtle)/70 flex items-center justify-center text-(--ink-primary) border border-(--border-subtle)">
-                <GraduationCap size={18} />
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle)/70 flex items-center justify-center text-(--ink-primary) border border-(--border-subtle)">
+                  <GraduationCap size={18} />
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Academic Foundations</h2>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Academic Foundations</h2>
-              <p className="text-sm text-(--ink-muted) leading-relaxed max-w-55">
+              <p className="text-sm text-(--ink-muted) leading-relaxed">
                 Formal computer science education and specialized focus areas.
               </p>
             </div>
           </div>
 
           {/* Right Timeline */}
-          <div className="md:col-span-8 lg:col-span-9 relative border-l border-(--border-subtle) pl-6 md:pl-12 ml-4 md:ml-0">
+          <div className="md:col-span-8 lg:col-span-9 relative border-l-0 md:border-l border-(--border-subtle) pl-0 md:pl-12 ml-0">
             <ExperienceList experiences={eduExp as any} />
           </div>
         </section>
