@@ -1,12 +1,13 @@
 {
   "name": "touseefspace",
-  "version": "4.1.2",
+  "version": "4.1.3",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "audit": "lhci autorun"
   },
   "dependencies": {
     "@portabletext/react": "^3.2.0",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@lhci/cli": "^0.14.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.3",

@@ -39,7 +39,8 @@ async function SkillsContainer() {
     <div className="mt-10 grid gap-6 lg:grid-cols-2">
       {skillCategories.length > 0 ? (
         skillCategories.map((category: any) => {
-          const categoryIcon = category.iconDark?.url || category.iconDark?.asset?.url || (typeof category.iconDark === "string" ? category.iconDark : null);
+          const iconLight = category.iconLight?.url || category.iconLight?.asset?.url || (typeof category.iconLight === "string" ? category.iconLight : null);
+          const iconDark = category.iconDark?.url || category.iconDark?.asset?.url || (typeof category.iconDark === "string" ? category.iconDark : null);
           return (
             <section 
               key={category.id || category._id || category.title} 
@@ -47,14 +48,42 @@ async function SkillsContainer() {
             >
               <div className="flex items-center gap-3.5 pb-3 border-b border-(--border-subtle)">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-(--bg-subtle)/70 border border-(--border-subtle) text-(--ink-primary)">
-                  {categoryIcon ? (
+                  {iconLight && iconDark && iconLight !== iconDark ? (
+                    <>
+                      <img 
+                        src={iconLight} 
+                        alt="" 
+                        aria-hidden="true" 
+                        loading="lazy"
+                        decoding="async"
+                        className="h-5 w-5 object-contain dark:hidden" 
+                      />
+                      <img 
+                        src={iconDark} 
+                        alt="" 
+                        aria-hidden="true" 
+                        loading="lazy"
+                        decoding="async"
+                        className="h-5 w-5 object-contain hidden dark:block" 
+                      />
+                    </>
+                  ) : iconDark ? (
                     <img 
-                      src={categoryIcon} 
+                      src={iconDark} 
                       alt="" 
                       aria-hidden="true" 
                       loading="lazy"
                       decoding="async"
-                      className="h-5 w-5 object-contain dark:invert dark:opacity-95 transition-all" 
+                      className="h-5 w-5 object-contain invert dark:invert-0" 
+                    />
+                  ) : iconLight ? (
+                    <img 
+                      src={iconLight} 
+                      alt="" 
+                      aria-hidden="true" 
+                      loading="lazy"
+                      decoding="async"
+                      className="h-5 w-5 object-contain dark:invert" 
                     />
                   ) : (
                     <div className="h-2 w-2 bg-(--ink-primary) rounded-full" />

@@ -1,0 +1,85 @@
+name: Lighthouse CI Audit
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lighthouse-audit:
+    name: Audit All Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'touseefspace/package-lock.json'
+
+      - name: Install Dependencies
+        working-directory: ./touseefspace
+        run: npm ci
+
+      - name: Build Next.js Site
+        working-directory: ./touseefspace
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: "8h4k9qg7"
+          NEXT_PUBLIC_SANITY_DATASET: "production"
+          NEXT_PUBLIC_SANITY_API_VERSION: "2026-02-01"
+          NEXT_PUBLIC_SITE_URL: "https://touseefspace.com"
+        run: npm run build
+
+      - name: Run Lighthouse CI Audit
+        working-directory: ./touseefspace
+        run: npx @lhci/cli@0.14.x autorun --config=lighthouserc.json
+        continue-on-error: true
+
+      - name: Generate Audit Summary Table
+        if: always()
+        working-directory: ./touseefspace
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const manifestPath = path.join(process.cwd(), '.lighthouseci', 'manifest.json');
+            if (!fs.existsSync(manifestPath)) {
+              console.log('No manifest found.');
+              process.exit(0);
+            }
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+            let markdown = '# ⚡ Lighthouse CI Audit Summary\n\n';
+            markdown += '| Page Route | Performance | Accessibility | Best Practices | SEO |\n';
+            markdown += '| :--- | :---: | :---: | :---: | :---: |\n';
+            for (const run of manifest) {
+              const report = JSON.parse(fs.readFileSync(run.jsonPath, 'utf8'));
+              const perf = Math.round((report.categories.performance?.score || 0) * 100);
+              const a11y = Math.round((report.categories.accessibility?.score || 0) * 100);
+              const bp = Math.round((report.categories['best-practices']?.score || 0) * 100);
+              const seo = Math.round((report.categories.seo?.score || 0) * 100);
+              const route = new URL(run.url).pathname;
+              const formatScore = (val) => {
+                const icon = val >= 90 ? '🟢' : val >= 50 ? '🟠' : '🔴';
+                return icon + ' ' + val + '%';
+              };
+              markdown += '| \`' + route + '\` | ' + formatScore(perf) + ' | ' + formatScore(a11y) + ' | ' + formatScore(bp) + ' | ' + formatScore(seo) + ' |\n';
+            }
+            markdown += '\n> ℹ️ *Download full interactive HTML reports from the Artifacts section below.*\n';
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown);
+          "
+
+      - name: Upload Lighthouse Reports Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: touseefspace/.lighthouseci/
+          retention-days: 30

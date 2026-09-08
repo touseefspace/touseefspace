@@ -201,6 +201,26 @@ To allow your deployed site to fetch data from Sanity:
 
 ---
 
+## ⚡ Automated Lighthouse CI Audits
+
+This repository includes turnkey automated performance benchmarking powered by Lighthouse CI (`@lhci/cli`):
+
+### 1. Automated GitHub Actions Workflow
+On every `git push` to `main`, GitHub Actions automatically:
+- Builds the production bundle and spins up a local server.
+- Runs Lighthouse across all major pages: `/`, `/projects`, `/projects/wholesale-distribution-erp-platform`, `/skills`, `/experiences`, `/blog`, and `/contact`.
+- Generates a **Markdown Scorecard** directly into the GitHub Actions run summary with real-time Performance, Accessibility, Best Practices, and SEO scores.
+- Attaches the complete interactive HTML reports as downloadable build artifacts (retained for 30 days).
+
+### 2. Local Ad-Hoc Audits
+Run a local audit across all pages anytime from `touseefspace/`:
+```bash
+npm run audit
+```
+Detailed reports will be generated in `touseefspace/.lighthouseci/`.
+
+---
+
 ## 🎨 Personalizing for Your Own Brand
 
 1. **Favicons & Logos**: Replace files in `public/favicon_io_*` with your brand monogram or logo assets.
