@@ -151,7 +151,7 @@ export const project = defineType({
       name: 'body',
       title: 'Deep-Dive Case Study Narrative',
       type: 'blockContent',
-      description: 'Full architectural breakdown, diagrams, code snippets, and key learnings for /work/[slug].',
+      description: 'Full architectural breakdown, diagrams, code snippets, and key learnings for /projects/[slug].',
     }),
     defineField({
       name: 'githubUrl',

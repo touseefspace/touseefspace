@@ -20,7 +20,7 @@ if (!secret) {
 
 const payload = {
   _type: process.argv[2] || "project",
-  slug: process.argv[3] || "aunvu-erp",
+  slug: process.argv[3] || "wholesale-distribution-erp-platform",
 };
 
 const stringifiedPayload = JSON.stringify(payload);

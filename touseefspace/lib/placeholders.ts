@@ -7,8 +7,9 @@
 export const placeholderProjects = [
   {
     id: "aunvu-erp",
-    title: "Aunvu / MISBAH ERP Platform",
-    slug: "aunvu-erp",
+    title: "Aunvu / Wholesale Distribution ERP Platform",
+    slug: "wholesale-distribution-erp-platform",
+    aliases: ["aunvu-erp"],
     client: "Regional Wholesale Distribution",
     role: "Lead Full Stack Architect",
     period: "2024 - 2025",

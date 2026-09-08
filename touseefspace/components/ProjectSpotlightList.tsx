@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowRight, Sparkles } from "lucide-react";
 import { SiGithub } from "react-icons/si";
 import Link from "next/link";
 import Image from "next/image";
+import { resolveSanityImageUrl } from "@/sanity/image";
 
 interface Media {
   url: string;
@@ -79,9 +80,7 @@ function ProjectCard({
     cardRef.current.style.setProperty("--y", `${y}px`);
   };
 
-  const imageUrl = typeof project.image === "string" 
-    ? project.image 
-    : project.image?.url;
+  const imageUrl = resolveSanityImageUrl(project.image, 1200);
     
   const imageAlt = typeof project.image === "string" 
     ? project.title 
@@ -105,7 +104,7 @@ function ProjectCard({
         <div className="lg:col-span-6 overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-subtle) transition-colors group-hover:border-(--border-strong)">
           {projectSlug ? (
             <Link
-              href={`/work/${projectSlug}`}
+              href={`/projects/${projectSlug}`}
               className="group/mockup relative aspect-16/10 w-full block overflow-hidden"
               aria-label={`Read ${project.title} case study`}
             >
@@ -161,7 +160,7 @@ function ProjectCard({
             )}
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-(--ink-primary) leading-snug">
               {projectSlug ? (
-                <Link href={`/work/${projectSlug}`} className="hover:underline">
+                <Link href={`/projects/${projectSlug}`} className="hover:underline">
                   {project.title}
                 </Link>
               ) : (
@@ -178,20 +177,23 @@ function ProjectCard({
           {/* Tech Stack Badges */}
           {project.technologies && project.technologies.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
-              {project.technologies.map((tech, index) => (
-                <div key={index} className="tech-tag">
-                  {tech.icon && (
-                    <Image 
-                      src={typeof tech.icon === "string" ? tech.icon : tech.icon.url} 
-                      alt={tech.name}
-                      width={14}
-                      height={14}
-                      className="h-3.5 w-3.5 object-contain"
-                    />
-                  )}
-                  <span>{tech.name}</span>
-                </div>
-              ))}
+              {project.technologies.map((tech, index) => {
+                const techIconUrl = resolveSanityImageUrl(tech.icon, 48);
+                return (
+                  <div key={index} className="tech-tag">
+                    {techIconUrl && (
+                      <Image 
+                        src={techIconUrl} 
+                        alt={tech.name}
+                        width={14}
+                        height={14}
+                        className="h-3.5 w-3.5 object-contain"
+                      />
+                    )}
+                    <span>{tech.name}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -230,7 +232,7 @@ function ProjectCard({
             {/* Mobile: Right button | Desktop: Primary first button */}
             {projectSlug && (
               <Link 
-                href={`/work/${projectSlug}`}
+                href={`/projects/${projectSlug}`}
                 aria-label={`Explore ${project.title} case study`}
                 className="btn-primary h-8! sm:h-9! px-3! sm:px-4! text-[11px]! sm:text-xs! font-semibold rounded-lg sm:rounded-xl inline-flex items-center gap-1.5 shadow-xs shrink-0 whitespace-nowrap order-2 sm:order-1"
               >

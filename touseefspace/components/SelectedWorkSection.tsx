@@ -12,7 +12,7 @@ import {
   Zap,
   ExternalLink,
 } from "lucide-react";
-import { urlForImage } from "@/sanity/image";
+import { urlForImage, resolveSanityImageUrl } from "@/sanity/image";
 
 interface Metric {
   value: string;
@@ -318,8 +318,7 @@ function StageCardContent({
   isCenter: boolean;
 }) {
   const imageAssetUrl =
-    urlForImage(project.image)?.width(1200).url() ||
-    (typeof project.image === "string" ? project.image : project.image?.url) ||
+    resolveSanityImageUrl(project.image, 1200) ||
     "/placeholders/aunvu-dashboard.svg";
 
   const imageAlt = project.image?.alt || `${project.title} Preview`;
@@ -380,7 +379,7 @@ function StageCardContent({
         </div>
 
         <Link
-          href={`/work/${project.slug}`}
+          href={`/projects/${project.slug}`}
           tabIndex={isCenter ? 0 : -1}
           className="relative block aspect-16/10 w-full overflow-hidden bg-black/5 dark:bg-black/40"
         >
@@ -434,7 +433,7 @@ function StageCardContent({
             </Link>
           )}
           <Link
-            href={`/work/${project.slug}`}
+            href={`/projects/${project.slug}`}
             tabIndex={isCenter ? 0 : -1}
             aria-label={`Explore ${project.title} case study`}
             className="btn-primary h-7! sm:h-8! px-3! sm:px-3.5! text-[11px]! sm:text-xs! font-semibold rounded-lg inline-flex items-center gap-1.5 shadow-xs"

@@ -88,8 +88,11 @@ export async function getProjectBySlug(slug: string) {
   cacheTag("projects");
   cacheLife((isDev ? "seconds" : "days") as any);
 
+  // Normalize legacy slug aliases if needed
+  const targetSlug = slug === "aunvu-erp" ? "wholesale-distribution-erp-platform" : slug;
+
   try {
-    const project = await client.fetch(PROJECT_BY_SLUG_QUERY, { slug });
+    const project = await client.fetch(PROJECT_BY_SLUG_QUERY, { slug: targetSlug });
     if (project) {
       return normalizeProject(project);
     }
@@ -97,7 +100,9 @@ export async function getProjectBySlug(slug: string) {
     console.warn(`[Sanity] Network query unavailable for project ${slug}, using cached local fallback.`);
   }
 
-  const fallback = placeholderProjects.find((p) => p.slug === slug);
+  const fallback = placeholderProjects.find(
+    (p) => p.slug === targetSlug || (p as any).aliases?.includes(slug)
+  );
   return fallback ? normalizeProject(fallback) : null;
 }
 
