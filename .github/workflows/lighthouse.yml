@@ -9,6 +9,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   lighthouse-audit:
     name: Audit All Pages
@@ -81,5 +84,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-reports
-          path: touseefspace/.lighthouseci/
+          path: |
+            touseefspace/.lighthouseci/*.html
+            touseefspace/.lighthouseci/manifest.json
+          include-hidden-files: true
           retention-days: 30
