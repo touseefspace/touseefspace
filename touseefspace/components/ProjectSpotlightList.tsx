@@ -182,12 +182,13 @@ function ProjectCard({
                 return (
                   <div key={index} className="tech-tag">
                     {techIconUrl && (
-                      <Image 
+                      <img 
                         src={techIconUrl} 
-                        alt={tech.name}
-                        width={14}
-                        height={14}
-                        className="h-3.5 w-3.5 object-contain"
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        decoding="async"
+                        className="h-3.5 w-3.5 object-contain shrink-0"
                       />
                     )}
                     <span>{tech.name}</span>

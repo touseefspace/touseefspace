@@ -43,15 +43,33 @@ export async function getSocialLinks() {
   return placeholderSocialLinks;
 }
 
+export function cleanUrl(url?: string | null): string | null {
+  if (!url || typeof url !== "string") return null;
+  const trimmed = url.trim();
+  if (trimmed.length === 0) return null;
+  if (trimmed.includes("touseefspace.vercel.app")) return null;
+  return trimmed;
+}
+
 function normalizeProject(project: any) {
   if (!project) return project;
-  let liveUrl = project.liveUrl;
-  if (!liveUrl || liveUrl.includes("touseefspace.vercel.app")) {
-    liveUrl = "https://touseefspace.com";
-  }
   return {
     ...project,
-    liveUrl,
+    liveUrl: cleanUrl(project.liveUrl),
+    githubUrl: cleanUrl(project.githubUrl),
+    technologies: Array.isArray(project.technologies)
+      ? project.technologies.filter((t: any) => Boolean(t && (t.name || t.skill)))
+      : [],
+  };
+}
+
+function normalizeExperience(exp: any) {
+  if (!exp) return exp;
+  return {
+    ...exp,
+    skillStack: Array.isArray(exp.skillStack)
+      ? exp.skillStack.filter((s: any) => Boolean(s && (s.skill || s.name)))
+      : [],
   };
 }
 
@@ -159,16 +177,17 @@ export async function getExperiences(limit?: number) {
   try {
     const experiences = await client.fetch(EXPERIENCES_QUERY);
     if (experiences && experiences.length > 0) {
-      return limit ? experiences.slice(0, limit) : experiences;
+      const normalized = experiences.map(normalizeExperience);
+      return limit ? normalized.slice(0, limit) : normalized;
     }
   } catch {
     console.warn("[Sanity] Network query unavailable for experiences, using cached local fallback.");
   }
 
   if (limit) {
-    return placeholderExperiences.slice(0, limit);
+    return placeholderExperiences.slice(0, limit).map(normalizeExperience);
   }
-  return placeholderExperiences;
+  return placeholderExperiences.map(normalizeExperience);
 }
 
 /**

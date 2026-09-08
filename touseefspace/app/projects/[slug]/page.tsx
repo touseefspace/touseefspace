@@ -269,12 +269,13 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                   return (
                     <span key={i} className="tech-tag text-xs flex items-center gap-1.5">
                       {techIconUrl && (
-                        <Image
+                        <img
                           src={techIconUrl}
-                          alt={tech.name}
-                          width={14}
-                          height={14}
-                          className="h-3.5 w-3.5 object-contain"
+                          alt=""
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          className="h-3.5 w-3.5 object-contain shrink-0"
                         />
                       )}
                       <span>{tech.name}</span>
@@ -321,19 +322,34 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
       </section>
 
       {/* Footer Navigation */}
-      <footer className="mt-20 pt-10 border-t border-(--border-subtle) flex flex-col sm:flex-row gap-4 sm:items-center justify-between">
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-(--ink-muted) hover:text-(--ink-primary) transition-colors"
-        >
-          <ArrowLeft size={16} aria-hidden="true" /> Browse All Projects
-        </Link>
-        <Link
-          href="/#selected-work"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-(--ink-primary) hover:underline"
-        >
-          Back to Homepage <ArrowRight size={16} aria-hidden="true" />
-        </Link>
+      <footer className="mt-20 pt-10 border-t border-(--border-subtle)">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5">
+          <Link
+            href="/projects"
+            className="group flex flex-col justify-center rounded-2xl border border-(--border-subtle) bg-(--bg-surface)/70 backdrop-blur-md p-3.5 sm:p-5 transition-all duration-200 hover:border-(--border-strong) hover:bg-(--bg-surface) active:scale-[0.98] shadow-xs min-w-0"
+          >
+            <div className="flex items-center gap-1.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-(--ink-muted)">
+              <ArrowLeft size={12} className="shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
+              <span>Back</span>
+            </div>
+            <div className="mt-1 text-xs sm:text-sm font-semibold text-(--ink-primary) truncate">
+              <span className="hidden sm:inline">Browse </span>All Projects
+            </div>
+          </Link>
+
+          <Link
+            href="/#selected-work"
+            className="group flex flex-col justify-center items-end text-right rounded-2xl border border-(--border-subtle) bg-(--bg-surface)/70 backdrop-blur-md p-3.5 sm:p-5 transition-all duration-200 hover:border-(--border-strong) hover:bg-(--bg-surface) active:scale-[0.98] shadow-xs min-w-0"
+          >
+            <div className="flex items-center gap-1.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-(--ink-muted)">
+              <span>Index</span>
+              <ArrowRight size={12} className="shrink-0 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+            </div>
+            <div className="mt-1 text-xs sm:text-sm font-semibold text-(--ink-primary) truncate">
+              <span className="hidden sm:inline">Back to </span>Homepage
+            </div>
+          </Link>
+        </div>
       </footer>
     </article>
   );

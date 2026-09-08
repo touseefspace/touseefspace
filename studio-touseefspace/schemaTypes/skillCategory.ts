@@ -32,11 +32,18 @@ export const skillCategory = defineType({
     }),
     defineField({
       name: 'skills',
-      title: 'Skills List',
+      title: 'Legacy Embedded Skills List (Optional)',
+      description: 'Skills are now created as top-level documents under "Skills & Technologies" and linked directly to this category.',
       type: 'array',
       of: [
         defineArrayMember({
+          type: 'reference',
+          to: [{ type: 'skill' }],
+          title: 'Skill Reference',
+        }),
+        defineArrayMember({
           type: 'object',
+          title: 'Legacy Inline Skill',
           fields: [
             defineField({
               name: 'name',

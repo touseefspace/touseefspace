@@ -1,11 +1,24 @@
 import { createClient } from '@sanity/client'
+import fs from 'fs'
+import path from 'path'
 
-const token = process.env.SANITY_TOKEN
+// Resolve SANITY_TOKEN from process.env or touseefspace/.env
+let token = process.env.SANITY_TOKEN
+if (!token) {
+  const envPath = path.resolve(__dirname, '../../touseefspace/.env')
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8')
+    const match = envContent.match(/SANITY_TOKEN=["']?([^"'\r\n]+)["']?/)
+    if (match) {
+      token = match[1]
+    }
+  }
+}
 
 if (!token) {
   console.error('❌ Error: SANITY_TOKEN environment variable is required to run the seed script.')
   console.error('Create a token with write access at https://sanity.io/manage and run:')
-  console.error('SANITY_TOKEN=your_token npm run seed')
+  console.error('SANITY_TOKEN=your_token npx tsx scripts/seed-sanity.ts')
   process.exit(1)
 }
 
@@ -17,11 +30,38 @@ const client = createClient({
   useCdn: false,
 })
 
+const categoryIconsDir = path.resolve(__dirname, '../category_icons')
+const skillIconsDir = path.resolve(__dirname, '../skill_icons')
+
+const assetCache: Record<string, string> = {}
+
+async function uploadIcon(filePath: string): Promise<string | null> {
+  const filename = path.basename(filePath)
+  if (assetCache[filename]) {
+    return assetCache[filename]
+  }
+
+  if (!fs.existsSync(filePath)) {
+    console.warn(`⚠️ Warning: Icon file not found: ${filePath}`)
+    return null
+  }
+
+  try {
+    const stream = fs.createReadStream(filePath)
+    const asset = await client.assets.upload('image', stream, { filename })
+    assetCache[filename] = asset._id
+    return asset._id
+  } catch (err) {
+    console.error(`❌ Failed to upload ${filename}:`, err)
+    return null
+  }
+}
+
 async function seed() {
-  console.log('🌱 Starting Sanity seed...')
+  console.log('🌱 Starting Sanity seed with normalized skills & real icon assets...')
 
   // 1. Seed Home Page Singleton
-  console.log('Seeding Home Page singleton...')
+  console.log('\n1. Seeding Home Page singleton...')
   await client.createOrReplace({
     _id: 'homePage',
     _type: 'homePage',
@@ -32,8 +72,167 @@ async function seed() {
     location: 'United Arab Emirates',
   })
 
-  // 2. Seed Projects with Phase 5 Case Study Fields
-  console.log('Seeding Projects & Case Studies...')
+  // 2. Upload Category Icons & Seed Skill Categories
+  console.log('\n2. Uploading Category Icons & Seeding Skill Categories...')
+  const categoriesDef = [
+    {
+      _id: 'cat-web',
+      _type: 'skillCategory',
+      title: 'Custom Web Applications',
+      description:
+        'High-performance web applications, modern interfaces, and internal operational tools.',
+      iconFile: 'code-xml.svg',
+      order: 1,
+    },
+    {
+      _id: 'cat-ai',
+      _type: 'skillCategory',
+      title: 'AI Workflows & Automation',
+      description:
+        'Practical LLM integrations, document intelligence, and automated extraction pipelines.',
+      iconFile: 'cpu.svg',
+      order: 2,
+    },
+    {
+      _id: 'cat-cloud',
+      _type: 'skillCategory',
+      title: 'Cloud Systems & Databases',
+      description:
+        'Resilient database design, headless CMS architecture, and serverless backends.',
+      iconFile: 'database.svg',
+      order: 3,
+    },
+    {
+      _id: 'cat-devops',
+      _type: 'skillCategory',
+      title: 'DevOps & Cloud Infrastructure',
+      description:
+        'Containerized deployments, cloud services, automated CI/CD, and deployment infrastructure.',
+      iconFile: 'cloud.svg',
+      order: 4,
+    },
+    {
+      _id: 'cat-tools',
+      _type: 'skillCategory',
+      title: 'Developer Tooling & Collaboration',
+      description:
+        'IDEs, version control workflows, automated testing, and developer collaboration.',
+      iconFile: 'paintbrush.svg',
+      order: 5,
+    },
+    {
+      _id: 'cat-mobile',
+      _type: 'skillCategory',
+      title: 'Mobile & Platform Engineering',
+      description:
+        'Cross-platform mobile applications, responsive viewports, and native developer SDKs.',
+      iconFile: 'smartphone.svg',
+      order: 6,
+    },
+  ]
+
+  for (const cat of categoriesDef) {
+    const iconAssetId = await uploadIcon(path.join(categoryIconsDir, cat.iconFile))
+    const doc: any = {
+      _id: cat._id,
+      _type: 'skillCategory',
+      title: cat.title,
+      description: cat.description,
+      order: cat.order,
+    }
+    if (iconAssetId) {
+      doc.iconDark = {
+        _type: 'image',
+        asset: { _type: 'reference', _ref: iconAssetId },
+      }
+      doc.iconLight = {
+        _type: 'image',
+        asset: { _type: 'reference', _ref: iconAssetId },
+      }
+    }
+    await client.createOrReplace(doc)
+    console.log(`  ✓ Category seeded: ${cat.title}`)
+  }
+
+  // 3. Upload Skill Icons & Seed Normalized Skill Documents
+  console.log('\n3. Uploading Skill Icons & Seeding Normalized Skill Documents...')
+  const skillsDef = [
+    // Web Applications
+    { id: 'skill-next-js', name: 'Next.js', cat: 'cat-web', icon: 'next-js.svg', prof: 95, order: 1 },
+    { id: 'skill-react-js', name: 'React', cat: 'cat-web', icon: 'react-js.svg', prof: 94, order: 2 },
+    { id: 'skill-typescript', name: 'TypeScript', cat: 'cat-web', icon: 'typescript.svg', prof: 92, order: 3 },
+    { id: 'skill-javascript', name: 'JavaScript', cat: 'cat-web', icon: 'javascript.svg', prof: 95, order: 4 },
+    { id: 'skill-tailwind-css', name: 'Tailwind CSS', cat: 'cat-web', icon: 'tailwind-css.svg', prof: 95, order: 5 },
+    { id: 'skill-html5', name: 'HTML5 & CSS3', cat: 'cat-web', icon: 'html5.svg', prof: 95, order: 6 },
+    { id: 'skill-node-js', name: 'Node.js', cat: 'cat-web', icon: 'node-js.svg', prof: 90, order: 7 },
+    { id: 'skill-bootstrap', name: 'Bootstrap', cat: 'cat-web', icon: 'bootstrap.svg', prof: 88, order: 8 },
+
+    // AI Workflows & Automation
+    { id: 'skill-python', name: 'Python', cat: 'cat-ai', icon: 'python.svg', prof: 92, order: 1 },
+    { id: 'skill-fastapi', name: 'FastAPI', cat: 'cat-ai', icon: 'fastapi.svg', prof: 90, order: 2 },
+    { id: 'skill-machine-learning', name: 'Machine Learning & LLMs', cat: 'cat-ai', icon: 'machine-learning.svg', prof: 88, order: 3 },
+    { id: 'skill-n8n', name: 'n8n Workflow Automation', cat: 'cat-ai', icon: 'n8n.png', prof: 90, order: 4 },
+    { id: 'skill-jupyter', name: 'Jupyter Notebooks', cat: 'cat-ai', icon: 'jupyter.svg', prof: 85, order: 5 },
+    { id: 'skill-anaconda', name: 'Anaconda', cat: 'cat-ai', icon: 'anaconda.svg', prof: 82, order: 6 },
+
+    // Cloud Systems & Databases
+    { id: 'skill-postgresql', name: 'PostgreSQL', cat: 'cat-cloud', icon: 'postgresql-icon.svg', prof: 92, order: 1 },
+    { id: 'skill-supabase', name: 'Supabase', cat: 'cat-cloud', icon: 'supabase.svg', prof: 90, order: 2 },
+    { id: 'skill-mongodb', name: 'MongoDB', cat: 'cat-cloud', icon: 'mongodb.svg', prof: 85, order: 3 },
+    { id: 'skill-redis', name: 'Redis', cat: 'cat-cloud', icon: 'redis.svg', prof: 84, order: 4 },
+    { id: 'skill-dynamodb', name: 'Amazon DynamoDB', cat: 'cat-cloud', icon: 'dynamodb.svg', prof: 82, order: 5 },
+    { id: 'skill-firebase', name: 'Firebase', cat: 'cat-cloud', icon: 'firebase.svg', prof: 85, order: 6 },
+    { id: 'skill-django', name: 'Django', cat: 'cat-cloud', icon: 'django.png', prof: 84, order: 7 },
+
+    // DevOps & Infrastructure
+    { id: 'skill-docker', name: 'Docker', cat: 'cat-devops', icon: 'docker.svg', prof: 88, order: 1 },
+    { id: 'skill-aws', name: 'Amazon Web Services (AWS)', cat: 'cat-devops', icon: 'aws.svg', prof: 85, order: 2 },
+    { id: 'skill-google-cloud', name: 'Google Cloud Platform', cat: 'cat-devops', icon: 'google-cloud.svg', prof: 82, order: 3 },
+    { id: 'skill-git', name: 'Git', cat: 'cat-devops', icon: 'git.svg', prof: 92, order: 4 },
+    { id: 'skill-github', name: 'GitHub', cat: 'cat-devops', icon: 'github.svg', prof: 92, order: 5 },
+
+    // Developer Tooling & Collaboration
+    { id: 'skill-vs-code', name: 'Visual Studio Code', cat: 'cat-tools', icon: 'vs-code.svg', prof: 95, order: 1 },
+    { id: 'skill-jetbrains', name: 'JetBrains IDEs', cat: 'cat-tools', icon: 'jetbrains.svg', prof: 90, order: 2 },
+    { id: 'skill-stack-overflow', name: 'Developer Problem Solving', cat: 'cat-tools', icon: 'stack-overflow.svg', prof: 92, order: 3 },
+
+    // Mobile & Platform
+    { id: 'skill-android-studio', name: 'Android Studio', cat: 'cat-mobile', icon: 'android-studio.svg', prof: 82, order: 1 },
+  ]
+
+  for (const s of skillsDef) {
+    const iconAssetId = await uploadIcon(path.join(skillIconsDir, s.icon))
+    const doc: any = {
+      _id: s.id,
+      _type: 'skill',
+      name: s.name,
+      category: {
+        _type: 'reference',
+        _ref: s.cat,
+      },
+      proficiency: s.prof,
+      order: s.order,
+    }
+    if (iconAssetId) {
+      doc.icon = {
+        _type: 'image',
+        asset: { _type: 'reference', _ref: iconAssetId },
+      }
+      doc.iconDark = {
+        _type: 'image',
+        asset: { _type: 'reference', _ref: iconAssetId },
+      }
+      doc.iconLight = {
+        _type: 'image',
+        asset: { _type: 'reference', _ref: iconAssetId },
+      }
+    }
+    await client.createOrReplace(doc)
+    console.log(`  ✓ Skill seeded: ${s.name} (${s.cat})`)
+  }
+
+  // 4. Seed Projects with References to Skills (and strict URL behavior)
+  console.log('\n4. Seeding Projects with References to Skills...')
   const projects = [
     {
       _id: 'project-aunvu-erp',
@@ -57,11 +256,11 @@ async function seed() {
         { _key: 'm3', label: 'Sync Latency', value: '<150ms' },
       ],
       technologies: [
-        { _key: 't1', name: 'Next.js' },
-        { _key: 't2', name: 'TypeScript' },
-        { _key: 't3', name: 'PostgreSQL' },
-        { _key: 't4', name: 'Sanity CMS' },
-        { _key: 't5', name: 'Tailwind CSS' },
+        { _key: 't1', _type: 'reference', _ref: 'skill-next-js' },
+        { _key: 't2', _type: 'reference', _ref: 'skill-typescript' },
+        { _key: 't3', _type: 'reference', _ref: 'skill-postgresql' },
+        { _key: 't4', _type: 'reference', _ref: 'skill-tailwind-css' },
+        { _key: 't5', _type: 'reference', _ref: 'skill-node-js' },
       ],
       features: [
         'Real-time event-driven stock ledger with immutable audit trail',
@@ -114,39 +313,14 @@ async function seed() {
             },
           ],
         },
-        {
-          _key: 'b6',
-          _type: 'codeBlock',
-          language: 'sql',
-          filename: 'ledger_transaction.sql',
-          code: `-- Atomic ledger append with branch verification\nINSERT INTO stock_ledger (branch_id, item_id, delta_quantity, reason, initiated_by)\nVALUES ($1, $2, $3, 'DISPATCH_CONFIRMED', $4)\nRETURNING transaction_id, current_stock;`,
-        },
-        {
-          _key: 'b7',
-          _type: 'block',
-          style: 'h2',
-          children: [{ _key: 'c5', _type: 'span', text: 'Measurable Outcomes & Scaling' }],
-        },
-        {
-          _key: 'b8',
-          _type: 'block',
-          style: 'normal',
-          children: [
-            {
-              _key: 'c6',
-              _type: 'span',
-              text: 'Within 6 weeks of rollout across all 12 facilities, stock discrepancy dropped to zero. End-of-month financial audit time dropped from 3 days to under 4 hours.',
-            },
-          ],
-        },
       ],
-      liveUrl: 'https://touseefspace.com',
+      // No liveUrl: internal private enterprise tool!
       githubUrl: 'https://github.com/touseefspace',
       featured: true,
       order: 1,
     },
     {
-      _id: 'project-ai-workflow-suite',
+      _id: 'project-ai-workflow-engine',
       _type: 'project',
       title: 'AI Document & Workflow Engine',
       slug: { _type: 'slug', current: 'ai-workflow-engine' },
@@ -167,11 +341,11 @@ async function seed() {
         { _key: 'm3', label: 'Turnaround Time', value: '<10s' },
       ],
       technologies: [
-        { _key: 't1', name: 'Python' },
-        { _key: 't2', name: 'OpenAI API' },
-        { _key: 't3', name: 'Next.js' },
-        { _key: 't4', name: 'FastAPI' },
-        { _key: 't5', name: 'Docker' },
+        { _key: 't1', _type: 'reference', _ref: 'skill-python' },
+        { _key: 't2', _type: 'reference', _ref: 'skill-fastapi' },
+        { _key: 't3', _type: 'reference', _ref: 'skill-docker' },
+        { _key: 't4', _type: 'reference', _ref: 'skill-next-js' },
+        { _key: 't5', _type: 'reference', _ref: 'skill-machine-learning' },
       ],
       features: [
         'Automated multi-page PDF document parsing and OCR normalization',
@@ -198,15 +372,7 @@ async function seed() {
             },
           ],
         },
-        {
-          _key: 'b3',
-          _type: 'codeBlock',
-          language: 'python',
-          filename: 'extractor_pipeline.py',
-          code: `@app.post("/extract-invoice")\nasync def extract_invoice(file: UploadFile):\n    ocr_text = await run_ocr_pipeline(file)\n    structured_data = await extract_schema_with_llm(\n        text=ocr_text,\n        target_schema=InvoiceSchema\n    )\n    return validate_tax_rules(structured_data)`,
-        },
       ],
-      liveUrl: 'https://touseefspace.com',
       githubUrl: 'https://github.com/touseefspace',
       featured: true,
       order: 2,
@@ -233,176 +399,30 @@ async function seed() {
         { _key: 'm3', label: 'Telemetry Latency', value: '180ms' },
       ],
       technologies: [
-        { _key: 't1', name: 'React' },
-        { _key: 't2', name: 'Next.js' },
-        { _key: 't3', name: 'Supabase' },
-        { _key: 't4', name: 'Tailwind CSS' },
-        { _key: 't5', name: 'TypeScript' },
+        { _key: 't1', _type: 'reference', _ref: 'skill-react-js' },
+        { _key: 't2', _type: 'reference', _ref: 'skill-next-js' },
+        { _key: 't3', _type: 'reference', _ref: 'skill-supabase' },
+        { _key: 't4', _type: 'reference', _ref: 'skill-tailwind-css' },
+        { _key: 't5', _type: 'reference', _ref: 'skill-typescript' },
       ],
       features: [
         'Live telemetry feeds powered by PostgreSQL change streams',
         'Interactive analytics dashboards with client-specific views',
         'One-click automated compliance report export in PDF format',
       ],
-      liveUrl: 'https://touseefspace.com',
       githubUrl: 'https://github.com/touseefspace',
       featured: true,
       order: 3,
     },
   ]
 
-  for (const p of projects) {
-    await client.createOrReplace(p as any)
+  for (const proj of projects) {
+    await client.createOrReplace(proj as any)
+    console.log(`  ✓ Project seeded: ${proj.title}`)
   }
 
-  // 3. Seed Technical Blog Posts
-  console.log('Seeding Blog Posts...')
-  const posts = [
-    {
-      _id: 'post-event-driven-erp',
-      _type: 'post',
-      title: 'Engineering Event-Driven ERP Systems with Next.js & PostgreSQL',
-      slug: { _type: 'slug', current: 'engineering-event-driven-erp-systems' },
-      publishedAt: '2026-02-15T09:00:00.000Z',
-      excerpt:
-        'How we replaced error-prone spreadsheet synchronization with an immutable transaction ledger, sub-150ms real-time sync, and optimistic barcode scanning in warehouse environments.',
-      estimatedReadTime: '6 min read',
-      tags: ['Next.js', 'PostgreSQL', 'Architecture', 'Systems'],
-      featured: true,
-      body: [
-        {
-          _key: 'p1',
-          _type: 'block',
-          style: 'h2',
-          children: [{ _key: 't1', _type: 'span', text: 'Why Traditional CRUD Fails in Inventory' }],
-        },
-        {
-          _key: 'p2',
-          _type: 'block',
-          style: 'normal',
-          children: [
-            {
-              _key: 't2',
-              _type: 'span',
-              text: 'In standard web applications, updating a product inventory level is often modeled as `UPDATE products SET stock = stock - 1 WHERE id = 123`. In a retail distribution business with 12 simultaneous regional warehouses and barcode scanners operating at rapid velocity, concurrent database updates will inevitably result in phantom inventory, race conditions, and locked tables.',
-            },
-          ],
-        },
-        {
-          _key: 'p3',
-          _type: 'callout',
-          type: 'tip',
-          title: 'The Ledger Principle',
-          content:
-            'Never mutate current stock numbers directly. Treat stock as a ledger: every scan is an immutable transaction record, and current stock is a derived projection.',
-        },
-        {
-          _key: 'p4',
-          _type: 'block',
-          style: 'h2',
-          children: [{ _key: 't3', _type: 'span', text: 'Optimistic UI for Barcode Readers' }],
-        },
-        {
-          _key: 'p5',
-          _type: 'block',
-          style: 'normal',
-          children: [
-            {
-              _key: 't4',
-              _type: 'span',
-              text: 'Warehouse operators scan boxes at an average rate of one item every 1.5 seconds. Waiting for server roundtrips kills throughput. By implementing optimistic mutations in React with rollback reconciliation queues, scanning remains butter-smooth even on 2.4GHz warehouse Wi-Fi.',
-            },
-          ],
-        },
-        {
-          _key: 'p6',
-          _type: 'codeBlock',
-          language: 'typescript',
-          filename: 'useOptimisticScan.ts',
-          code: `export function useOptimisticScan() {\n  const [queue, setQueue] = useState<ScanItem[]>([]);\n\n  const handleScan = async (barcode: string) => {\n    const tempId = crypto.randomUUID();\n    // 1. Immediately acknowledge in UI\n    setQueue(prev => [...prev, { tempId, barcode, status: 'pending' }]);\n    \n    // 2. Dispatch in background\n    try {\n      await dispatchLedgerScan(barcode);\n      setQueue(prev => prev.filter(item => item.tempId !== tempId));\n    } catch (err) {\n      markAsFailed(tempId);\n    }\n  };\n  return { queue, handleScan };\n}`,
-        },
-      ],
-    },
-    {
-      _id: 'post-practical-llm-document-extraction',
-      _type: 'post',
-      title: 'Practical Document Extraction Pipelines with Python & Structured Outputs',
-      slug: { _type: 'slug', current: 'practical-document-extraction-pipelines' },
-      publishedAt: '2026-01-20T11:30:00.000Z',
-      excerpt:
-        'Designing zero-hallucination structured invoice parsing pipelines with 99.2% accuracy and sub-10 second turnaround times.',
-      estimatedReadTime: '5 min read',
-      tags: ['AI Workflows', 'Python', 'Automation', 'LLMs'],
-      featured: false,
-      body: [
-        {
-          _key: 'p1',
-          _type: 'block',
-          style: 'h2',
-          children: [{ _key: 't1', _type: 'span', text: 'Taming Unstructured PDFs' }],
-        },
-        {
-          _key: 'p2',
-          _type: 'block',
-          style: 'normal',
-          children: [
-            {
-              _key: 't2',
-              _type: 'span',
-              text: 'Extracting data from multi-page PDFs using naive text prompts frequently causes hallucinated line items or formatted dollar amounts that fail downstream financial validation. The key to 99.2% accuracy is schema-constrained structured outputs combined with deterministic tax rule verification.',
-            },
-          ],
-        },
-        {
-          _key: 'p3',
-          _type: 'callout',
-          type: 'info',
-          title: 'Two-Stage Verification',
-          content:
-            'Stage 1 uses an LLM to extract JSON matching strict Pydantic schemas. Stage 2 executes deterministic math (unit price * qty == line total) and rejects mathematical inconsistencies back to human review.',
-        },
-      ],
-    },
-    {
-      _id: 'post-nextjs-16-caching',
-      _type: 'post',
-      title: 'Next.js 16 Caching in Production: cacheLife, cacheTag, and Edge Freshness',
-      slug: { _type: 'slug', current: 'nextjs-16-caching-in-production' },
-      publishedAt: '2025-12-10T14:15:00.000Z',
-      excerpt:
-        'A deep dive into Next.js 16 cache directives, avoiding cache invalidation cascades, and pairing headless CMS with edge revalidation.',
-      estimatedReadTime: '7 min read',
-      tags: ['Next.js', 'Performance', 'Web Development'],
-      featured: false,
-      body: [
-        {
-          _key: 'p1',
-          _type: 'block',
-          style: 'h2',
-          children: [{ _key: 't1', _type: 'span', text: 'The Evolution of App Router Caching' }],
-        },
-        {
-          _key: 'p2',
-          _type: 'block',
-          style: 'normal',
-          children: [
-            {
-              _key: 't2',
-              _type: 'span',
-              text: "Next.js 16 introduced clean primitives like `'use cache'`, `cacheTag`, and `cacheLife`. By structuring your CMS queries with semantic tags (such as `projects`, `posts`, `social-links`), edge caches remain instant for visitors while instant on-demand revalidation triggers when you publish in Sanity.",
-            },
-          ],
-        },
-      ],
-    },
-  ]
-
-  for (const post of posts) {
-    await client.createOrReplace(post)
-  }
-
-  // 4. Seed Experiences
-  console.log('Seeding Experiences...')
+  // 5. Seed Experiences with References to Skills
+  console.log('\n5. Seeding Experiences with References to Skills...')
   const experiences = [
     {
       _id: 'exp-1',
@@ -428,6 +448,14 @@ async function seed() {
           task: 'Constructed headless CMS and API backends with robust role-based security.',
         },
       ],
+      skillStack: [
+        { _key: 's1', _type: 'reference', _ref: 'skill-next-js' },
+        { _key: 's2', _type: 'reference', _ref: 'skill-typescript' },
+        { _key: 's3', _type: 'reference', _ref: 'skill-python' },
+        { _key: 's4', _type: 'reference', _ref: 'skill-fastapi' },
+        { _key: 's5', _type: 'reference', _ref: 'skill-postgresql' },
+        { _key: 's6', _type: 'reference', _ref: 'skill-docker' },
+      ],
       order: 1,
     },
     {
@@ -450,67 +478,23 @@ async function seed() {
           task: 'Delivered multiple full-stack capstone projects and open-source utilities.',
         },
       ],
+      skillStack: [
+        { _key: 's1', _type: 'reference', _ref: 'skill-python' },
+        { _key: 's2', _type: 'reference', _ref: 'skill-javascript' },
+        { _key: 's3', _type: 'reference', _ref: 'skill-postgresql' },
+        { _key: 's4', _type: 'reference', _ref: 'skill-git' },
+      ],
       order: 2,
     },
   ]
 
   for (const exp of experiences) {
     await client.createOrReplace(exp)
-  }
-
-  // 5. Seed Skills
-  console.log('Seeding Skill Categories...')
-  const skillCategories = [
-    {
-      _id: 'cat-1',
-      _type: 'skillCategory',
-      title: 'Custom Web Applications',
-      description:
-        'High-performance web applications and internal tools designed for complex business operations.',
-      skills: [
-        { _key: 's1', name: 'Next.js / React 19', proficiency: 95 },
-        { _key: 's2', name: 'TypeScript', proficiency: 92 },
-        { _key: 's3', name: 'Tailwind CSS', proficiency: 95 },
-        { _key: 's4', name: 'Sanity CMS', proficiency: 94 },
-      ],
-      order: 1,
-    },
-    {
-      _id: 'cat-2',
-      _type: 'skillCategory',
-      title: 'AI Workflows & Automation',
-      description:
-        'Practical LLM integrations and automated extraction pipelines that eliminate operational busywork.',
-      skills: [
-        { _key: 's1', name: 'LLM APIs & Prompt Systems', proficiency: 88 },
-        { _key: 's2', name: 'Python & FastAPI', proficiency: 85 },
-        { _key: 's3', name: 'Document Parsing & OCR', proficiency: 90 },
-        { _key: 's4', name: 'Webhook Dispatchers', proficiency: 92 },
-      ],
-      order: 2,
-    },
-    {
-      _id: 'cat-3',
-      _type: 'skillCategory',
-      title: 'Cloud Systems & Databases',
-      description:
-        'Resilient database design, headless CMS architecture, and serverless cloud deployments.',
-      skills: [
-        { _key: 's1', name: 'PostgreSQL & Supabase', proficiency: 90 },
-        { _key: 's2', name: 'Sanity Studio', proficiency: 92 },
-        { _key: 's3', name: 'Docker & Containerization', proficiency: 85 },
-        { _key: 's4', name: 'REST & GraphQL APIs', proficiency: 92 },
-      ],
-      order: 3,
-    },
-  ]
-
-  for (const cat of skillCategories) {
-    await client.createOrReplace(cat)
+    console.log(`  ✓ Experience seeded: ${exp.company}`)
   }
 
   // 6. Seed Social Links
-  console.log('Seeding Social Links...')
+  console.log('\n6. Seeding Social Links...')
   const socials = [
     {
       _id: 'soc-1',
@@ -557,8 +541,31 @@ async function seed() {
   for (const s of socials) {
     await client.createOrReplace(s)
   }
+  console.log('  ✓ Social links seeded.')
 
-  console.log('✨ All content successfully seeded into Sanity dataset: production!')
+  // 7. Migration Verification Queries
+  console.log('\n7. Running Migration Verification Checks...')
+  const seededSkills = await client.fetch<any[]>(`*[_type == "skill"]{ _id, name, "categoryRef": category._ref }`)
+  console.log(`  ✓ Total skill documents: ${seededSkills.length}`)
+
+  // Check for duplicates
+  const skillNames = seededSkills.map((s) => s.name.toLowerCase())
+  const duplicates = skillNames.filter((name, idx) => skillNames.indexOf(name) !== idx)
+  if (duplicates.length > 0) {
+    console.warn(`  ⚠️ Warning: Duplicate skill names found: ${duplicates.join(', ')}`)
+  } else {
+    console.log('  ✓ Check passed: No duplicate skills exist.')
+  }
+
+  // Check valid category references
+  const orphanSkills = seededSkills.filter((s) => !s.categoryRef)
+  if (orphanSkills.length > 0) {
+    console.warn(`  ⚠️ Warning: Skills without category: ${orphanSkills.map((s) => s.name).join(', ')}`)
+  } else {
+    console.log('  ✓ Check passed: 100% of skills have a valid category reference.')
+  }
+
+  console.log('\n✨ All content and real icon assets successfully seeded into Sanity production dataset!')
 }
 
 seed().catch((err) => {

@@ -48,7 +48,14 @@ async function SkillsContainer() {
               <div className="flex items-center gap-3.5 pb-3 border-b border-(--border-subtle)">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-(--bg-subtle)/70 border border-(--border-subtle) text-(--ink-primary)">
                   {categoryIcon ? (
-                    <img src={categoryIcon} alt="" aria-hidden="true" className="h-5 w-5 object-contain" />
+                    <img 
+                      src={categoryIcon} 
+                      alt="" 
+                      aria-hidden="true" 
+                      loading="lazy"
+                      decoding="async"
+                      className="h-5 w-5 object-contain dark:invert dark:opacity-95 transition-all" 
+                    />
                   ) : (
                     <div className="h-2 w-2 bg-(--ink-primary) rounded-full" />
                   )}
@@ -74,6 +81,8 @@ async function SkillsContainer() {
                             src={skillIcon}
                             alt=""
                             aria-hidden="true"
+                            loading="lazy"
+                            decoding="async"
                             className="h-5 w-5 rounded-sm object-contain shrink-0"
                           />
                         )}

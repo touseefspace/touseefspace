@@ -7,6 +7,7 @@ import { HomeIcon } from '@sanity/icons/Home'
 import { ProjectsIcon } from '@sanity/icons/Projects'
 import { DocumentTextIcon } from '@sanity/icons/DocumentText'
 import { CaseIcon } from '@sanity/icons/Case'
+import { SparklesIcon } from '@sanity/icons/Sparkles'
 import { UlistIcon } from '@sanity/icons/Ulist'
 import { LinkIcon } from '@sanity/icons/Link'
 
@@ -68,7 +69,17 @@ export default defineConfig({
                   .defaultOrdering([{ field: 'order', direction: 'asc' }])
               ),
 
-            // Skills
+            // Skills & Technologies
+            S.listItem()
+              .title('Skills & Technologies')
+              .icon(SparklesIcon)
+              .child(
+                S.documentTypeList('skill')
+                  .title('All Skills & Technologies')
+                  .defaultOrdering([{ field: 'order', direction: 'asc' }, { field: 'name', direction: 'asc' }])
+              ),
+
+            // Skill Categories
             S.listItem()
               .title('Skill Categories')
               .icon(UlistIcon)

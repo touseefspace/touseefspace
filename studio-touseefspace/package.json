@@ -1,7 +1,7 @@
 {
   "name": "touseefspace",
   "private": true,
-  "version": "4.1.1",
+  "version": "4.1.2",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
@@ -9,7 +9,10 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
-    "start": "sanity start"
+    "start": "sanity start",
+    "seed": "npx tsx scripts/seed-sanity.ts",
+    "clean-duplicates": "npx tsx scripts/clean-sanity-duplicates.ts",
+    "update-dark-icons": "npx tsx scripts/update-category-dark-icons.ts"
   },
   "keywords": [
     "sanity"

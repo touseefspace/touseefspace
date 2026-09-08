@@ -64,14 +64,19 @@ I built this project not just to serve as my personal portfolio, but to provide 
 │   │   ├── projects/          # Filterable project spotlight index
 │   │   ├── experiences/       # Timeline & role breakdowns
 │   │   ├── skills/            # Interactive capability categories
-│   │   └── contact/           # Zero-runtime brand channels & contact form
+│   │   ├── contact/           # Zero-runtime brand channels & contact form
+│   │   ├── sitemap.ts         # Dynamic sitemap generator (/sitemap.xml)
+│   │   └── robots.ts          # Search engine crawler directives (/robots.txt)
 │   ├── components/            # UI design system, WebGL canvas & layouts
 │   ├── lib/                   # GROQ queries, caching tags & placeholder fallbacks
 │   └── sanity/                # Sanity client, image URL builder & live preview
 │
 └── studio-touseefspace/       # Sanity Studio v3 (Content Management)
-    ├── schemaTypes/           # Document schemas (projects, posts, hero, skills)
-    ├── scripts/               # Automated dataset seed script
+    ├── category_icons/        # Light-mode SVG icons for skill categories
+    ├── category_icons_dark/   # High-contrast dark-mode SVG icons (#F4F4F5 stroke)
+    ├── skill_icons/           # 30 normalized SVG icons for individual skills
+    ├── schemaTypes/           # Document schemas (skill, skillCategory, project, post, hero)
+    ├── scripts/               # Seeding, deduplication & dark icon scripts
     └── sanity.config.ts       # Desk structure, singletons & presentation tool
 ```
 
@@ -138,46 +143,55 @@ NEXT_PUBLIC_SANITY_DATASET="production"
 NEXT_PUBLIC_SANITY_API_VERSION="2026-02-01"
 ```
 
-### 3. Seed Sample Content
+### 3. Seed Sample Content & Asset Icons
+The template features a **normalized skills architecture**: skills are first-class, top-level documents in Sanity rather than duplicate strings. Each skill references its parent `skillCategory`, and projects and experiences reference these shared skill entities.
+
 Inside `studio-touseefspace`, create a write token at [sanity.io/manage](https://sanity.io/manage) (under **API** > **Tokens** > **Add API token** with **Editor/Write** permissions), then run:
 ```bash
 SANITY_TOKEN=your_write_token npm run seed
 ```
-This automatically populates your Sanity dataset with:
-- The Home Page Hero singleton
-- 3 comprehensive case studies with metrics and problem-solution writeups
-- 2 technical blog posts with structured blocks
-- All experience milestones, skills categories, and social media channels
+
+This automated seed script:
+1. Uploads light-mode icons from `category_icons/` (`code-xml.svg`, `cpu.svg`, `database.svg`, `cloud.svg`, `paintbrush.svg`, `smartphone.svg`).
+2. Uploads high-contrast dark-mode icons from `category_icons_dark/` (`#F4F4F5` stroke) to `iconDark`.
+3. Uploads 30 tech stack SVG icons from `skill_icons/` (Next.js, TypeScript, Python, Docker, AWS, PostgreSQL, etc.).
+4. Creates the 6 canonical `skillCategory` documents (`cat-web`, `cat-ai`, `cat-cloud`, `cat-devops`, `cat-tools`, `cat-mobile`).
+5. Seeds 30 normalized `skill` documents with direct category references and proficiency ratings.
+6. Seeds 3 comprehensive case studies with metrics, problem-solution narratives, and skill references.
+7. Seeds 3 technical engineering articles, 2 career milestones, and 5 social media links.
+
+#### Useful Studio Utility Scripts
+```bash
+# Clean up any legacy duplicate documents or drafts
+npm run clean-duplicates
+
+# Regenerate and sync high-contrast dark-mode category icons
+npm run update-dark-icons
+```
 
 ### 4. Run Sanity Studio Locally
 ```bash
 npm run dev
 ```
-Open **[http://localhost:3333](http://localhost:3333)** to visually curate your portfolio.
+Open **[http://localhost:3333](http://localhost:3333)** to visually curate your portfolio. You will see top-level navigation for **Projects**, **Skills**, **Skill Categories**, **Experiences**, **Blog Posts**, and the **Home Page**.
+
+### 5. Deploy Updated Studio Online (Sanity Cloud)
+Whenever you modify schemas (such as top-level Skills) or update Studio code, deploy your changes to Sanity's free global hosting so your online dashboard reflects your local studio:
+```bash
+npx sanity deploy
+```
+1. Sanity CLI will compile your studio and deploy it with automatic SSL.
+2. Access your live studio anytime at `https://yourname.sanity.studio`!
 
 ---
 
-## 🌐 Production Deployment Guide
+## 🗺️ Search Engine Optimization (SEO) & Sitemaps
 
-### Deploying the Frontend (Vercel)
-1. Push your code to GitHub.
-2. Go to [Vercel Dashboard](https://vercel.com/new) and import your repository.
-3. If your repository contains both folders, set the **Root Directory** to `touseefspace`.
-4. Under **Environment Variables**, add:
-   - `NEXT_PUBLIC_SANITY_PROJECT_ID`: Your Sanity project ID
-   - `NEXT_PUBLIC_SANITY_DATASET`: `production`
-   - `NEXT_PUBLIC_SITE_URL`: `https://yourdomain.com`
-5. Click **Deploy**. Vercel will build and serve your site globally.
-
-### Deploying the Sanity Studio (100% Free on Sanity Cloud)
-You do not need an extra server or Vercel project to host your Studio. Sanity provides free global hosting:
-```bash
-cd studio-touseefspace
-npx sanity deploy
-```
-1. Sanity CLI will ask you to choose a studio subdomain (e.g. `yourname.sanity.studio`).
-2. It compiles the studio and hosts it globally with automatic SSL.
-3. Access your live studio anytime at `https://yourname.sanity.studio`!
+The portfolio automatically implements full SEO best practices:
+- **Dynamic Sitemap (`/sitemap.xml`)**: Generated by `app/sitemap.ts`, indexing all static pages plus every case study (`/projects/[slug]`) and blog article (`/blog/[slug]`) with accurate priority weights and modification timestamps.
+- **Crawler Directives (`/robots.txt`)**: Generated by `app/robots.ts`, allowing search engines to index public content while protecting private studio routes.
+- **OpenGraph & Twitter Cards**: Native social sharing cards with pre-rendered `<head>` metadata.
+- **Zero Preload Console Warnings**: Strictly optimized with `loading="lazy"` and asynchronous image decoding.
 
 ### Configuring CORS Origins
 To allow your deployed site to fetch data from Sanity:

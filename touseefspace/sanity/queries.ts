@@ -25,13 +25,25 @@ export const PROJECTS_QUERY = `*[_type == "project"] | order(order asc, _created
     },
     alt
   },
-  technologies[] {
+  technologies[@->name != null || name != null] {
     _key,
-    name,
-    icon {
-      asset-> {
-        _id,
-        url
+    _type,
+    _type == "reference" => {
+      "name": @->name,
+      "icon": {
+        "asset": {
+          "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
+          "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
+        }
+      }
+    },
+    _type != "reference" => {
+      name,
+      icon {
+        asset-> {
+          _id,
+          url
+        }
       }
     }
   },
@@ -65,13 +77,25 @@ export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true
     },
     alt
   },
-  technologies[] {
+  technologies[@->name != null || name != null] {
     _key,
-    name,
-    icon {
-      asset-> {
-        _id,
-        url
+    _type,
+    _type == "reference" => {
+      "name": @->name,
+      "icon": {
+        "asset": {
+          "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
+          "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
+        }
+      }
+    },
+    _type != "reference" => {
+      name,
+      icon {
+        asset-> {
+          _id,
+          url
+        }
       }
     }
   },
@@ -104,13 +128,25 @@ export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $s
     },
     alt
   },
-  technologies[] {
+  technologies[@->name != null || name != null] {
     _key,
-    name,
-    icon {
-      asset-> {
-        _id,
-        url
+    _type,
+    _type == "reference" => {
+      "name": @->name,
+      "icon": {
+        "asset": {
+          "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
+          "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
+        }
+      }
+    },
+    _type != "reference" => {
+      name,
+      icon {
+        asset-> {
+          _id,
+          url
+        }
       }
     }
   },
@@ -181,14 +217,29 @@ export const EXPERIENCES_QUERY = `*[_type == "experience"] | order(order asc, _c
     _key,
     task
   },
-  skillStack[] {
+  skillStack[@->name != null || skill != null || name != null] {
     _key,
-    skill,
-    icon {
-      "url": asset->url,
-      asset-> {
-        _id,
-        url
+    _type,
+    _type == "reference" => {
+      "skill": @->name,
+      "name": @->name,
+      "icon": {
+        "url": coalesce(@->icon.asset->url, @->iconDark.asset->url),
+        "asset": {
+          "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
+          "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
+        }
+      }
+    },
+    _type != "reference" => {
+      skill,
+      "name": skill,
+      icon {
+        "url": asset->url,
+        asset-> {
+          _id,
+          url
+        }
       }
     }
   }
@@ -212,25 +263,68 @@ export const SKILL_CATEGORIES_QUERY = `*[_type == "skillCategory"] | order(order
       "url": iconLight.asset->url
     }
   },
-  skills[] {
-    _key,
-    name,
-    proficiency,
-    "iconDark": {
-      "url": iconDark.asset->url,
-      "asset": {
-        "_id": iconDark.asset->_id,
-        "url": iconDark.asset->url
-      }
-    },
-    "iconLight": {
-      "url": iconLight.asset->url,
-      "asset": {
-        "_id": iconLight.asset->_id,
-        "url": iconLight.asset->url
+  "skills": select(
+    count(*[_type == "skill" && category._ref == ^._id]) > 0 =>
+      *[_type == "skill" && category._ref == ^._id] | order(order asc, proficiency desc, name asc) {
+        _id,
+        name,
+        proficiency,
+        "iconDark": {
+          "url": coalesce(iconDark.asset->url, icon.asset->url),
+          "asset": {
+            "_id": coalesce(iconDark.asset->_id, icon.asset->_id),
+            "url": coalesce(iconDark.asset->url, icon.asset->url)
+          }
+        },
+        "iconLight": {
+          "url": coalesce(iconLight.asset->url, icon.asset->url),
+          "asset": {
+            "_id": coalesce(iconLight.asset->_id, icon.asset->_id),
+            "url": coalesce(iconLight.asset->url, icon.asset->url)
+          }
+        }
+      },
+    skills[@->name != null || name != null] {
+      _key,
+      _type,
+      _type == "reference" => {
+        "name": @->name,
+        "proficiency": coalesce(@->proficiency, 0),
+        "iconDark": {
+          "url": coalesce(@->iconDark.asset->url, @->icon.asset->url),
+          "asset": {
+            "_id": coalesce(@->iconDark.asset->_id, @->icon.asset->_id),
+            "url": coalesce(@->iconDark.asset->url, @->icon.asset->url)
+          }
+        },
+        "iconLight": {
+          "url": coalesce(@->iconLight.asset->url, @->icon.asset->url),
+          "asset": {
+            "_id": coalesce(@->iconLight.asset->_id, @->icon.asset->_id),
+            "url": coalesce(@->iconLight.asset->url, @->icon.asset->url)
+          }
+        }
+      },
+      _type != "reference" => {
+        name,
+        proficiency,
+        "iconDark": {
+          "url": iconDark.asset->url,
+          "asset": {
+            "_id": iconDark.asset->_id,
+            "url": iconDark.asset->url
+          }
+        },
+        "iconLight": {
+          "url": iconLight.asset->url,
+          "asset": {
+            "_id": iconLight.asset->_id,
+            "url": iconLight.asset->url
+          }
+        }
       }
     }
-  }
+  )
 }`;
 
 export const SOCIAL_LINKS_QUERY = `*[_type == "socialLink"] | order(order asc, name asc) {

@@ -121,10 +121,18 @@ export const project = defineType({
     defineField({
       name: 'technologies',
       title: 'Technologies & Stack',
+      description: 'Select existing skills/technologies or create new ones on the fly.',
       type: 'array',
       of: [
         defineArrayMember({
+          type: 'reference',
+          to: [{ type: 'skill' }],
+          title: 'Skill / Technology',
+        }),
+        defineArrayMember({
           type: 'object',
+          name: 'customTechnology',
+          title: 'Custom / Legacy Technology',
           fields: [
             defineField({
               name: 'name',
@@ -138,6 +146,12 @@ export const project = defineType({
               type: 'image',
             }),
           ],
+          preview: {
+            select: {
+              title: 'name',
+              media: 'icon',
+            },
+          },
         }),
       ],
     }),

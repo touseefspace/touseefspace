@@ -221,18 +221,31 @@ export default async function BlogPostPage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="grid grid-cols-2 gap-3 sm:gap-5 pt-2">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-(--ink-muted) hover:text-(--ink-primary) transition-colors"
+                className="group flex flex-col justify-center rounded-2xl border border-(--border-subtle) bg-(--bg-surface)/70 backdrop-blur-md p-3.5 sm:p-5 transition-all duration-200 hover:border-(--border-strong) hover:bg-(--bg-surface) active:scale-[0.98] shadow-xs min-w-0"
               >
-                <ArrowLeft size={16} /> Back to all articles
+                <div className="flex items-center gap-1.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-(--ink-muted)">
+                  <ArrowLeft size={12} className="shrink-0 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
+                  <span>Articles</span>
+                </div>
+                <div className="mt-1 text-xs sm:text-sm font-semibold text-(--ink-primary) truncate">
+                  <span className="hidden sm:inline">Back to </span>All Articles
+                </div>
               </Link>
+
               <Link
                 href="/#selected-work"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-(--ink-primary) hover:underline"
+                className="group flex flex-col justify-center items-end text-right rounded-2xl border border-(--border-subtle) bg-(--bg-surface)/70 backdrop-blur-md p-3.5 sm:p-5 transition-all duration-200 hover:border-(--border-strong) hover:bg-(--bg-surface) active:scale-[0.98] shadow-xs min-w-0"
               >
-                Explore Case Studies <ArrowRight size={16} />
+                <div className="flex items-center gap-1.5 font-mono text-[10px] sm:text-xs uppercase tracking-wider text-(--ink-muted)">
+                  <span>Portfolio</span>
+                  <ArrowRight size={12} className="shrink-0 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </div>
+                <div className="mt-1 text-xs sm:text-sm font-semibold text-(--ink-primary) truncate">
+                  <span className="hidden sm:inline">Explore </span>Case Studies
+                </div>
               </Link>
             </div>
           </footer>

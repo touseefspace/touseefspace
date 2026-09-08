@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react", "react-icons"],
   },
   images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
     formats: ["image/avif", "image/webp"],
     qualities: [75, 85],
     remotePatterns: [

@@ -90,7 +90,13 @@ function ExperienceCard({ exp }: { exp: Experience }) {
             {/* Logo */}
             <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-2xl bg-(--bg-subtle) border border-(--border-subtle) p-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
               {logoUrl ? (
-                <img src={logoUrl} alt={exp.company} className="h-full w-full object-contain" />
+                <img 
+                  src={logoUrl} 
+                  alt={exp.company} 
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-contain" 
+                />
               ) : (
                 <span className="text-xl font-bold text-(--ink-muted)">{exp.company.charAt(0)}</span>
               )}
@@ -149,7 +155,14 @@ function ExperienceCard({ exp }: { exp: Experience }) {
                   return (
                     <div key={i} className="tech-tag">
                       {skillIconUrl && (
-                        <img src={skillIconUrl} alt="" className="h-3.5 w-3.5 object-contain" />
+                        <img 
+                          src={skillIconUrl} 
+                          alt="" 
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          className="h-3.5 w-3.5 object-contain" 
+                        />
                       )}
                       <span>{skill.skill}</span>
                     </div>

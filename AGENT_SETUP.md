@@ -32,7 +32,9 @@ Here are my personal details to configure across the project:
    - If available in your environment, leverage Sanity skills or best practices (`sanity-best-practices` / `next-sanity`) to ensure optimal GROQ queries and schema definitions.
    - Create `.env.local` from `.env.example` and set `NEXT_PUBLIC_SITE_URL` to my domain.
    - If I provide my Sanity Project ID (`NEXT_PUBLIC_SANITY_PROJECT_ID`) and Dataset (`NEXT_PUBLIC_SANITY_DATASET`), configure them in `.env.local` and in `studio-touseefspace/sanity.cli.ts` / `studio-touseefspace/sanity.config.ts`.
-   - Remind me to run `SANITY_TOKEN=my_write_token npm run seed` inside `studio-touseefspace` to initialize my content, or keep using the offline fallback data in `lib/placeholders.ts`.
+   - Remind me to run `SANITY_TOKEN=my_write_token npm run seed` inside `studio-touseefspace` to initialize content with normalized skills and real SVGs from `category_icons/`, `category_icons_dark/`, and `skill_icons/`.
+   - Maintain the normalized `skill` architecture: treat skills as first-class Sanity documents referenced across categories, projects, and experiences rather than duplicate inline strings.
+   - When deploying schema changes online, remind me to run `npx sanity deploy` inside `studio-touseefspace`.
 
 3. **Asset Checklist**:
    - Remind me to replace `public/touseef.png` with my own portrait photo.

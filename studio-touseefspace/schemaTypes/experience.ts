@@ -79,10 +79,18 @@ export const experience = defineType({
     defineField({
       name: 'skillStack',
       title: 'Skills & Technologies',
+      description: 'Select existing skills/technologies or create new ones on the fly.',
       type: 'array',
       of: [
         defineArrayMember({
+          type: 'reference',
+          to: [{ type: 'skill' }],
+          title: 'Skill / Technology',
+        }),
+        defineArrayMember({
           type: 'object',
+          name: 'customSkill',
+          title: 'Custom / Legacy Skill',
           fields: [
             defineField({
               name: 'skill',
@@ -96,6 +104,12 @@ export const experience = defineType({
               type: 'image',
             }),
           ],
+          preview: {
+            select: {
+              title: 'skill',
+              media: 'icon',
+            },
+          },
         }),
       ],
     }),
