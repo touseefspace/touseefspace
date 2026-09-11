@@ -1,5 +1,5 @@
 import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
+import { structureTool, type StructureResolver } from 'sanity/structure'
 import { presentationTool } from 'sanity/presentation'
 import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './schemaTypes'
@@ -10,108 +10,141 @@ import { CaseIcon } from '@sanity/icons/Case'
 import { SparklesIcon } from '@sanity/icons/Sparkles'
 import { UlistIcon } from '@sanity/icons/Ulist'
 import { LinkIcon } from '@sanity/icons/Link'
+import { TerminalIcon } from '@sanity/icons/Terminal'
+import { RocketIcon } from '@sanity/icons/Rocket'
 
-export default defineConfig({
-  name: 'default',
-  title: 'touseefspace',
+const projectId = '52hp81x4'
 
-  projectId: '52hp81x4',
-  dataset: 'production',
+const portfolioStructure: StructureResolver = (S) =>
+  S.list()
+    .title('Portfolio Content')
+    .items([
+      // Singleton: Home Page
+      S.listItem()
+        .title('Home Page Hero')
+        .icon(HomeIcon)
+        .child(
+          S.document()
+            .schemaType('homePage')
+            .documentId('homePage')
+            .title('Home Page Hero & Settings')
+        ),
 
-  plugins: [
-    structureTool({
-      structure: (S) =>
-        S.list()
-          .title('Portfolio Content')
-          .items([
-            // Singleton: Home Page
-            S.listItem()
-              .title('Home Page Hero')
-              .icon(HomeIcon)
-              .child(
-                S.document()
-                  .schemaType('homePage')
-                  .documentId('homePage')
-                  .title('Home Page Hero & Settings')
-              ),
+      S.divider(),
 
-            S.divider(),
+      // Projects & Selected Work
+      S.listItem()
+        .title('Projects & Case Studies')
+        .icon(ProjectsIcon)
+        .child(
+          S.documentTypeList('project')
+            .title('All Projects')
+            .defaultOrdering([{ field: 'order', direction: 'asc' }])
+        ),
 
-            // Projects & Selected Work
-            S.listItem()
-              .title('Projects & Case Studies')
-              .icon(ProjectsIcon)
-              .child(
-                S.documentTypeList('project')
-                  .title('All Projects')
-                  .defaultOrdering([{ field: 'order', direction: 'asc' }])
-              ),
+      // Blog & Notes
+      S.listItem()
+        .title('Blog Posts & Articles')
+        .icon(DocumentTextIcon)
+        .child(
+          S.documentTypeList('post')
+            .title('Blog Posts')
+            .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
+        ),
 
-            // Blog & Notes
-            S.listItem()
-              .title('Blog Posts & Articles')
-              .icon(DocumentTextIcon)
-              .child(
-                S.documentTypeList('post')
-                  .title('Blog Posts')
-                  .defaultOrdering([{ field: 'publishedAt', direction: 'desc' }])
-              ),
+      S.divider(),
 
-            S.divider(),
+      // Experience & Education
+      S.listItem()
+        .title('Experience & Education')
+        .icon(CaseIcon)
+        .child(
+          S.documentTypeList('experience')
+            .title('Experience Records')
+            .defaultOrdering([{ field: 'order', direction: 'asc' }])
+        ),
 
-            // Experience & Education
-            S.listItem()
-              .title('Experience & Education')
-              .icon(CaseIcon)
-              .child(
-                S.documentTypeList('experience')
-                  .title('Experience Records')
-                  .defaultOrdering([{ field: 'order', direction: 'asc' }])
-              ),
+      // Skills & Technologies
+      S.listItem()
+        .title('Skills & Technologies')
+        .icon(SparklesIcon)
+        .child(
+          S.documentTypeList('skill')
+            .title('All Skills & Technologies')
+            .defaultOrdering([
+              { field: 'order', direction: 'asc' },
+              { field: 'name', direction: 'asc' },
+            ])
+        ),
 
-            // Skills & Technologies
-            S.listItem()
-              .title('Skills & Technologies')
-              .icon(SparklesIcon)
-              .child(
-                S.documentTypeList('skill')
-                  .title('All Skills & Technologies')
-                  .defaultOrdering([{ field: 'order', direction: 'asc' }, { field: 'name', direction: 'asc' }])
-              ),
+      // Skill Categories
+      S.listItem()
+        .title('Skill Categories')
+        .icon(UlistIcon)
+        .child(
+          S.documentTypeList('skillCategory')
+            .title('Skill Categories')
+            .defaultOrdering([{ field: 'order', direction: 'asc' }])
+        ),
 
-            // Skill Categories
-            S.listItem()
-              .title('Skill Categories')
-              .icon(UlistIcon)
-              .child(
-                S.documentTypeList('skillCategory')
-                  .title('Skill Categories')
-                  .defaultOrdering([{ field: 'order', direction: 'asc' }])
-              ),
+      // Social Links
+      S.listItem()
+        .title('Social & Contact Links')
+        .icon(LinkIcon)
+        .child(
+          S.documentTypeList('socialLink')
+            .title('Social Links')
+            .defaultOrdering([{ field: 'order', direction: 'asc' }])
+        ),
+    ])
 
-            // Social Links
-            S.listItem()
-              .title('Social & Contact Links')
-              .icon(LinkIcon)
-              .child(
-                S.documentTypeList('socialLink')
-                  .title('Social Links')
-                  .defaultOrdering([{ field: 'order', direction: 'asc' }])
-              ),
-          ]),
-    }),
-    presentationTool({
-      previewUrl: {
-        origin: process.env.SANITY_STUDIO_PREVIEW_ORIGIN || 'http://localhost:3000',
-        previewMode: {
-          enable: '/api/draft-mode/enable',
+export default defineConfig([
+  {
+    name: 'development',
+    title: 'Development (Sandbox)',
+    subtitle: 'Local dev & experimentation',
+    projectId,
+    dataset: 'development',
+    basePath: '/dev',
+    icon: TerminalIcon,
+    plugins: [
+      structureTool({ structure: portfolioStructure }),
+      presentationTool({
+        previewUrl: {
+          origin: process.env.SANITY_STUDIO_DEV_PREVIEW_ORIGIN || 'http://localhost:3000',
+          previewMode: {
+            enable: '/api/draft-mode/enable',
+          },
         },
-      },
-    }),
-    visionTool(),
-  ],
-
-  schema: {
-    types: schemaTypes,
+      }),
+      visionTool(),
+    ],
+    schema: {
+      types: schemaTypes,
+    },
   },
-})
+  {
+    name: 'production',
+    title: 'Production (Live)',
+    subtitle: 'Public live portfolio content',
+    projectId,
+    dataset: 'production',
+    basePath: '/prod',
+    icon: RocketIcon,
+    plugins: [
+      structureTool({ structure: portfolioStructure }),
+      presentationTool({
+        previewUrl: {
+          origin: process.env.SANITY_STUDIO_PREVIEW_ORIGIN || 'https://touseefspace.com',
+          previewMode: {
+            enable: '/api/draft-mode/enable',
+          },
+        },
+      }),
+      visionTool(),
+    ],
+    schema: {
+      types: schemaTypes,
+    },
+  },
+])

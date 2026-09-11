@@ -1,7 +1,7 @@
 {
   "name": "touseefspace",
   "private": true,
-  "version": "4.1.4",
+  "version": "4.1.5",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
@@ -12,7 +12,11 @@
     "start": "sanity start",
     "seed": "npx tsx scripts/seed-sanity.ts",
     "clean-duplicates": "npx tsx scripts/clean-sanity-duplicates.ts",
-    "update-dark-icons": "npx tsx scripts/update-category-dark-icons.ts"
+    "update-dark-icons": "npx tsx scripts/update-category-dark-icons.ts",
+    "dataset:sync-down": "npx tsx scripts/sync-datasets.ts sync-down",
+    "dataset:backup-prod": "npx tsx scripts/sync-datasets.ts backup-prod",
+    "dataset:backup-dev": "npx tsx scripts/sync-datasets.ts backup-dev",
+    "dataset:sync-up": "npx tsx scripts/sync-datasets.ts sync-up"
   },
   "keywords": [
     "sanity"

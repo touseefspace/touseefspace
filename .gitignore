@@ -12,9 +12,11 @@
 **/out/
 **/build/
 
-# Sanity Studio build artifacts
+# Sanity Studio build artifacts & dataset backups
 **/dist/
 **/.sanity/
+**/backups/
+*.tar.gz
 
 # Environment files and credentials (keep safe!)
 .env*

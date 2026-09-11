@@ -3,7 +3,7 @@
 > **Live Production Website:** 🌐 **[https://touseefspace.com](https://touseefspace.com)**
 
 [![Live Website](https://img.shields.io/badge/Live-touseefspace.com-000000?style=flat&logo=safari&logoColor=white)](https://touseefspace.com)
-[![Version](https://img.shields.io/badge/Version-v4.1.4-emerald)](#)
+[![Version](https://img.shields.io/badge/Version-v4.1.5-emerald)](#)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
 [![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f?logo=sanity)](https://www.sanity.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -160,12 +160,27 @@ This automated seed script:
 6. Seeds 3 comprehensive case studies with metrics, problem-solution narratives, and skill references.
 7. Seeds 3 technical engineering articles, 2 career milestones, and 5 social media links.
 
-#### Useful Studio Utility Scripts
+#### 🔄 Dataset Separation & Management Scripts
+The project strictly isolates local development from production to ensure local experiments, drafts, and tests never alter your live site:
+- **Local Next.js & Studio**: Connects to the **`development`** sandbox dataset by default.
+- **Production Deployment (Vercel)**: Connects to the **`production`** live dataset.
+- **Studio Dual Workspaces**: Switch between **Development (Sandbox)** (`/dev`) and **Production (Live)** (`/prod`) directly in the Studio top bar.
+
 ```bash
-# Clean up any legacy duplicate documents or drafts
+# Safely refresh your local dev sandbox with the latest production content:
+npm run dataset:sync-down
+
+# Create timestamped local JSON backups before making major schema/content changes:
+npm run dataset:backup-prod
+npm run dataset:backup-dev
+
+# Promote approved development data to production (requires confirmation):
+npm run dataset:sync-up -- --confirm
+
+# Clean up any legacy duplicate documents or drafts:
 npm run clean-duplicates
 
-# Regenerate and sync high-contrast dark-mode category icons
+# Regenerate and sync high-contrast dark-mode category icons:
 npm run update-dark-icons
 ```
 
