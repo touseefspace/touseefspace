@@ -6,13 +6,7 @@ import { Metadata } from "next";
 import {
   ArrowLeft,
   ArrowRight,
-  Calendar,
-  Clock,
-  User,
-  Share2,
-  BookOpen,
   List,
-  Sparkles,
   MessageSquare,
 } from "lucide-react";
 import { getPostBySlug, getPosts } from "@/lib/queries";
@@ -26,7 +20,7 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const posts = await getPosts();
-  return posts.map((post: any) => ({
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
@@ -66,6 +60,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+interface RawBlock {
+  _type?: string;
+  style?: string;
+  children?: { text?: string }[];
+}
+
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
@@ -75,18 +75,20 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const coverImageUrl =
-    urlForImage(post.coverImage)?.width(1400).url() ||
-    (typeof post.coverImage === "string" ? post.coverImage : post.coverImage?.url);
+    urlForImage(post.coverImage as Parameters<typeof urlForImage>[0])?.width(1400).url() ||
+    (typeof post.coverImage === "string"
+      ? post.coverImage
+      : (post.coverImage as { url?: string } | undefined)?.url);
 
   // Extract H2 and H3 headings for Apple-style Table of Contents
-  const headings =
-    post.body
-      ?.filter((b: any) => b._type === "block" && (b.style === "h2" || b.style === "h3"))
-      .map((b: any) => {
-        const text = b.children?.map((c: any) => c.text).join("") || "";
-        const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
-        return { text, id, level: b.style };
-      }) || [];
+  const bodyBlocks = Array.isArray(post.body) ? (post.body as RawBlock[]) : [];
+  const headings = bodyBlocks
+    .filter((b) => b._type === "block" && (b.style === "h2" || b.style === "h3"))
+    .map((b) => {
+      const text = b.children?.map((c) => c.text || "").join("") || "";
+      const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
+      return { text, id, level: b.style };
+    });
 
   return (
     <div className="page-shell pt-24 pb-20 sm:pt-32 sm:pb-28">
@@ -152,6 +154,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   src="/touseef.png"
                   alt="Touseef Ahmed"
                   fill
+                  sizes="44px"
                   className="object-cover"
                 />
               </div>
@@ -173,6 +176,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   alt={post.title}
                   fill
                   priority
+                  sizes="(max-width: 896px) 100vw, 896px"
                   className="object-cover"
                 />
               </div>
@@ -194,6 +198,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   src="/touseef.png"
                   alt="Touseef Ahmed"
                   fill
+                  sizes="64px"
                   className="object-cover"
                 />
               </div>
@@ -261,7 +266,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <span>On this page</span>
               </div>
               <nav aria-label="Table of contents" className="space-y-2.5 text-sm">
-                {headings.map((h: any, i: number) => (
+                {headings.map((h, i: number) => (
                   <a
                     key={i}
                     href={`#${h.id}`}

@@ -35,8 +35,8 @@ export default function ExperiencePage() {
 async function ExperiencesContainer() {
   const experiences = await getExperiences();
 
-  const workExp = experiences.filter((e: any) => e.category === "work");
-  const eduExp = experiences.filter((e: any) => e.category === "education");
+  const workExp = experiences.filter((e) => e.category === "work");
+  const eduExp = experiences.filter((e) => e.category === "education");
 
   if (workExp.length === 0 && eduExp.length === 0) {
     return (
@@ -63,8 +63,9 @@ async function ExperiencesContainer() {
           {/* Left Header - Sticky */}
           <div className="md:col-span-4 lg:col-span-3">
             <div className="md:sticky md:top-28 space-y-3">
+              <p className="section-label">01 / Delivery</p>
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle)/70 flex items-center justify-center text-(--ink-primary) border border-(--border-subtle)">
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle) flex items-center justify-center text-(--ink-primary) border border-(--border-subtle) shadow-xs">
                   <BriefcaseIcon size={18} />
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Professional Experience</h2>
@@ -77,7 +78,7 @@ async function ExperiencesContainer() {
           
           {/* Right Timeline */}
           <div className="md:col-span-8 lg:col-span-9 relative border-l-0 md:border-l border-(--border-subtle) pl-0 md:pl-12 ml-0">
-            <ExperienceList experiences={workExp as any} />
+            <ExperienceList experiences={workExp} />
           </div>
         </section>
       )}
@@ -88,8 +89,9 @@ async function ExperiencesContainer() {
           {/* Left Header - Sticky */}
           <div className="md:col-span-4 lg:col-span-3">
             <div className="md:sticky md:top-28 space-y-3">
+              <p className="section-label">02 / Academic</p>
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle)/70 flex items-center justify-center text-(--ink-primary) border border-(--border-subtle)">
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle) flex items-center justify-center text-(--ink-primary) border border-(--border-subtle) shadow-xs">
                   <GraduationCap size={18} />
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Academic Foundations</h2>
@@ -102,7 +104,7 @@ async function ExperiencesContainer() {
 
           {/* Right Timeline */}
           <div className="md:col-span-8 lg:col-span-9 relative border-l-0 md:border-l border-(--border-subtle) pl-0 md:pl-12 ml-0">
-            <ExperienceList experiences={eduExp as any} />
+            <ExperienceList experiences={eduExp} />
           </div>
         </section>
       )}

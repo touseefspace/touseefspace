@@ -55,7 +55,7 @@ async function ProjectListContainer() {
 
   return (
     <>
-      <ProjectSpotlightList projects={projects as any} />
+      <ProjectSpotlightList projects={projects} />
       
       {/* GitHub CTA */}
       <div className="mt-20 border-t border-(--border-subtle) pt-12 flex flex-col items-center text-center">

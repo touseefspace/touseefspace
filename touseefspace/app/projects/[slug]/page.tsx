@@ -15,8 +15,8 @@ interface PageProps {
 export async function generateStaticParams() {
   try {
     const projects = await getProjects();
-    return projects.map((project: any) => ({
-      slug: typeof project.slug === "string" ? project.slug : project.slug?.current || project.id,
+    return projects.map((project) => ({
+      slug: typeof project.slug === "string" ? project.slug : project.id,
     }));
   } catch {
     return [];
@@ -186,7 +186,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
       {/* Quantified Metrics Highlight */}
       {project.metrics && project.metrics.length > 0 && (
         <section className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 min-w-0">
-          {project.metrics.map((m: any, i: number) => (
+          {project.metrics.map((m, i: number) => (
             <div
               key={i}
               className="rounded-2xl border border-(--border-subtle) bg-(--bg-surface)/65 backdrop-blur-xs p-6 text-center space-y-1.5 shadow-xs transition-colors duration-200 hover:border-(--border-strong)"
@@ -206,7 +206,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
       <section className="mt-16 grid gap-10 lg:grid-cols-12 min-w-0">
         <div className="lg:col-span-8 space-y-12 min-w-0 max-w-full">
           {/* Problem Breakdown */}
-          {project.problem && (
+          {project.problem ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="section-label">01 / Operational Friction</span>
@@ -218,10 +218,10 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 {project.problem}
               </p>
             </div>
-          )}
+          ) : null}
 
           {/* Solution Breakdown */}
-          {project.solution && (
+          {project.solution ? (
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="section-label">02 / Engineered Architecture</span>
@@ -233,10 +233,10 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 {project.solution}
               </p>
             </div>
-          )}
+          ) : null}
 
           {/* Outcome Breakdown */}
-          {project.outcome && (
+          {project.outcome ? (
             <div className="rounded-2xl border border-(--border-strong) bg-(--bg-surface)/80 backdrop-blur-md p-6 sm:p-7 space-y-3 shadow-xs">
               <div className="flex items-center gap-2">
                 <span className="section-label text-(--ink-primary)">03 / Measurable Outcome</span>
@@ -245,14 +245,14 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 {project.outcome}
               </p>
             </div>
-          )}
+          ) : null}
 
           {/* Portable Text Body (Full Case Study Writeup) */}
-          {project.body && (
+          {project.body ? (
             <div className="pt-8 border-t border-(--border-subtle) min-w-0 max-w-full">
               <PortableTextRenderer value={project.body} />
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Sidebar: Stack & Key Features */}
@@ -264,17 +264,18 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 Technology Stack
               </h2>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech: any, i: number) => {
+                {project.technologies.map((tech, i) => {
                   const techIconUrl = resolveSanityImageUrl(tech.icon, 36);
                   return (
                     <span key={i} className="tech-tag text-xs flex items-center gap-1.5">
                       {techIconUrl && (
-                        <img
+                        <Image
                           src={techIconUrl}
                           alt=""
+                          width={14}
+                          height={14}
+                          unoptimized
                           aria-hidden="true"
-                          loading="lazy"
-                          decoding="async"
                           className="h-3.5 w-3.5 object-contain shrink-0"
                         />
                       )}
@@ -293,7 +294,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 Key Engineered Capabilities
               </h2>
               <ul className="space-y-3 text-sm text-(--ink-secondary)">
-                {project.features.map((feature: any, i: number) => (
+                {project.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-2.5">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-(--ink-muted)" aria-hidden="true" />
                     <span>{typeof feature === "string" ? feature : feature.feature}</span>

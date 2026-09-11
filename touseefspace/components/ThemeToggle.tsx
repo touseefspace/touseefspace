@@ -1,43 +1,54 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 
+const emptySubscribe = () => () => {};
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+
+  const theme = useSyncExternalStore<"dark" | "light">(
+    (callback) => {
+      window.addEventListener("theme-change", callback);
+      return () => window.removeEventListener("theme-change", callback);
+    },
+    () =>
+      ((document.documentElement.getAttribute("data-theme") as "dark" | "light") ||
+        (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")),
+    () => "dark"
+  );
 
   const applyFavicon = (activeTheme: "dark" | "light") => {
     try {
       const iconLinks = document.querySelectorAll<HTMLLinkElement>("link[rel*='icon']");
-      const targetFavicon = activeTheme === "light"
-        ? "/favicon_io_bglight_darklogo/favicon-32x32.png"
-        : "/favicon_io_bgdark_whitelogo/favicon-32x32.png";
+      const targetFavicon =
+        activeTheme === "light"
+          ? "/favicon_io_bglight_darklogo/favicon-32x32.png"
+          : "/favicon_io_bgdark_whitelogo/favicon-32x32.png";
       iconLinks.forEach((link) => {
         link.href = targetFavicon;
       });
-    } catch (e) {
+    } catch {
       // ignore
     }
   };
 
   useEffect(() => {
-    setMounted(true);
-    const currentTheme =
-      (document.documentElement.getAttribute("data-theme") as "dark" | "light") ||
-      (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
-    setTheme(currentTheme);
-    applyFavicon(currentTheme);
-  }, []);
+    applyFavicon(theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
     applyFavicon(nextTheme);
     try {
       localStorage.setItem("theme", nextTheme);
-    } catch (e) {
+    } catch {
       // ignore in restricted environments
     }
     window.dispatchEvent(new CustomEvent("theme-change", { detail: nextTheme }));

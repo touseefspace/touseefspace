@@ -10,7 +10,7 @@ export function ProjectsSkeleton() {
       {[1, 2, 3].map((i) => (
         <div 
           key={i} 
-          className="glass-line rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start relative overflow-hidden bg-(--bg-surface) border border-(--border-subtle)"
+          className="rounded-3xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start relative overflow-hidden bg-(--bg-surface) border border-(--border-card)"
         >
           {/* Accent glow line mock */}
           <div className="absolute top-0 left-0 w-full h-px bg-(--border-subtle)" />
@@ -111,33 +111,32 @@ export function ExperiencesSkeleton() {
  */
 export function SkillsSkeleton() {
   return (
-    <div className="mt-10 grid gap-5 lg:grid-cols-2 animate-pulse">
-      {[1, 2, 3, 4].map((i) => (
-        <section key={i} className="glass-line rounded-3xl p-5 md:p-6 space-y-6 bg-(--bg-surface) border border-(--border-subtle)">
-          {/* Header Row */}
-          <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-(--bg-subtle) border border-(--border-subtle)" />
-            <div className="h-6 w-36 bg-(--bg-subtle) rounded-md" />
-          </div>
+    <div className="mt-10 space-y-8 animate-pulse">
+      {/* Control console bar skeleton */}
+      <div className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-5 space-y-4">
+        <div className="flex flex-col lg:flex-row justify-between gap-4">
+          <div className="h-9 w-96 max-w-full rounded-2xl bg-(--bg-subtle)" />
+          <div className="h-9 w-64 rounded-xl bg-(--bg-subtle)" />
+        </div>
+        <div className="h-4 w-72 rounded bg-(--bg-subtle)" />
+      </div>
 
-          {/* Skill Pill Grid */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map((j) => (
-              <div key={j} className="rounded-2xl border border-(--border-subtle) bg-(--bg-subtle) p-3 space-y-3">
-                <div className="flex items-center gap-3">
-                  <div className="h-6 w-6 rounded bg-(--border-subtle) shrink-0" />
-                  <div className="h-4 w-16 bg-(--border-subtle) rounded" />
-                </div>
-                {/* Proficiency track loader */}
-                <div className="flex items-center gap-3">
-                  <div className="h-1 flex-1 rounded-full bg-(--border-subtle)" />
-                  <div className="h-3 w-6 bg-(--border-subtle)" />
-                </div>
-              </div>
-            ))}
+      {/* Compact category icon trays */}
+      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-5 space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-(--border-subtle)">
+              <div className="h-4 w-32 bg-(--bg-subtle) rounded" />
+              <div className="h-4 w-6 bg-(--bg-subtle) rounded-full" />
+            </div>
+            <div className="flex flex-wrap gap-2.5">
+              {[1, 2, 3, 4, 5, 6, 7].map((j) => (
+                <div key={j} className="h-13 w-13 rounded-2xl bg-(--bg-subtle) border border-(--border-card)" />
+              ))}
+            </div>
           </div>
-        </section>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -148,9 +147,9 @@ export function SkillsSkeleton() {
  */
 export function SocialsSkeleton() {
   return (
-    <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 animate-pulse">
-      {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div key={i} className="glass-line rounded-2xl p-5 flex items-center gap-4 bg-(--bg-surface) border border-(--border-subtle)">
+    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 animate-pulse">
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="rounded-2xl p-5 flex items-center gap-4 bg-(--bg-surface) border border-(--border-card)">
           <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle) border border-(--border-subtle)" />
           <div className="min-w-0 flex-1 space-y-2">
             <div className="h-4 w-24 bg-(--bg-subtle)" />
@@ -212,7 +211,7 @@ export function HomeSkeleton() {
               <div className="h-4 w-28 bg-(--bg-subtle) rounded" />
               <div className="h-8 w-48 bg-(--bg-subtle) rounded-md" />
             </div>
-            <div className="glass-line rounded-3xl p-6 md:p-8 flex flex-col justify-between h-72 max-w-2xl space-y-6 bg-(--bg-surface) border border-(--border-subtle)">
+            <div className="rounded-3xl p-6 md:p-8 flex flex-col justify-between h-72 max-w-2xl space-y-6 bg-(--bg-surface) border border-(--border-card)">
               <div className="flex gap-5 items-start">
                 <div className="h-16 w-16 rounded-xl bg-(--bg-subtle) border border-(--border-subtle) shrink-0" />
                 <div className="flex-1 space-y-3">
@@ -241,7 +240,7 @@ export function BlogSkeleton() {
   return (
     <div className="space-y-12 animate-pulse">
       {/* Featured Spotlight Card */}
-      <div className="rounded-3xl border border-(--border-subtle) bg-(--bg-surface)/70 backdrop-blur-md p-6 sm:p-10">
+      <div className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-6 sm:p-10">
         <div className="flex flex-col gap-6 lg:grid lg:grid-cols-12 lg:gap-10 lg:items-center">
           <div className="lg:col-span-7 space-y-4">
             <div className="flex items-center gap-3">
@@ -269,7 +268,7 @@ export function BlogSkeleton() {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="flex flex-col justify-between rounded-3xl border border-(--border-subtle) bg-(--bg-surface)/70 backdrop-blur-md p-6 sm:p-8 space-y-6"
+            className="flex flex-col justify-between rounded-3xl border border-(--border-card) bg-(--bg-surface) p-6 sm:p-8 space-y-6"
           >
             <div className="space-y-3">
               <div className="h-4 w-28 bg-(--bg-subtle) rounded" />

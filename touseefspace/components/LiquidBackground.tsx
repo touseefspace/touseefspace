@@ -146,8 +146,8 @@ export default function LiquidBackground({
 
     let animationFrameId: number | null = null;
     let isRunning = false;
-    let idleId: any = null;
-    let timerId: any = null;
+    let idleId: number | null = null;
+    let timerId: ReturnType<typeof setTimeout> | null = null;
     let resizeObserver: ResizeObserver | null = null;
     let themeObserver: MutationObserver | null = null;
 
@@ -365,17 +365,22 @@ export default function LiquidBackground({
       startLoop();
     };
 
+    type WindowIdle = Window & {
+      requestIdleCallback: (cb: () => void, options?: { timeout: number }) => number;
+      cancelIdleCallback: (id: number) => void;
+    };
+
     // Schedule initialization when browser is idle to protect critical render path
     if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      idleId = (window as any).requestIdleCallback(initWebGL, { timeout: 1500 });
+      idleId = (window as unknown as WindowIdle).requestIdleCallback(initWebGL, { timeout: 1500 });
     } else {
       timerId = setTimeout(initWebGL, 400);
     }
 
     // 9. Cleanup
     return () => {
-      if (idleId && typeof window !== "undefined" && "cancelIdleCallback" in window) {
-        (window as any).cancelIdleCallback(idleId);
+      if (idleId !== null && typeof window !== "undefined" && "cancelIdleCallback" in window) {
+        (window as unknown as WindowIdle).cancelIdleCallback(idleId);
       }
       if (timerId) {
         clearTimeout(timerId);

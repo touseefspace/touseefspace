@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, MapPin, Mail } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import { MapPin, Mail } from "lucide-react";
+import React from "react";
 import { BrandIcon } from "@/components/ui/BrandIcons";
+import type { SocialLink } from "@/lib/types";
 
 const footerNavLinks = [
   { name: "Projects", href: "/projects" },
@@ -14,13 +15,9 @@ const footerNavLinks = [
   { name: "Contact", href: "/contact" },
 ];
 
-export function Footer({ socialLinks = [] }: { socialLinks?: any[] }) {
+export function Footer({ socialLinks = [] }: { socialLinks?: SocialLink[] }) {
   const displayLinks = socialLinks;
-  const [currentYear, setCurrentYear] = useState(2026);
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="relative z-20 mt-20 border-t border-(--border-subtle) bg-(--footer-bg) backdrop-blur-xl text-(--ink-primary) py-14 sm:py-16 transition-colors duration-200">
@@ -106,7 +103,8 @@ export function Footer({ socialLinks = [] }: { socialLinks?: any[] }) {
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {displayLinks.map((link) => {
-                const iconUrl = link.iconDark?.url || link.iconDark?.asset?.url || (typeof link.iconDark === "string" ? link.iconDark : null);
+                const darkObj = typeof link.iconDark === "object" && link.iconDark !== null ? link.iconDark : null;
+                const iconUrl = darkObj?.url || darkObj?.asset?.url || (typeof link.iconDark === "string" ? link.iconDark : null);
                 return (
                   <Link
                     key={link.name}
@@ -117,9 +115,12 @@ export function Footer({ socialLinks = [] }: { socialLinks?: any[] }) {
                     aria-label={link.name}
                   >
                     {iconUrl ? (
-                      <img
+                      <Image
                         src={iconUrl}
                         alt=""
+                        width={28}
+                        height={28}
+                        unoptimized
                         aria-hidden="true"
                         className="h-7 w-7 object-contain"
                       />

@@ -49,11 +49,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let projectRoutes: MetadataRoute.Sitemap = [];
   try {
     const projects = await getProjects();
-    projectRoutes = projects.map((p: any) => {
-      const slug = typeof p.slug === "string" ? p.slug : p.slug?.current || p.id;
+    projectRoutes = projects.map((p) => {
+      const slug = typeof p.slug === "string" ? p.slug : p.id;
+      const updatedAt = (p as { _updatedAt?: string })._updatedAt;
       return {
         url: `${baseUrl}/projects/${slug}`,
-        lastModified: p._updatedAt ? new Date(p._updatedAt) : now,
+        lastModified: updatedAt ? new Date(updatedAt) : now,
         changeFrequency: "monthly" as const,
         priority: 0.85,
       };
@@ -66,11 +67,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let postRoutes: MetadataRoute.Sitemap = [];
   try {
     const posts = await getPosts();
-    postRoutes = posts.map((post: any) => {
-      const slug = typeof post.slug === "string" ? post.slug : post.slug?.current || post.id;
+    postRoutes = posts.map((post) => {
+      const slug = typeof post.slug === "string" ? post.slug : post.id || "";
+      const updatedAt = (post as { _updatedAt?: string })._updatedAt;
+      const dateStr = updatedAt || post.publishedAt;
       return {
         url: `${baseUrl}/blog/${slug}`,
-        lastModified: post._updatedAt || post.publishedAt ? new Date(post._updatedAt || post.publishedAt) : now,
+        lastModified: dateStr ? new Date(dateStr) : now,
         changeFrequency: "monthly" as const,
         priority: 0.85,
       };

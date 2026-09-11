@@ -7,7 +7,26 @@ import Link from "next/link";
 import { Copy, Check, ExternalLink } from "lucide-react";
 import { urlForImage } from "@/sanity/image";
 
-function CodeBlockComponent({ value }: { value: any }) {
+interface CodeBlockValue {
+  code?: string;
+  filename?: string;
+  language?: string;
+}
+
+interface CalloutValue {
+  type?: string;
+  title?: string;
+  content?: string;
+}
+
+interface ImageBlockValue {
+  asset?: { url?: string; _id?: string };
+  url?: string;
+  alt?: string;
+  caption?: string;
+}
+
+function CodeBlockComponent({ value }: { value: CodeBlockValue }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -48,7 +67,7 @@ function CodeBlockComponent({ value }: { value: any }) {
   );
 }
 
-function CalloutComponent({ value }: { value: any }) {
+function CalloutComponent({ value }: { value: CalloutValue }) {
   const type = value?.type || "info";
 
   const labelMap: Record<string, string> = {
@@ -88,7 +107,7 @@ const portableTextComponents: PortableTextComponents = {
   types: {
     codeBlock: CodeBlockComponent,
     callout: CalloutComponent,
-    image: ({ value }: { value: any }) => {
+    image: ({ value }: { value: ImageBlockValue }) => {
       const imageUrl = urlForImage(value)?.width(1200).url() || value?.url;
       if (!imageUrl) return null;
 
@@ -99,6 +118,7 @@ const portableTextComponents: PortableTextComponents = {
               src={imageUrl}
               alt={value?.alt || "Article illustration"}
               fill
+              sizes="(max-width: 768px) 100vw, 768px"
               className="object-cover object-center"
             />
           </div>
@@ -112,8 +132,11 @@ const portableTextComponents: PortableTextComponents = {
     },
   },
   block: {
-    h2: ({ children, value }: { children?: any; value?: any }) => {
-      const text = value?.children?.map((c: any) => c.text).join("") || "";
+    h2: ({ children, value }) => {
+      const text =
+        value?.children
+          ?.map((c) => ("text" in c && typeof c.text === "string" ? c.text : ""))
+          .join("") || "";
       const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
       return (
         <h2 id={id} className="mt-10 mb-4 text-2xl sm:text-3xl font-bold tracking-tight text-(--ink-primary) scroll-mt-24">
@@ -121,8 +144,11 @@ const portableTextComponents: PortableTextComponents = {
         </h2>
       );
     },
-    h3: ({ children, value }: { children?: any; value?: any }) => {
-      const text = value?.children?.map((c: any) => c.text).join("") || "";
+    h3: ({ children, value }) => {
+      const text =
+        value?.children
+          ?.map((c) => ("text" in c && typeof c.text === "string" ? c.text : ""))
+          .join("") || "";
       const id = text.toLowerCase().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-");
       return (
         <h3 id={id} className="mt-8 mb-3 text-xl sm:text-2xl font-semibold tracking-tight text-(--ink-primary) scroll-mt-24">
@@ -185,7 +211,7 @@ const portableTextComponents: PortableTextComponents = {
   },
 };
 
-export default function PortableTextRenderer({ value }: { value: any }) {
+export default function PortableTextRenderer({ value }: { value: unknown }) {
   if (!value) return null;
-  return <PortableText value={value} components={portableTextComponents} />;
+  return <PortableText value={value as Parameters<typeof PortableText>[0]["value"]} components={portableTextComponents} />;
 }

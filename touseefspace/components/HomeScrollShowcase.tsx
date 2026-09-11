@@ -6,23 +6,47 @@ import { ArrowRight } from "lucide-react";
 import React from "react";
 import SelectedWorkSection from "./SelectedWorkSection";
 
+import type { Project, Experience, SkillCategory, Skill } from "@/lib/types";
+
+interface HomeDataProps {
+  hero?: {
+    title?: string;
+    role?: string;
+    description?: string;
+    portrait?: unknown;
+    location?: string;
+  };
+  location?: string;
+  portrait?: {
+    asset?: { url?: string };
+    url?: string;
+  } | string;
+  role?: string;
+  title?: string;
+  description?: string;
+}
+
 export default function HomeScrollShowcase({
   featuredProjects: cmsProjects,
   activeExperience: cmsExperience,
   skillCategories: cmsSkillCategories,
   homeData
 }: {
-  featuredProjects?: any[];
-  activeExperience?: any;
-  skillCategories?: any;
-  homeData?: any;
+  featuredProjects?: Project[];
+  activeExperience?: Experience | null;
+  skillCategories?: SkillCategory[];
+  homeData?: HomeDataProps | null;
 }) {
   // Hero content defaults - supports both root homeData and legacy nested .hero
   const heroData = homeData?.hero || homeData || {};
+  const portraitObj = (heroData as Record<string, unknown>).portrait as
+    | { asset?: { url?: string }; url?: string }
+    | string
+    | undefined;
   const portraitUrl =
-    heroData.portrait?.asset?.url ||
-    heroData.portrait?.url ||
-    (typeof heroData.portrait === "string" ? heroData.portrait : null) ||
+    (typeof portraitObj === "object" && portraitObj?.asset?.url) ||
+    (typeof portraitObj === "object" && portraitObj?.url) ||
+    (typeof portraitObj === "string" ? portraitObj : null) ||
     "/touseef.png";
   const heroRole = heroData.role || "AI Systems & Software Developer";
   const heroLocation = heroData.location || "United Arab Emirates";
@@ -39,8 +63,8 @@ export default function HomeScrollShowcase({
 
   const activeExperience = cmsExperience || null;
 
-  const highlightedSkills = cmsSkillCategories?.length > 0
-    ? cmsSkillCategories.flatMap((cat: any) => cat.skills?.slice(0, 2) || []).slice(0, 8)
+  const highlightedSkills: Skill[] = (cmsSkillCategories && cmsSkillCategories.length > 0)
+    ? cmsSkillCategories.flatMap((cat) => cat.skills?.slice(0, 2) || []).slice(0, 8)
     : [];
 
   return (
@@ -67,7 +91,7 @@ export default function HomeScrollShowcase({
                 View projects <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
               </Link>
               <Link href="/contact" className="btn-secondary flex-1 sm:flex-initial text-xs sm:text-sm px-3.5 sm:px-5 text-center justify-center whitespace-nowrap">
-                Let's Talk
+                Let&apos;s Talk
               </Link>
             </div>
           </div>
@@ -126,14 +150,15 @@ export default function HomeScrollShowcase({
                   {activeExperience.role}
                 </h2>
               </div>
-              <div className="glass-line rounded-3xl p-5 md:p-6 max-w-2xl bg-(--bg-surface) border border-(--border-subtle)">
+              <div className="group rounded-3xl p-6 md:p-7 max-w-2xl bg-(--bg-surface) border border-(--border-card) shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:shadow-md">
                 <div className="flex items-start gap-4">
                   {activeExperience.logo?.url && (
-                    <div className="relative h-10 w-10 md:h-12 md:w-12 shrink-0 rounded-xl overflow-hidden bg-(--bg-subtle) border border-(--border-subtle) p-2">
+                    <div className="relative h-10 w-10 md:h-12 md:w-12 shrink-0 rounded-xl overflow-hidden bg-(--bg-subtle) border border-(--border-subtle) p-2 shadow-xs">
                       <Image
                         src={activeExperience.logo.url}
                         alt={activeExperience.company}
                         fill
+                        sizes="(max-width: 768px) 40px, 48px"
                         className="object-contain"
                       />
                     </div>
@@ -143,14 +168,14 @@ export default function HomeScrollShowcase({
                       {activeExperience.company}
                     </p>
                     <p className="mt-1 text-sm text-(--ink-muted)">
-                      {activeExperience.time} {activeExperience.location ? `· ${activeExperience.location}` : ""}
+                      {activeExperience.period}
                     </p>
                   </div>
                 </div>
                 <ul className="mt-5 grid gap-3 text-sm leading-6 text-(--ink-secondary)">
-                  {activeExperience.tasks?.slice(0, 3).map((item: any, i: number) => (
+                  {activeExperience.tasks?.slice(0, 3).map((item: string | { task?: string }, i: number) => (
                     <li key={i} className="border-l-2 border-(--border-strong) pl-3">
-                      {item.task || item}
+                      {typeof item === "string" ? item : (item.task || "")}
                     </li>
                   ))}
                 </ul>
@@ -173,7 +198,7 @@ export default function HomeScrollShowcase({
                   Career trajectory.
                 </h2>
               </div>
-              <div className="glass-line rounded-3xl p-8 flex flex-col items-center justify-center text-center border-dashed border-(--border-subtle) max-w-2xl bg-(--bg-surface)">
+              <div className="rounded-3xl p-8 flex flex-col items-center justify-center text-center border border-dashed border-(--border-card) max-w-2xl bg-(--bg-surface)">
                 <p className="text-sm font-semibold text-(--ink-muted) uppercase tracking-wider">
                   Experience needed
                 </p>
@@ -194,29 +219,38 @@ export default function HomeScrollShowcase({
                 </h2>
               </div>
               <div className="grid grid-cols-4 gap-3 sm:gap-4 max-w-2xl">
-                {highlightedSkills.map((skill: any, i: number) => (
-                  <div
-                    key={i}
-                    title={skill.name || skill.skill}
-                    className="glass-line group aspect-square flex items-center justify-center rounded-2xl sm:rounded-3xl p-3 sm:p-4 transition-colors bg-(--bg-surface) border border-(--border-subtle) hover:bg-(--bg-subtle)"
-                  >
-                    <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-md transition-all group-hover:scale-105">
-                      {skill.iconDark?.url || skill.icon ? (
-                        <Image
-                          src={skill.iconDark?.url || skill.icon}
-                          alt={skill.name || skill.skill}
-                          width={56}
-                          height={56}
-                          className={`h-full w-full object-contain ${(skill.name === 'GitHub' || skill.skill === 'GitHub') ? 'dark:invert' : ''}`}
-                        />
-                      ) : (
-                        <span className="text-xs font-bold text-(--ink-muted)">
-                          {(skill.name || skill.skill)?.charAt(0)}
-                        </span>
-                      )}
+                {highlightedSkills.map((skill, i: number) => {
+                  const iconSrc =
+                    skill.iconDark?.url ||
+                    (typeof skill.icon === "string" ? skill.icon : skill.icon?.url) ||
+                    "";
+                  const skillTitle = (skill.name as string) || (skill.skill as string) || "";
+                  return (
+                    <div
+                      key={i}
+                      title={skillTitle}
+                      className="group aspect-square flex items-center justify-center rounded-2xl sm:rounded-3xl p-3 sm:p-4 transition-all duration-200 bg-(--bg-surface) border border-(--border-card) shadow-xs hover:border-(--border-strong) hover:bg-(--bg-subtle) hover:scale-105"
+                    >
+                      <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-md transition-all group-hover:scale-105">
+                        {iconSrc ? (
+                          <Image
+                            src={iconSrc}
+                            alt={skillTitle}
+                            width={56}
+                            height={56}
+                            className={`h-full w-full object-contain ${
+                              skillTitle === "GitHub" ? "dark:invert" : ""
+                            }`}
+                          />
+                        ) : (
+                          <span className="text-xs font-bold text-(--ink-muted)">
+                            {skillTitle.charAt(0)}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </article>
           ) : (
@@ -227,7 +261,7 @@ export default function HomeScrollShowcase({
                   Technical range.
                 </h2>
               </div>
-              <div className="glass-line rounded-3xl p-8 flex flex-col items-center justify-center text-center border-dashed border-(--border-subtle) max-w-2xl bg-(--bg-surface)">
+              <div className="rounded-3xl p-8 flex flex-col items-center justify-center text-center border border-dashed border-(--border-card) max-w-2xl bg-(--bg-surface)">
                 <p className="text-sm font-semibold text-(--ink-muted) uppercase tracking-wider">
                   Skills required
                 </p>

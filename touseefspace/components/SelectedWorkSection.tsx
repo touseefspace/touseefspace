@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -12,11 +12,17 @@ import {
   Zap,
   ExternalLink,
 } from "lucide-react";
-import { urlForImage, resolveSanityImageUrl } from "@/sanity/image";
+import { resolveSanityImageUrl, type SanityImageSource } from "@/sanity/image";
 
 interface Metric {
   value: string;
   label: string;
+}
+
+export interface ProjectImageDetail {
+  url?: string;
+  asset?: { url?: string; _id?: string };
+  alt?: string;
 }
 
 interface Project {
@@ -27,15 +33,15 @@ interface Project {
   client?: string;
   role?: string;
   period?: string;
-  summary: string;
+  summary?: string;
   problem?: string;
   solution?: string;
   outcome?: string;
   metrics?: Metric[];
-  image?: any;
-  technologies?: { name: string; icon?: any }[];
-  liveUrl?: string;
-  githubUrl?: string;
+  image?: (SanityImageSource & { alt?: string }) | null;
+  technologies?: { name: string; icon?: unknown }[];
+  liveUrl?: string | null;
+  githubUrl?: string | null;
 }
 
 export default function SelectedWorkSection({
@@ -48,13 +54,13 @@ export default function SelectedWorkSection({
   const lastWheelTime = useRef<number>(0);
 
   // Circular loop navigation (1 -> 2 -> 3 -> 1, or 1 -> 3 -> 2 -> 1)
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + projects.length) % projects.length);
-  };
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + projects.length) % (projects.length || 1));
+  }, [projects.length]);
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % projects.length);
-  };
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % (projects.length || 1));
+  }, [projects.length]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -69,7 +75,7 @@ export default function SelectedWorkSection({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [projects.length]);
+  }, [handleNext, handlePrev]);
 
   // Only handle explicit horizontal trackpad swipes; NEVER intercept vertical page scrolling (deltaY)
   const handleWheel = (e: React.WheelEvent) => {

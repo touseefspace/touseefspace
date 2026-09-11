@@ -1,51 +1,19 @@
 "use client";
 
 import React, { useRef } from "react";
+import Image from "next/image";
 import { Calendar, MapPin, Download, ExternalLink } from "lucide-react";
-
-interface Experience {
-  id: string;
-  role: string;
-  company: string;
-  time: string;
-  location?: string;
-  category?: "work" | "education";
-  description?: string;
-  logo?: {
-    url?: string;
-    asset?: {
-      url?: string;
-    };
-  };
-  tasks?: {
-    task: string;
-  }[];
-  skillStack?: {
-    skill: string;
-    icon?: {
-      url?: string;
-      asset?: {
-        url?: string;
-      };
-    };
-  }[];
-  attachments?: {
-    label: string;
-    file: {
-      url: string;
-    };
-  }[];
-}
+import type { Experience } from "@/lib/types";
 
 export default function ExperienceList({ experiences }: { experiences: Experience[] }) {
   return (
     <div className="flex flex-col gap-12 md:gap-16">
       {experiences.length > 0 ? (
-        experiences.map((exp) => (
-          <ExperienceCard key={exp.id} exp={exp} />
+        experiences.map((exp, index) => (
+          <ExperienceCard key={exp._id || exp.id || `${exp.company}-${exp.role}-${index}`} exp={exp} />
         ))
       ) : (
-        <div className="glass-line rounded-3xl p-12 flex flex-col items-center justify-center text-center border-dashed border-(--border-subtle) bg-(--bg-surface)">
+        <div className="rounded-3xl p-12 flex flex-col items-center justify-center text-center border border-dashed border-(--border-card) bg-(--bg-surface)">
           <div className="h-16 w-16 rounded-full bg-(--bg-subtle) flex items-center justify-center mb-6">
             <Calendar className="h-8 w-8 text-(--ink-muted)" />
           </div>
@@ -76,7 +44,7 @@ function ExperienceCard({ exp }: { exp: Experience }) {
     <div 
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      className="experience-card glass-line group relative p-5 sm:p-8 md:p-9 rounded-3xl border border-(--border-subtle) bg-(--bg-surface)/65 backdrop-blur-xl shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:bg-(--bg-surface)/80 hover:shadow-md"
+      className="experience-card group relative p-6 sm:p-8 md:p-9 rounded-3xl border border-(--border-card) bg-(--bg-surface) shadow-xs transition-all duration-300 hover:border-(--border-strong) hover:shadow-md overflow-hidden"
     >
       {/* Spotlight Glow */}
       <div className="spotlight-glow" />
@@ -90,11 +58,12 @@ function ExperienceCard({ exp }: { exp: Experience }) {
             {/* Logo */}
             <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-2xl bg-(--bg-subtle) border border-(--border-subtle) p-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
               {logoUrl ? (
-                <img 
+                <Image 
                   src={logoUrl} 
                   alt={exp.company} 
-                  loading="lazy"
-                  decoding="async"
+                  width={56}
+                  height={56}
+                  unoptimized
                   className="h-full w-full object-contain" 
                 />
               ) : (
@@ -131,7 +100,7 @@ function ExperienceCard({ exp }: { exp: Experience }) {
                 {exp.tasks.map((item, i) => (
                   <div key={i} className="flex gap-3 text-sm md:text-base text-(--ink-secondary) leading-relaxed group/item">
                     <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-(--ink-muted) group-hover/item:bg-(--ink-primary) transition-colors" />
-                    {item.task}
+                    {typeof item === "string" ? item : (item.task || "")}
                   </div>
                 ))}
               </div>
@@ -141,7 +110,7 @@ function ExperienceCard({ exp }: { exp: Experience }) {
 
         {/* Right Details Column (Desktop Only) */}
         <div className="lg:col-span-4 lg:pl-6 space-y-6">
-          <div className="flex items-center gap-2 text-xs font-mono text-(--ink-muted) bg-(--bg-subtle)/70 px-3.5 py-1.5 rounded-full border border-(--border-subtle) w-fit">
+          <div className="flex items-center gap-2 text-xs font-mono text-(--ink-muted) bg-(--bg-subtle) px-3.5 py-1.5 rounded-full border border-(--border-subtle) w-fit">
             <Calendar size={13}/> {exp.time}
           </div>
 
@@ -155,12 +124,13 @@ function ExperienceCard({ exp }: { exp: Experience }) {
                   return (
                     <div key={i} className="tech-tag">
                       {skillIconUrl && (
-                        <img 
+                        <Image 
                           src={skillIconUrl} 
                           alt="" 
+                          width={14}
+                          height={14}
+                          unoptimized
                           aria-hidden="true"
-                          loading="lazy"
-                          decoding="async"
                           className="h-3.5 w-3.5 object-contain" 
                         />
                       )}
@@ -180,10 +150,10 @@ function ExperienceCard({ exp }: { exp: Experience }) {
                 {exp.attachments.map((att, i) => (
                   <a 
                     key={i}
-                    href={att.file.url}
+                    href={att.file?.url || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-(--bg-subtle)/60 border border-(--border-subtle) text-(--ink-primary) text-xs font-medium hover:border-(--border-strong) hover:bg-(--bg-subtle) transition-all duration-200 group/att"
+                    className="flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl bg-(--bg-subtle) border border-(--border-subtle) text-(--ink-primary) text-xs font-medium hover:border-(--border-strong) hover:bg-(--bg-surface) transition-all duration-200 group/att shadow-xs"
                   >
                     <div className="flex items-center gap-2.5">
                       <Download size={13} />

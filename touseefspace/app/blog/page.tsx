@@ -1,10 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Metadata } from "next";
-import { ArrowRight, BookOpen, Calendar, Clock, Tag } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { getPosts } from "@/lib/queries";
-import { urlForImage } from "@/sanity/image";
 import EmptyState from "@/components/EmptyState";
 
 export const metadata: Metadata = {
@@ -23,19 +21,19 @@ export default async function BlogIndexPage({
 
   // Extract unique tags across all posts
   const allTags = Array.from(
-    new Set(allPosts.flatMap((post: any) => post.tags || []))
+    new Set(allPosts.flatMap((post) => post.tags || []))
   );
 
   // Filter posts if activeTag is provided
   const filteredPosts = activeTag
-    ? allPosts.filter((post: any) =>
+    ? allPosts.filter((post) =>
         post.tags?.some((t: string) => t.toLowerCase() === activeTag.toLowerCase())
       )
     : allPosts;
 
-  const featuredPost = !activeTag ? filteredPosts.find((p: any) => p.featured) : null;
+  const featuredPost = !activeTag ? filteredPosts.find((p) => p.featured) : null;
   const remainingPosts = featuredPost
-    ? filteredPosts.filter((p: any) => p._id !== featuredPost._id)
+    ? filteredPosts.filter((p) => (p._id || p.id) !== (featuredPost._id || featuredPost.id))
     : filteredPosts;
 
   return (
@@ -73,7 +71,7 @@ export default async function BlogIndexPage({
             )}
             All Topics ({allPosts.length})
           </Link>
-          {allTags.map((t: any) => {
+          {allTags.map((t: string) => {
             const isSelected = activeTag?.toLowerCase() === t.toLowerCase();
             return (
               <Link
@@ -166,7 +164,7 @@ export default async function BlogIndexPage({
 
       {/* Grid of Remaining Posts */}
       <div className="mt-12 grid gap-8 md:grid-cols-2">
-        {remainingPosts.map((post: any) => (
+        {remainingPosts.map((post) => (
           <Link
             key={post._id || post.slug}
             href={`/blog/${post.slug}`}

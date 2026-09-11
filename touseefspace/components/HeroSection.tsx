@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowDown, ArrowRight, Code, Sparkles, Terminal } from "lucide-react";
 
 interface HeroProps {
@@ -43,11 +44,6 @@ export default function HeroSection({ heroData }: HeroProps) {
       ? heroData.title
       : "I turn messy workflows into simple & reliable software spaces.";
 
-  const strapline =
-    heroData?.description && !heroData.description.includes("make work feel lighter")
-      ? heroData.description
-      : "Developing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.";
-
   // Use uploaded touseef.png as the default portrait
   const portraitUrl = heroData?.portrait?.url || "/touseef.png";
 
@@ -78,12 +74,12 @@ export default function HeroSection({ heroData }: HeroProps) {
 
             {/* Action Group */}
             <div className="mt-8 flex flex-wrap items-center gap-3.5">
-              <a href="/projects" className="btn-primary">
+              <Link href="/projects" className="btn-primary">
                 See Projects <ArrowDown className="h-4 w-4" />
-              </a>
-              <a href="/contact" className="btn-secondary">
-                Let's Talk <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
+              <Link href="/contact" className="btn-secondary">
+                Let&apos;s Talk <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
 
@@ -122,7 +118,7 @@ export default function HeroSection({ heroData }: HeroProps) {
 
                 <div className="space-y-4 py-6">
                   <p className="text-sm sm:text-base leading-relaxed text-(--ink-secondary)">
-                    "Good engineering removes friction. Great engineering creates quiet space where complex operations feel simple, dependable, and effortless."
+                    &ldquo;Good engineering removes friction. Great engineering creates quiet space where complex operations feel simple, dependable, and effortless.&rdquo;
                   </p>
                 </div>
 

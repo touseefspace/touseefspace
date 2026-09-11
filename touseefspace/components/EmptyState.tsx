@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Compass, Sparkles } from "lucide-react";
+import { ArrowRight, Compass } from "lucide-react";
 
 export interface EmptyStateProps {
   /** Optional badge text shown at the top (defaults to "Space in development") */

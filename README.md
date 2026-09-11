@@ -3,7 +3,7 @@
 > **Live Production Website:** 🌐 **[https://touseefspace.com](https://touseefspace.com)**
 
 [![Live Website](https://img.shields.io/badge/Live-touseefspace.com-000000?style=flat&logo=safari&logoColor=white)](https://touseefspace.com)
-[![Version](https://img.shields.io/badge/Version-v4.1.1-emerald)](#)
+[![Version](https://img.shields.io/badge/Version-v4.1.4-emerald)](#)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
 [![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f?logo=sanity)](https://www.sanity.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)

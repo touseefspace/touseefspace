@@ -26,9 +26,9 @@ async function HomeContainer() {
 
   return (
     <HomeScrollShowcase 
-      featuredProjects={projects as any} 
-      activeExperience={experiences[0] as any}
-      skillCategories={skillCategories as any}
+      featuredProjects={projects} 
+      activeExperience={experiences[0] || null}
+      skillCategories={skillCategories}
       homeData={homeData}
     />
   );

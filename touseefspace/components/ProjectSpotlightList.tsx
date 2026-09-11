@@ -6,26 +6,7 @@ import { SiGithub } from "react-icons/si";
 import Link from "next/link";
 import Image from "next/image";
 import { resolveSanityImageUrl } from "@/sanity/image";
-
-interface Media {
-  url: string;
-  alt: string;
-}
-
-interface Project {
-  id: string;
-  title: string;
-  slug?: string | { current?: string };
-  image?: Media | string | null;
-  githubUrl?: string;
-  liveUrl?: string;
-  period?: string;
-  summary?: string;
-  technologies?: { 
-    name: string;
-    icon?: Media | string | null;
-  }[];
-}
+import type { Project } from "@/lib/types";
 
 export default function ProjectSpotlightList({ projects }: { projects: Project[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -34,15 +15,19 @@ export default function ProjectSpotlightList({ projects }: { projects: Project[]
     <div className="mt-12 flex flex-col gap-8 md:gap-10" ref={containerRef}>
       {projects.length > 0 ? (
         projects.map((project, index) => {
+          const projectSlug =
+            typeof project.slug === "string"
+              ? project.slug
+              : project.id || project._id || "";
           const projectKey =
             project.id ||
-            (project as any)._id ||
-            (typeof project.slug === "string" ? project.slug : project.slug?.current) ||
+            project._id ||
+            projectSlug ||
             `project-${index}`;
           return (
             <ProjectCard 
               key={projectKey} 
-              project={project} 
+              project={{ ...project, slug: projectSlug }} 
               priority={index === 0}
             />
           );
@@ -89,7 +74,7 @@ function ProjectCard({
   const projectSlug =
     typeof project.slug === "string"
       ? project.slug
-      : project.slug?.current || project.id;
+      : project.id || project._id || "";
 
   return (
     <div 
@@ -182,13 +167,14 @@ function ProjectCard({
                 return (
                   <div key={index} className="tech-tag">
                     {techIconUrl && (
-                      <img 
+                      <Image 
                         src={techIconUrl} 
-                        alt=""
-                        aria-hidden="true"
-                        loading="lazy"
-                        decoding="async"
-                        className="h-3.5 w-3.5 object-contain shrink-0"
+                        alt="" 
+                        width={14}
+                        height={14}
+                        unoptimized
+                        aria-hidden="true" 
+                        className="h-3.5 w-3.5 object-contain shrink-0" 
                       />
                     )}
                     <span>{tech.name}</span>

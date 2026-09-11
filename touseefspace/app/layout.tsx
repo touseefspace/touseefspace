@@ -4,6 +4,9 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Suspense } from "react";
+
+const geistSans = GeistSans;
+const geistMono = GeistMono;
 import LayoutWrapper from "@/components/LayoutWrapper";
 import FooterAndDock from "@/components/FooterAndDock";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -104,7 +107,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable}`} data-theme="dark">
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${geistSans.variable} ${geistMono.variable}`} data-theme="dark">
       <head>
         <script
           type="application/ld+json"

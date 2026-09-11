@@ -52,7 +52,7 @@ async function run() {
     } else {
       console.log("\n❌ Webhook revalidation failed.");
     }
-  } catch (err) {
+  } catch {
     console.error("\n❌ Could not connect to dev server. Is 'npm run dev' running on http://localhost:3000?");
   }
 }

@@ -105,7 +105,7 @@ export default function Navbar() {
               href="/contact"
               className="btn-nav-cta desktop-nav-only"
             >
-              Let's Talk <span aria-hidden="true">→</span>
+              Let&apos;s Talk <span aria-hidden="true">→</span>
             </Link>
 
             {/* Visual separator */}
@@ -172,7 +172,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="btn-mobile-cta mt-2"
                 >
-                  Let's Talk <span aria-hidden="true">→</span>
+                  Let&apos;s Talk <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>

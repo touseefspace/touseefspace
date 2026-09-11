@@ -7,7 +7,7 @@ export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2026-02
 const isDev = process.env.NODE_ENV === "development";
 
 /**
- * Client for frontend rendering. In development, automatically uses previewDrafts
+ * Client for frontend rendering. In development, automatically uses drafts
  * with SANITY_TOKEN so unpublished draft edits appear immediately.
  */
 export const client = createClient({
@@ -15,12 +15,12 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: false,
-  perspective: isDev ? "previewDrafts" : "published",
+  perspective: isDev ? "drafts" : "published",
   token: isDev ? process.env.SANITY_TOKEN : undefined,
 });
 
 /**
- * Authenticated client with write access for migrations, mutations, and preview drafts.
+ * Authenticated client with write access for migrations, mutations, and drafts.
  */
 export const writeClient = createClient({
   projectId,
@@ -28,5 +28,5 @@ export const writeClient = createClient({
   apiVersion,
   useCdn: false,
   token: process.env.SANITY_TOKEN,
-  perspective: "previewDrafts",
+  perspective: "drafts",
 });
