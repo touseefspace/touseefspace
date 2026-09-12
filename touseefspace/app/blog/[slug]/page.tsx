@@ -10,7 +10,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { getPostBySlug, getPosts } from "@/lib/queries";
-import { urlForImage } from "@/sanity/image";
+import { resolveSanityImageUrl } from "@/sanity/image";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
 import BlogCoverPlaceholder from "@/components/BlogCoverPlaceholder";
 
@@ -74,11 +74,10 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
-  const coverImageUrl =
-    urlForImage(post.coverImage as Parameters<typeof urlForImage>[0])?.width(1400).url() ||
-    (typeof post.coverImage === "string"
-      ? post.coverImage
-      : (post.coverImage as { url?: string } | undefined)?.url);
+  const coverImageUrl = resolveSanityImageUrl(
+    post.coverImage as Parameters<typeof resolveSanityImageUrl>[0],
+    1400
+  );
 
   // Extract H2 and H3 headings for Apple-style Table of Contents
   const bodyBlocks = Array.isArray(post.body) ? (post.body as RawBlock[]) : [];

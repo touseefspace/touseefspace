@@ -5,7 +5,7 @@ import { PortableText, PortableTextComponents } from "@portabletext/react";
 import Image from "next/image";
 import Link from "next/link";
 import { Copy, Check, ExternalLink } from "lucide-react";
-import { urlForImage } from "@/sanity/image";
+import { resolveSanityImageUrl } from "@/sanity/image";
 
 interface CodeBlockValue {
   code?: string;
@@ -108,7 +108,10 @@ const portableTextComponents: PortableTextComponents = {
     codeBlock: CodeBlockComponent,
     callout: CalloutComponent,
     image: ({ value }: { value: ImageBlockValue }) => {
-      const imageUrl = urlForImage(value)?.width(1200).url() || value?.url;
+      const imageUrl = resolveSanityImageUrl(
+        value as Parameters<typeof resolveSanityImageUrl>[0],
+        1200
+      ) || value?.url;
       if (!imageUrl) return null;
 
       return (
