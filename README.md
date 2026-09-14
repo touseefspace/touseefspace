@@ -23,7 +23,9 @@ I turn messy workflows into simple, reliable software spaces — engineering cus
 - 💼 **LinkedIn**: [linkedin.com/in/touseefspace](https://linkedin.com/in/touseefspace)
 - 🐙 **GitHub**: [@touseefspace](https://github.com/touseefspace)
 - 🐦 **X / Twitter**: [@touseefspace](https://x.com/touseefspace)
-- 📬 **Email**: [contact@touseefspace.com](mailto:conta---
+- 📬 **Email**: [hello@touseefspace.com](mailto:hello@touseefspace.com)
+
+---
 
 ## ✨ Features & Architecture
 
