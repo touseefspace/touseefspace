@@ -23,34 +23,19 @@ I turn messy workflows into simple, reliable software spaces — engineering cus
 - 💼 **LinkedIn**: [linkedin.com/in/touseefspace](https://linkedin.com/in/touseefspace)
 - 🐙 **GitHub**: [@touseefspace](https://github.com/touseefspace)
 - 🐦 **X / Twitter**: [@touseefspace](https://x.com/touseefspace)
-- 📬 **Email**: [contact@touseefspace.com](mailto:contact@touseefspace.com)
+- 📬 **Email**: [contact@touseefspace.com](mailto:conta---
 
----
+## ✨ Features & Architecture
 
-## 🌟 Open Source & Architecture
+`touseefspace` is an open-source, production-grade **case study engine and portfolio architecture** designed for engineers, systems architects, and technical creators who demand editorial visual craft without sacrificing performance:
 
-This repository is **100% open source** under the [MIT License](https://opensource.org/licenses/MIT). 
-
-I built this project not just to serve as my personal portfolio, but to provide an open-source, production-grade **case study engine and portfolio architecture** for developers, systems engineers, and technical creators who want to showcase their work with editorial visual craft without sacrificing performance or accessibility.
-
-### Why It's Open Source
-- **Real-World Next.js 16 Patterns**: Built on App Router with modern `"use cache"`, `cacheTag`, and `cacheLife` cache primitives, eliminating slow database hits while keeping content fresh.
-- **Zero-Contention WebGL Living Canvas**: Features a continuous GLSL fluid simulation background that initializes during browser idle time and runs at a throttled 30 FPS on mobile to protect your Core Web Vitals (LCP, TBT, INP).
-- **Ready for Forking & Rebranding**: Completely decoupled frontend and CMS. You can clone it, customize your schemas, and deploy in minutes.
-- **AI-Agent Ready**: Includes ready-to-copy prompts in **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** that allow AI coding assistants (Antigravity, Cursor, Claude Code, Copilot) to personalize and rebrand the entire portfolio in one pass.
-
----
-
-## 📸 Overview & Architecture
-
-`touseefspace` is designed for engineers, systems architects, and technical creators who need a portfolio that balances **editorial visual elegance** with **real-world production engineering**:
-
-- **⚡ Next.js 16 App Router & Cache Primitives**: Built with `"use cache"`, `cacheTag`, and `cacheLife` for sub-millisecond page transitions and instant edge revalidations.
-- **🌊 Ambient WebGL Fluid Simulation**: Monochromatic, continuous living liquid currents rendered via custom GLSL vertex/fragment shaders, synchronized with system/theme preferences and optimized via `requestIdleCallback` to protect main-thread performance.
-- **📖 Deep-Dive Editorial Case Studies (`/work/[slug]`)**: Dedicated production breakdown pages with quantified impact metrics, problem-solution narratives, technology chips, and rich Portable Text bodies.
+- **⚡ Next.js 16 App Router & Cache Primitives**: Built with `"use cache"`, `cacheTag`, and `cacheLife` for sub-millisecond page transitions, minimal database hits, and instant edge revalidations.
+- **🌊 Ambient WebGL Fluid Simulation**: Monochromatic, continuous living liquid currents rendered via custom GLSL vertex/fragment shaders, synchronized with system/theme preferences and throttled during browser idle time to safeguard Core Web Vitals.
+- **📖 Deep-Dive Editorial Case Studies (`/projects/[slug]`)**: Dedicated production breakdown pages with quantified impact metrics, problem-solution narratives, technology chips, and rich Portable Text bodies.
 - **📝 Technical Engineering Blog (`/blog/[slug]`)**: Minimalist reading experience featuring Apple-inspired Table of Contents, syntax-highlighted code blocks, and breakout visual cards.
-- **🛡️ Resilient Offline Fallbacks**: Zero-config local development! If Sanity is offline or unconfigured, the app automatically falls back to rich built-in data in `lib/placeholders.ts` with 0 crashes.
-- **🎯 100/100 Core Web Vitals Focus**: Zero heavy icon packages (native lightweight SVGs), pre-rendered static `<head>` meta tags, Schema.org JSON-LD, and strict `h1 -> h2` accessibility hierarchies.
+- **🛡️ Resilient Offline Fallbacks (Template Mode)**: Zero-config local development! If Sanity is offline, unconfigured, or unseeded, the app automatically falls back to rich built-in data in `lib/placeholders.ts` with 0 crashes.
+- **🤖 AI-Agent Ready**: Includes ready-to-copy prompts in **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** allowing coding assistants (Antigravity, Cursor, Claude Code, Copilot) to personalize and rebrand the entire portfolio in one pass.
+- **🎯 100/100 Core Web Vitals Focus**: Zero heavy icon packages (native lightweight SVGs), pre-rendered static `<head>` meta tags, Schema.org JSON-LD, and strict accessibility hierarchies.
 
 ---
 
@@ -59,9 +44,11 @@ I built this project not just to serve as my personal portfolio, but to provide 
 ```
 ├── touseefspace/              # Next.js 16 Web Application (Frontend)
 │   ├── app/                   # App Router pages, loading skeletons & routes
-│   │   ├── projects/[slug]/   # Editorial case studies (SSG / ISR)
-│   │   ├── blog/[slug]/       # Engineering articles & TOC
+│   │   ├── page.tsx           # Home landing page (living canvas & work showcase)
 │   │   ├── projects/          # Filterable project spotlight index
+│   │   ├── projects/[slug]/   # Editorial case studies (SSG / ISR)
+│   │   ├── blog/              # Engineering blog & field notes index
+│   │   ├── blog/[slug]/       # Engineering articles & Table of Contents
 │   │   ├── experiences/       # Timeline & role breakdowns
 │   │   ├── skills/            # Interactive capability categories
 │   │   ├── contact/           # Theme-adaptive social channels & contact form
@@ -71,14 +58,9 @@ I built this project not just to serve as my personal portfolio, but to provide 
 │   ├── lib/                   # GROQ queries, caching tags & placeholder fallbacks
 │   └── sanity/                # Sanity client, image URL builder & live preview
 │
-└── studio-touseefspace/       # Sanity Studio v3 (Content Management)
-    ├── seed-assets/           # Centralized seed assets for instant site onboarding
-    │   ├── socials/           # Platform SVG icons (light & dark) for contact & footer
-    │   ├── blogposts/         # Hero cover images for blog posts & field notes
-    │   ├── projects/          # Preview mockups & screenshots for case studies
-    │   ├── category_icons/    # Unified SVG icons (light & dark) for 3 skill categories
-    │   └── skill_icons/       # 13 normalized SVG icons for core starter skills
-    ├── schemaTypes/           # Document schemas (skill, skillCategory, project, post, hero)
+└── studio-touseefspace/       # Sanity Studio v3 (Content Management System)
+    ├── seed-assets/           # SVG icons, project mockups & covers for instant seeding
+    ├── schemaTypes/           # Document schemas (skills, categories, projects, posts, hero)
     ├── scripts/               # Turnkey seeding script (seed-sanity.ts)
     └── sanity.config.ts       # Desk structure, singletons & presentation tool
 ```
@@ -109,6 +91,59 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
+## 🔐 Environment Variables Guide
+
+The repository separates frontend environment variables from the CMS studio environment variables.
+
+### 1. Next.js Frontend (`touseefspace/.env.local`)
+Copy the provided template:
+```bash
+cd touseefspace
+cp .env.example .env.local
+```
+
+| Variable | Required | Description |
+| :--- | :--- | :--- |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Optional | Your Sanity project ID (leave empty to run in offline fallback mode). |
+| `NEXT_PUBLIC_SANITY_DATASET` | Optional | Dataset name (`development` for local testing, `production` for live). |
+| `NEXT_PUBLIC_SANITY_API_VERSION`| Optional | API version date (e.g. `2026-02-01`). |
+| `SANITY_API_READ_TOKEN` | Optional | Read token for draft mode and live preview. |
+| `SANITY_REVALIDATE_SECRET` | Optional | Shared secret string for on-demand revalidation webhooks. |
+| `NEXT_PUBLIC_SITE_URL` | Optional | Canonical site domain for metadata, sitemap, and OpenGraph (default: `https://touseefspace.com`). |
+| `MAIL_USER` / `MAIL_PASS` / `MAIL_TO` | Optional | SMTP credentials for the `/contact` form (leave blank if not using email dispatch). |
+
+### 2. Sanity Studio (`studio-touseefspace/.env.local`)
+Copy the studio template:
+```bash
+cd studio-touseefspace
+cp .env.example .env.local
+```
+
+| Variable | Required | Description |
+| :--- | :--- | :--- |
+| `SANITY_STUDIO_PROJECT_ID` | Yes | Sanity project ID to connect the Studio. |
+| `SANITY_STUDIO_DATASET` | Yes | Dataset targeted by the Studio (e.g. `development` or `production`). |
+| `SANITY_STUDIO_HOST` | Optional | Subdomain hostname for online deployment (e.g. `yourname.sanity.studio`). |
+| `SANITY_STUDIO_APP_ID` | Optional | Cloud application ID assigned by Sanity. |
+| `SANITY_TOKEN` | Yes (for seed)| Write-enabled API token used by `npm run seed` to ingest starter assets and content. |
+
+---
+
+## 🛠️ Sanity CMS & Studio Setup
+
+Content for this portfolio (case studies, articles, hero text, and normalized skill entities) is managed via **Sanity Studio v3**.
+
+To keep this main guide clean, all detailed Studio instructions — including:
+- Creating a new Sanity project (`npx sanity init --bare`)
+- Configuring datasets (`development` vs `production`)
+- Running the turnkey seed script (`npm run seed`) to ingest sample mockups & normalized skills
+- Local Studio development (`http://localhost:3333`)
+- Deploying the Studio to Sanity Cloud (`npx sanity deploy`)
+
+👉 **[Read the Complete Sanity Studio & Seeding Guide in `studio-touseefspace/README.md`](./studio-touseefspace/README.md)**
+
+---
+
 ## 🤖 AI Agent Quickstart (Cursor, Antigravity, Claude Code, Copilot)
 
 Using an AI coding assistant to customize this portfolio? We've created a ready-to-copy prompt in **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** that guides your agent to:
@@ -119,73 +154,6 @@ Using an AI coding assistant to customize this portfolio? We've created a ready-
 - 🧪 **Verification**: Automatically runs `npx tsc --noEmit` and `npm run build` to ensure your personalized version builds with 0 errors.
 
 👉 **[Open AGENT_SETUP.md to copy the prompt](./AGENT_SETUP.md)**
-
----
-
-## 🛠️ Setting Up Sanity CMS (Content Management)
-
-To manage your own projects, case studies, blog articles, and hero content through a visual dashboard:
-
-### 1. Create a Free Sanity Project
-Run this command from inside the `studio-touseefspace` folder:
-```bash
-cd studio-touseefspace
-npm install
-```
-If you don't have a Sanity project ID yet, run:
-```bash
-npx sanity init --bare
-```
-Note your **Project ID** and **Dataset name** (default: `production`).
-
-### 2. Configure Environment Variables
-Copy `.env.example` in the `touseefspace` frontend directory:
-```bash
-cp .env.example .env.local
-```
-Fill in your Sanity keys:
-```env
-NEXT_PUBLIC_SANITY_PROJECT_ID="your_sanity_project_id"
-NEXT_PUBLIC_SANITY_DATASET="production"
-NEXT_PUBLIC_SANITY_API_VERSION="2026-02-01"
-```
-
-### 3. Seed Sample Content & Asset Icons
-The template features a **normalized skills architecture**: skills are first-class, top-level documents in Sanity rather than duplicate strings. Each skill references its parent `skillCategory`, and projects and experiences reference these shared skill entities.
-
-Inside `studio-touseefspace`, create a write token at [sanity.io/manage](https://sanity.io/manage) (under **API** > **Tokens** > **Add API token** with **Editor/Write** permissions), then run:
-```bash
-SANITY_TOKEN=your_write_token npm run seed
-```
-
-This automated seed script:
-1. Uploads dual-theme category icons from `category_icons/` (`code-xml.svg` & `code-xml-dark.svg`, `cpu.svg` & `cpu-dark.svg`, `database.svg` & `database-dark.svg`).
-2. Uploads 13 tech stack SVG icons from `skill_icons/` (Next.js, React, TypeScript, Tailwind, Python, Docker, PostgreSQL, etc.).
-3. Creates the 3 streamlined `skillCategory` documents (`cat-web`, `cat-ai`, `cat-cloud`).
-4. Seeds 13 normalized `skill` documents with direct category references and proficiency ratings.
-5. Seeds 2 comprehensive case studies matching `projects/` with metrics, problem-solution narratives, and skill references.
-6. Seeds 2 engineering articles matching `blogposts/`, 2 career milestones, and 5 social media links.
-7. **Turnkey Asset Ingestion**: Automatically detects and uploads project mockups from `seed-assets/projects/`, blog covers from `seed-assets/blogposts/`, and platform icons from `seed-assets/socials/` to Sanity CDN. Anyone cloning the repo gets a clean, uncluttered starter setup that can be easily customized or purged without having to delete dozens of starter documents.
-
-#### 🔄 Environment & Dataset Configuration
-The project isolates local development from production:
-- **Local Next.js & Studio**: Connects to your configured Sanity dataset (default: `development` for local sandbox, or `production`).
-- **Studio Workspaces**: Switch between datasets or workspaces directly in the Studio interface.
-- **Instant Seeding**: Re-running `npm run seed` will safely create or replace the canonical starter documents without producing duplicates.
-
-### 4. Run Sanity Studio Locally
-```bash
-npm run dev
-```
-Open **[http://localhost:3333](http://localhost:3333)** to visually curate your portfolio. You will see top-level navigation for **Projects**, **Skills**, **Skill Categories**, **Experiences**, **Blog Posts**, and the **Home Page**.
-
-### 5. Deploy Updated Studio Online (Sanity Cloud)
-Whenever you modify schemas (such as top-level Skills) or update Studio code, deploy your changes to Sanity's free global hosting so your online dashboard reflects your local studio:
-```bash
-npx sanity deploy
-```
-1. Sanity CLI will compile your studio and deploy it with automatic SSL.
-2. Access your live studio anytime at `https://yourname.sanity.studio`!
 
 ---
 
