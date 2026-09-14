@@ -9,6 +9,20 @@ export interface Technology {
     };
     url?: string;
   };
+  iconDark?: {
+    asset?: {
+      _id?: string;
+      url?: string;
+    };
+    url?: string;
+  } | string;
+  iconLight?: {
+    asset?: {
+      _id?: string;
+      url?: string;
+    };
+    url?: string;
+  } | string;
 }
 
 export interface Metric {

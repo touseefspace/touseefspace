@@ -35,6 +35,20 @@ export const PROJECTS_QUERY = `*[_type == "project"] | order(order asc, _created
           "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
           "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
         }
+      },
+      "iconDark": {
+        "url": coalesce(@->iconDark.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconDark.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconDark.asset->url, @->icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(@->iconLight.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconLight.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconLight.asset->url, @->icon.asset->url)
+        }
       }
     },
     _type != "reference" => {
@@ -43,6 +57,20 @@ export const PROJECTS_QUERY = `*[_type == "project"] | order(order asc, _created
         asset-> {
           _id,
           url
+        }
+      },
+      "iconDark": {
+        "url": coalesce(iconDark.asset->url, icon.asset->url),
+        "asset": {
+          "_id": coalesce(iconDark.asset->_id, icon.asset->_id),
+          "url": coalesce(iconDark.asset->url, icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(iconLight.asset->url, icon.asset->url),
+        "asset": {
+          "_id": coalesce(iconLight.asset->_id, icon.asset->_id),
+          "url": coalesce(iconLight.asset->url, icon.asset->url)
         }
       }
     }
@@ -87,6 +115,20 @@ export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true
           "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
           "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
         }
+      },
+      "iconDark": {
+        "url": coalesce(@->iconDark.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconDark.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconDark.asset->url, @->icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(@->iconLight.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconLight.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconLight.asset->url, @->icon.asset->url)
+        }
       }
     },
     _type != "reference" => {
@@ -95,6 +137,20 @@ export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true
         asset-> {
           _id,
           url
+        }
+      },
+      "iconDark": {
+        "url": coalesce(iconDark.asset->url, icon.asset->url),
+        "asset": {
+          "_id": coalesce(iconDark.asset->_id, icon.asset->_id),
+          "url": coalesce(iconDark.asset->url, icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(iconLight.asset->url, icon.asset->url),
+        "asset": {
+          "_id": coalesce(iconLight.asset->_id, icon.asset->_id),
+          "url": coalesce(iconLight.asset->url, icon.asset->url)
         }
       }
     }
@@ -138,6 +194,20 @@ export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $s
           "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
           "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
         }
+      },
+      "iconDark": {
+        "url": coalesce(@->iconDark.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconDark.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconDark.asset->url, @->icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(@->iconLight.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconLight.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconLight.asset->url, @->icon.asset->url)
+        }
       }
     },
     _type != "reference" => {
@@ -146,6 +216,20 @@ export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $s
         asset-> {
           _id,
           url
+        }
+      },
+      "iconDark": {
+        "url": coalesce(iconDark.asset->url, icon.asset->url),
+        "asset": {
+          "_id": coalesce(iconDark.asset->_id, icon.asset->_id),
+          "url": coalesce(iconDark.asset->url, icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(iconLight.asset->url, icon.asset->url),
+        "asset": {
+          "_id": coalesce(iconLight.asset->_id, icon.asset->_id),
+          "url": coalesce(iconLight.asset->url, icon.asset->url)
         }
       }
     }

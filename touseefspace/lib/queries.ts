@@ -41,6 +41,18 @@ function applyCacheLife(profile: "days" | "weeks") {
   }
 }
 
+async function fetchSanity<T>(query: string, params?: Record<string, unknown>): Promise<T> {
+  let timer: NodeJS.Timeout | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new Error("Sanity network timeout")), 6000);
+  });
+  try {
+    return await Promise.race([client.fetch<T>(query, params || {}), timeoutPromise]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 /**
  * Fetch all social links, cached for up to weeks in production, seconds in dev.
  * Falls back to placeholder links if CMS is empty or offline.
@@ -55,7 +67,7 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
   }
 
   try {
-    const socials = await client.fetch(SOCIAL_LINKS_QUERY);
+    const socials = await fetchSanity<SocialLink[]>(SOCIAL_LINKS_QUERY);
     if (socials && socials.length > 0) {
       return socials;
     }
@@ -127,7 +139,7 @@ export async function getProjects(featuredOnly?: boolean): Promise<Project[]> {
 
   try {
     const query = featuredOnly ? FEATURED_PROJECTS_QUERY : PROJECTS_QUERY;
-    const projects = await client.fetch(query);
+    const projects = await fetchSanity<Record<string, unknown>[]>(query);
     if (projects && projects.length > 0) {
       return projects.map((p: Record<string, unknown>) => normalizeProject(p));
     }
@@ -159,7 +171,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   }
 
   try {
-    const project = await client.fetch(PROJECT_BY_SLUG_QUERY, { slug: targetSlug });
+    const project = await fetchSanity<Record<string, unknown>>(PROJECT_BY_SLUG_QUERY, { slug: targetSlug });
     if (project) {
       return normalizeProject(project);
     }
@@ -187,7 +199,7 @@ export async function getPosts(): Promise<Post[]> {
   }
 
   try {
-    const posts = await client.fetch(POSTS_QUERY);
+    const posts = await fetchSanity<Post[]>(POSTS_QUERY);
     if (posts && posts.length > 0) {
       return posts;
     }
@@ -211,7 +223,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 
   try {
-    const post = await client.fetch(POST_BY_SLUG_QUERY, { slug });
+    const post = await fetchSanity<Post>(POST_BY_SLUG_QUERY, { slug });
     if (post) {
       return post;
     }
@@ -239,7 +251,7 @@ export async function getExperiences(limit?: number): Promise<Experience[]> {
   }
 
   try {
-    const experiences = await client.fetch(EXPERIENCES_QUERY);
+    const experiences = await fetchSanity<Record<string, unknown>[]>(EXPERIENCES_QUERY);
     if (experiences && experiences.length > 0) {
       const normalized = experiences.map((e: Record<string, unknown>) => normalizeExperience(e));
       return limit ? normalized.slice(0, limit) : normalized;
@@ -268,7 +280,7 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
   }
 
   try {
-    const skillCategories = await client.fetch(SKILL_CATEGORIES_QUERY);
+    const skillCategories = await fetchSanity<SkillCategory[]>(SKILL_CATEGORIES_QUERY);
     if (skillCategories && skillCategories.length > 0) {
       return skillCategories;
     }
@@ -300,14 +312,14 @@ export async function getHomeGlobalData(): Promise<{
   }
 
   try {
-    const homeData = await client.fetch(HOME_PAGE_QUERY);
-    if (homeData && (homeData.title || homeData.portrait)) {
+    const homeData = await fetchSanity<Record<string, unknown>>(HOME_PAGE_QUERY);
+    if (homeData && (homeData.title || homeData.role || homeData.description || homeData.portrait)) {
       return {
         hero: {
-          title: homeData.title,
-          role: homeData.role || "AI Systems and Software Developer",
-          description: homeData.description,
-          portrait: homeData.portrait,
+          title: (homeData.title as string) || placeholderHomeData.hero.title,
+          role: (homeData.role as string) || placeholderHomeData.hero.role,
+          description: (homeData.description as string) || placeholderHomeData.hero.description,
+          portrait: homeData.portrait || placeholderHomeData.hero.portrait,
         },
       };
     }

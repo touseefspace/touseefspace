@@ -9,7 +9,8 @@ import {
   List,
   MessageSquare,
 } from "lucide-react";
-import { getPostBySlug, getPosts } from "@/lib/queries";
+import { getPostBySlug, getPosts, getHomeGlobalData } from "@/lib/queries";
+import { placeholderHomeData } from "@/lib/placeholders";
 import { resolveSanityImageUrl } from "@/sanity/image";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
 import BlogCoverPlaceholder from "@/components/BlogCoverPlaceholder";
@@ -68,11 +69,22 @@ interface RawBlock {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, homeData] = await Promise.all([
+    getPostBySlug(slug),
+    getHomeGlobalData(),
+  ]);
 
   if (!post) {
     notFound();
   }
+
+  const authorRole = homeData?.hero?.role || placeholderHomeData.hero.role;
+  const authorBio = homeData?.hero?.description || placeholderHomeData.hero.description;
+  const authorPortrait = homeData?.hero?.portrait || placeholderHomeData.hero.portrait;
+  const authorAvatarUrl =
+    (typeof authorPortrait === "object" && authorPortrait !== null && "url" in authorPortrait && typeof authorPortrait.url === "string" ? authorPortrait.url : null) ||
+    resolveSanityImageUrl(authorPortrait as Parameters<typeof resolveSanityImageUrl>[0], 128) ||
+    "/touseef.png";
 
   const coverImageUrl = resolveSanityImageUrl(
     post.coverImage as Parameters<typeof resolveSanityImageUrl>[0],
@@ -155,7 +167,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="flex items-center gap-3.5 pt-4 border-t border-(--border-subtle)">
               <div className="relative h-11 w-11 overflow-hidden rounded-full border border-(--border-subtle) bg-(--bg-subtle)">
                 <Image
-                  src="/touseef.png"
+                  src={authorAvatarUrl}
                   alt="Touseef Ahmed"
                   fill
                   sizes="44px"
@@ -165,7 +177,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               <div>
                 <div className="text-sm font-semibold text-(--ink-primary)">Touseef Ahmed</div>
                 <div className="text-xs text-(--ink-muted) font-mono">
-                  AI Systems and Software Developer
+                  {authorRole}
                 </div>
               </div>
             </div>
@@ -203,7 +215,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-6 sm:p-8 grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr] gap-x-4 sm:gap-x-6 gap-y-3 sm:gap-y-2 items-center sm:items-start">
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0 overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-subtle) sm:row-span-3 sm:self-center">
                 <Image
-                  src="/touseef.png"
+                  src={authorAvatarUrl}
                   alt="Touseef Ahmed"
                   fill
                   sizes="64px"
@@ -215,11 +227,11 @@ export default async function BlogPostPage({ params }: PageProps) {
                   Written by Touseef Ahmed
                 </h2>
                 <p className="text-xs sm:text-sm font-mono text-(--ink-muted)">
-                  AI Systems and Software Developer
+                  {authorRole}
                 </p>
               </div>
               <p className="col-span-2 sm:col-span-1 text-sm text-(--ink-secondary) leading-relaxed">
-                Designing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.
+                {authorBio}
               </p>
               <div className="col-span-2 sm:col-span-1 pt-1 sm:pt-2 flex items-center gap-4 text-xs font-mono">
                 <Link href="/contact" className="text-(--ink-primary) font-semibold hover:underline">

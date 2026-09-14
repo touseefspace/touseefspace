@@ -21,11 +21,14 @@ Here are my personal details to configure across the project:
 ### Execution Steps for the Agent:
 
 1. **Brand & Identity Rebranding**:
+   - `lib/placeholders.ts`: Update all hardcoded local fallback datasets (`placeholderHomeData`, `placeholderSocialLinks`, `placeholderProjects`, `placeholderExperiences`, `placeholderPosts`) with my name, role, bio description, domain, contact email, and social profiles so offline loads and CMS empty states reflect my personal identity.
    - `app/layout.tsx`: Update `metadataBase`, `title`, `description`, `openGraph`, `twitter`, and Schema.org `jsonLd` with my name, role, domain, and social profiles.
    - `components/Navbar.tsx`: Update the brand logo text and wordmark to match my brand name and GitHub link.
    - `components/Footer.tsx`: Update brand name, email link, location, copyright line, and maintain template credit if requested.
-   - `components/HomeScrollShowcase.tsx` & `components/HeroSection.tsx`: Update the bottom caption under the hero portrait to display my name with the pulsing green dot on the left, and my role on the right.
-   - `app/blog/[slug]/page.tsx`: Update the "Written by" author card snippet with my name, bio, and contact links.
+   - `components/HomeScrollShowcase.tsx`: Update default caption fallbacks under the hero portrait to display my name with the pulsing green dot on the left, and my role on the right.
+   - `app/blog/[slug]/page.tsx`: Verify the header author snippet and "Written by" author card snippet display my name, bio, and role (these pull dynamically from CMS `homeData` with `lib/placeholders.ts` as fallback).
+   - `app/projects/page.tsx`: Update the GitHub link and handle in the bottom CTA card.
+   - `studio-touseefspace/schemaTypes/homePage.ts`: Update `initialValue` for `title`, `role`, and `description` to match my personal details for when the `homePage` singleton document is created in Sanity Studio.
    - `public/site.webmanifest` & `package.json`: Update project title, app name, and author details.
 
 2. **Sanity CMS & Environment Setup**:

@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowUpRight, ArrowRight } from "lucide-react";
 import { getProjectBySlug, getProjects } from "@/lib/queries";
 import { resolveSanityImageUrl } from "@/sanity/image";
 import PortableTextRenderer from "@/components/PortableTextRenderer";
+import TechBadge from "@/components/TechBadge";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -264,25 +265,9 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
                 Technology Stack
               </h2>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech, i) => {
-                  const techIconUrl = resolveSanityImageUrl(tech.icon, 36);
-                  return (
-                    <span key={i} className="tech-tag text-xs flex items-center gap-1.5">
-                      {techIconUrl && (
-                        <Image
-                          src={techIconUrl}
-                          alt=""
-                          width={14}
-                          height={14}
-                          unoptimized
-                          aria-hidden="true"
-                          className="h-3.5 w-3.5 object-contain shrink-0"
-                        />
-                      )}
-                      <span>{tech.name}</span>
-                    </span>
-                  );
-                })}
+                {project.technologies.map((tech, i) => (
+                  <TechBadge key={tech._key || `${tech.name}-${i}`} tech={tech} />
+                ))}
               </div>
             </div>
           )}

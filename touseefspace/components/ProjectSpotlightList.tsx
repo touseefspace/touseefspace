@@ -6,6 +6,7 @@ import { SiGithub } from "react-icons/si";
 import Link from "next/link";
 import Image from "next/image";
 import { resolveSanityImageUrl } from "@/sanity/image";
+import TechBadge from "./TechBadge";
 import type { Project } from "@/lib/types";
 
 export default function ProjectSpotlightList({ projects }: { projects: Project[] }) {
@@ -162,25 +163,9 @@ function ProjectCard({
           {/* Tech Stack Badges */}
           {project.technologies && project.technologies.length > 0 && (
             <div className="flex flex-wrap gap-2 pt-2">
-              {project.technologies.map((tech, index) => {
-                const techIconUrl = resolveSanityImageUrl(tech.icon, 48);
-                return (
-                  <div key={index} className="tech-tag">
-                    {techIconUrl && (
-                      <Image 
-                        src={techIconUrl} 
-                        alt="" 
-                        width={14}
-                        height={14}
-                        unoptimized
-                        aria-hidden="true" 
-                        className="h-3.5 w-3.5 object-contain shrink-0" 
-                      />
-                    )}
-                    <span>{tech.name}</span>
-                  </div>
-                );
-              })}
+              {project.technologies.map((tech, index) => (
+                <TechBadge key={tech._key || `${tech.name}-${index}`} tech={tech} />
+              ))}
             </div>
           )}
 
