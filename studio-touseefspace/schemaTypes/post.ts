@@ -24,6 +24,21 @@ export const post = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'postType',
+      title: 'Post Format & Category',
+      type: 'string',
+      description: 'Categorizes whether this is an engineering deep-dive, real-world experience, or personal essay.',
+      options: {
+        list: [
+          { title: 'Technical Deep-Dive (Engineering & Architecture)', value: 'technical' },
+          { title: 'Field Notes & Experiences (Travel, Events, Real-World Observations)', value: 'experience' },
+          { title: 'Life Lessons & Essays (Personal Reflections & Philosophy)', value: 'essay' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'technical',
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published Date',
       type: 'datetime',
@@ -98,9 +113,17 @@ export const post = defineType({
     select: {
       title: 'title',
       subtitle: 'publishedAt',
+      postType: 'postType',
       media: 'coverImage',
     },
-    prepare({ title, subtitle, media }) {
+    prepare({ title, subtitle, postType, media }) {
+      const typeLabel =
+        postType === 'experience'
+          ? 'Field Note'
+          : postType === 'essay'
+          ? 'Essay'
+          : 'Technical'
+
       const dateFormatted = subtitle
         ? new Date(subtitle).toLocaleDateString('en-US', {
             month: 'short',
@@ -108,9 +131,10 @@ export const post = defineType({
             year: 'numeric',
           })
         : 'Draft'
+
       return {
         title,
-        subtitle: dateFormatted,
+        subtitle: `[${typeLabel}] · ${dateFormatted}`,
         media,
       }
     },

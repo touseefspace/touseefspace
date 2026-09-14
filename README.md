@@ -3,7 +3,7 @@
 > **Live Production Website:** 🌐 **[https://touseefspace.com](https://touseefspace.com)**
 
 [![Live Website](https://img.shields.io/badge/Live-touseefspace.com-000000?style=flat&logo=safari&logoColor=white)](https://touseefspace.com)
-[![Version](https://img.shields.io/badge/Version-v4.1.5-emerald)](#)
+[![Version](https://img.shields.io/badge/Version-v4.1.6-emerald)](#)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
 [![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f?logo=sanity)](https://www.sanity.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
@@ -59,12 +59,12 @@ I built this project not just to serve as my personal portfolio, but to provide 
 ```
 ├── touseefspace/              # Next.js 16 Web Application (Frontend)
 │   ├── app/                   # App Router pages, loading skeletons & routes
-│   │   ├── work/[slug]/       # Editorial case studies (SSG / ISR)
+│   │   ├── projects/[slug]/   # Editorial case studies (SSG / ISR)
 │   │   ├── blog/[slug]/       # Engineering articles & TOC
 │   │   ├── projects/          # Filterable project spotlight index
 │   │   ├── experiences/       # Timeline & role breakdowns
 │   │   ├── skills/            # Interactive capability categories
-│   │   ├── contact/           # Zero-runtime brand channels & contact form
+│   │   ├── contact/           # Theme-adaptive social channels & contact form
 │   │   ├── sitemap.ts         # Dynamic sitemap generator (/sitemap.xml)
 │   │   └── robots.ts          # Search engine crawler directives (/robots.txt)
 │   ├── components/            # UI design system, WebGL canvas & layouts
@@ -72,11 +72,14 @@ I built this project not just to serve as my personal portfolio, but to provide 
 │   └── sanity/                # Sanity client, image URL builder & live preview
 │
 └── studio-touseefspace/       # Sanity Studio v3 (Content Management)
-    ├── category_icons/        # Light-mode SVG icons for skill categories
-    ├── category_icons_dark/   # High-contrast dark-mode SVG icons (#F4F4F5 stroke)
-    ├── skill_icons/           # 30 normalized SVG icons for individual skills
+    ├── seed-assets/           # Centralized seed assets for instant site onboarding
+    │   ├── socials/           # Platform SVG icons (light & dark) for contact & footer
+    │   ├── blogposts/         # Hero cover images for blog posts & field notes
+    │   ├── projects/          # Preview mockups & screenshots for case studies
+    │   ├── category_icons/    # Unified SVG icons (light & dark) for 3 skill categories
+    │   └── skill_icons/       # 13 normalized SVG icons for core starter skills
     ├── schemaTypes/           # Document schemas (skill, skillCategory, project, post, hero)
-    ├── scripts/               # Seeding, deduplication & dark icon scripts
+    ├── scripts/               # Turnkey seeding script (seed-sanity.ts)
     └── sanity.config.ts       # Desk structure, singletons & presentation tool
 ```
 
@@ -84,7 +87,7 @@ I built this project not just to serve as my personal portfolio, but to provide 
 
 ## 🚀 Quickstart for Developers
 
-You can run this portfolio locally in under 3 minutes, with or without a Sanity account.
+You can run this portfolio locally in under 2 minutes, with or without a Sanity account.
 
 ### 1. Clone the Repository
 ```bash
@@ -94,11 +97,15 @@ cd touseefspace
 
 ### 2. Run the Next.js Frontend
 ```bash
+# Navigate to the frontend directory
+cd touseefspace
+
+# Install dependencies and start local dev server
 npm install
 npm run dev
 ```
-Open **[http://localhost:3000](http://localhost:3000)**.  
-*Because of the built-in fallback system, the site is fully populated and navigable immediately!*
+Open **[http://localhost:3000](http://localhost:3000)** in your browser.  
+*Thanks to the built-in offline fallback engine, the entire website is fully populated, interactive, and beautifully styled immediately without any setup!*
 
 ---
 
@@ -152,37 +159,19 @@ SANITY_TOKEN=your_write_token npm run seed
 ```
 
 This automated seed script:
-1. Uploads light-mode icons from `category_icons/` (`code-xml.svg`, `cpu.svg`, `database.svg`, `cloud.svg`, `paintbrush.svg`, `smartphone.svg`).
-2. Uploads high-contrast dark-mode icons from `category_icons_dark/` (`#F4F4F5` stroke) to `iconDark`.
-3. Uploads 30 tech stack SVG icons from `skill_icons/` (Next.js, TypeScript, Python, Docker, AWS, PostgreSQL, etc.).
-4. Creates the 6 canonical `skillCategory` documents (`cat-web`, `cat-ai`, `cat-cloud`, `cat-devops`, `cat-tools`, `cat-mobile`).
-5. Seeds 30 normalized `skill` documents with direct category references and proficiency ratings.
-6. Seeds 3 comprehensive case studies with metrics, problem-solution narratives, and skill references.
-7. Seeds 3 technical engineering articles, 2 career milestones, and 5 social media links.
+1. Uploads dual-theme category icons from `category_icons/` (`code-xml.svg` & `code-xml-dark.svg`, `cpu.svg` & `cpu-dark.svg`, `database.svg` & `database-dark.svg`).
+2. Uploads 13 tech stack SVG icons from `skill_icons/` (Next.js, React, TypeScript, Tailwind, Python, Docker, PostgreSQL, etc.).
+3. Creates the 3 streamlined `skillCategory` documents (`cat-web`, `cat-ai`, `cat-cloud`).
+4. Seeds 13 normalized `skill` documents with direct category references and proficiency ratings.
+5. Seeds 2 comprehensive case studies matching `projects/` with metrics, problem-solution narratives, and skill references.
+6. Seeds 2 engineering articles matching `blogposts/`, 2 career milestones, and 5 social media links.
+7. **Turnkey Asset Ingestion**: Automatically detects and uploads project mockups from `seed-assets/projects/`, blog covers from `seed-assets/blogposts/`, and platform icons from `seed-assets/socials/` to Sanity CDN. Anyone cloning the repo gets a clean, uncluttered starter setup that can be easily customized or purged without having to delete dozens of starter documents.
 
-#### 🔄 Dataset Separation & Management Scripts
-The project strictly isolates local development from production to ensure local experiments, drafts, and tests never alter your live site:
-- **Local Next.js & Studio**: Connects to the **`development`** sandbox dataset by default.
-- **Production Deployment (Vercel)**: Connects to the **`production`** live dataset.
-- **Studio Dual Workspaces**: Switch between **Development (Sandbox)** (`/dev`) and **Production (Live)** (`/prod`) directly in the Studio top bar.
-
-```bash
-# Safely refresh your local dev sandbox with the latest production content:
-npm run dataset:sync-down
-
-# Create timestamped local JSON backups before making major schema/content changes:
-npm run dataset:backup-prod
-npm run dataset:backup-dev
-
-# Promote approved development data to production (requires confirmation):
-npm run dataset:sync-up -- --confirm
-
-# Clean up any legacy duplicate documents or drafts:
-npm run clean-duplicates
-
-# Regenerate and sync high-contrast dark-mode category icons:
-npm run update-dark-icons
-```
+#### 🔄 Environment & Dataset Configuration
+The project isolates local development from production:
+- **Local Next.js & Studio**: Connects to your configured Sanity dataset (default: `development` for local sandbox, or `production`).
+- **Studio Workspaces**: Switch between datasets or workspaces directly in the Studio interface.
+- **Instant Seeding**: Re-running `npm run seed` will safely create or replace the canonical starter documents without producing duplicates.
 
 ### 4. Run Sanity Studio Locally
 ```bash
@@ -223,7 +212,7 @@ This repository includes turnkey automated performance benchmarking powered by L
 ### 1. Automated GitHub Actions Workflow
 On every `git push` to `main`, GitHub Actions automatically:
 - Builds the production bundle and spins up a local server.
-- Runs Lighthouse across all major pages: `/`, `/projects`, `/projects/wholesale-distribution-erp-platform`, `/skills`, `/experiences`, `/blog`, and `/contact`.
+- Runs Lighthouse across all major pages: `/`, `/projects`, `/projects/heritage-corporate-law-firm-web-presence`, `/skills`, `/experiences`, `/blog`, and `/contact`.
 - Generates a **Markdown Scorecard** directly into the GitHub Actions run summary with real-time Performance, Accessibility, Best Practices, and SEO scores.
 - Attaches the complete interactive HTML reports as downloadable build artifacts (retained for 30 days).
 
@@ -245,6 +234,16 @@ Detailed reports will be generated in `touseefspace/.lighthouseci/`.
 
 ---
 
+## 💡 Support & Maintenance
+
+This repository is shared **as-is for inspiration, educational reference, and personal portfolio setups**. 
+
+Because this codebase powers my personal production website:
+- **No Technical Support**: I do not provide individualized setup support, troubleshooting, or feature request fulfillment.
+- **Self-Service & AI-Friendly**: If you fork this project, please consult the [Quickstart Guide](#-quickstart-for-developers), the [Next.js Documentation](https://nextjs.org/docs), and the [Sanity Documentation](https://www.sanity.io/docs). If you use an AI coding assistant (Cursor, Antigravity, Claude Code), follow the guided workflow in **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** to customize your own instance effortlessly.
+
+---
+
 ## 📄 License
 
 Distributed under the **MIT License**. You are free to fork, customize, and deploy this project for your personal portfolio or client projects. Attribution is appreciated!
@@ -252,3 +251,4 @@ Distributed under the **MIT License**. You are free to fork, customize, and depl
 ---
 
 *Engineered by [Touseef Ahmed](https://touseefspace.com) · Built with Next.js · Powered by Sanity.*
+

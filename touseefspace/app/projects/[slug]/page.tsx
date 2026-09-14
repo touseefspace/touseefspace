@@ -69,7 +69,7 @@ export default async function ProjectCaseStudyPage({ params }: PageProps) {
 
   const imageUrl =
     resolveSanityImageUrl(project.image, 1600) ||
-    "/placeholders/aunvu-dashboard.svg";
+    "/placeholders/erp-dashboard.svg";
 
   return (
     <article className="page-shell pt-24 pb-20 sm:pt-32 sm:pb-28 min-w-0 max-w-full">

@@ -1,10 +1,12 @@
 import { createImageUrlBuilder, type ImageUrlBuilder } from "@sanity/image-url";
-import { projectId, dataset } from "./client";
+import { projectId, dataset, isSanityConfigured } from "./client";
 
-const imageBuilder = createImageUrlBuilder({
-  projectId: projectId || "52hp81x4",
-  dataset: dataset || "production",
-});
+const imageBuilder = isSanityConfigured
+  ? createImageUrlBuilder({
+      projectId,
+      dataset: dataset || "production",
+    })
+  : null;
 
 export type SanityImageSource =
   | Parameters<ReturnType<typeof createImageUrlBuilder>["image"]>[0]
@@ -12,7 +14,7 @@ export type SanityImageSource =
   | string;
 
 export const urlForImage = (source: SanityImageSource | null | undefined): ImageUrlBuilder | undefined => {
-  if (!source || typeof source === "string" || (!("asset" in source) && !("_ref" in source))) {
+  if (!imageBuilder || !source || typeof source === "string" || (!("asset" in source) && !("_ref" in source))) {
     return undefined;
   }
   return imageBuilder.image(source).auto("format").fit("max");

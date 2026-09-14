@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Suspense } from "react";
 
-const geistSans = GeistSans;
-const geistMono = GeistMono;
+const geistSans = localFont({
+  src: "../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
+  variable: "--font-geist-sans",
+  display: "swap",
+  preload: false,
+});
+
+const geistMono = localFont({
+  src: "../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
+  variable: "--font-geist-mono",
+  display: "swap",
+  preload: false,
+});
 import LayoutWrapper from "@/components/LayoutWrapper";
 import FooterAndDock from "@/components/FooterAndDock";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -119,7 +129,7 @@ export default async function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">
+      <body className={`${geistSans.className} antialiased`}>
         <Suspense fallback={null}>
           <LayoutWrapper
             footerAndDock={

@@ -13,7 +13,7 @@ import { LinkIcon } from '@sanity/icons/Link'
 import { TerminalIcon } from '@sanity/icons/Terminal'
 import { RocketIcon } from '@sanity/icons/Rocket'
 
-const projectId = '52hp81x4'
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || ''
 
 const portfolioStructure: StructureResolver = (S) =>
   S.list()

@@ -35,7 +35,7 @@ jobs:
       - name: Build Next.js Site
         working-directory: ./touseefspace
         env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: "8h4k9qg7"
+          NEXT_PUBLIC_SANITY_PROJECT_ID: "52hp81x4"
           NEXT_PUBLIC_SANITY_DATASET: "production"
           NEXT_PUBLIC_SANITY_API_VERSION: "2026-02-01"
           NEXT_PUBLIC_SITE_URL: "https://touseefspace.com"

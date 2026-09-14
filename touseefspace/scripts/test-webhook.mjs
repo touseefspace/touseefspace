@@ -2,25 +2,29 @@ import { encodeSignatureHeader, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 import fs from "fs";
 import path from "path";
 
-// Load SANITY_REVALIDATE_SECRET from local .env if available
+// Load SANITY_REVALIDATE_SECRET from local .env.local or .env if available
 let secret = process.env.SANITY_REVALIDATE_SECRET;
 if (!secret) {
   try {
+    const envLocalPath = path.resolve(process.cwd(), ".env.local");
     const envPath = path.resolve(process.cwd(), ".env");
-    const envContent = fs.readFileSync(envPath, "utf-8");
-    const match = envContent.match(/SANITY_REVALIDATE_SECRET=["']?([^"'\r\n]+)["']?/);
-    if (match) secret = match[1];
+    const targetEnv = fs.existsSync(envLocalPath) ? envLocalPath : fs.existsSync(envPath) ? envPath : null;
+    if (targetEnv) {
+      const envContent = fs.readFileSync(targetEnv, "utf-8");
+      const match = envContent.match(/SANITY_REVALIDATE_SECRET=["']?([^"'\r\n]+)["']?/);
+      if (match) secret = match[1];
+    }
   } catch {}
 }
 
 if (!secret) {
-  console.error("❌ Error: SANITY_REVALIDATE_SECRET not found in environment or .env file.");
+  console.error("❌ Error: SANITY_REVALIDATE_SECRET not found in environment or .env.local / .env file.");
   process.exit(1);
 }
 
 const payload = {
   _type: process.argv[2] || "project",
-  slug: process.argv[3] || "wholesale-distribution-erp-platform",
+  slug: process.argv[3] || "heritage-corporate-law-firm-web-presence",
 };
 
 const stringifiedPayload = JSON.stringify(payload);

@@ -1,5 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
-import { client } from "@/sanity/client";
+import { client, isSanityConfigured } from "@/sanity/client";
 import {
   PROJECTS_QUERY,
   FEATURED_PROJECTS_QUERY,
@@ -49,6 +49,10 @@ export async function getSocialLinks(): Promise<SocialLink[]> {
   "use cache";
   cacheTag("social-links");
   applyCacheLife("weeks");
+
+  if (!isSanityConfigured) {
+    return placeholderSocialLinks;
+  }
 
   try {
     const socials = await client.fetch(SOCIAL_LINKS_QUERY);
@@ -114,6 +118,13 @@ export async function getProjects(featuredOnly?: boolean): Promise<Project[]> {
   cacheTag("projects");
   applyCacheLife("days");
 
+  if (!isSanityConfigured) {
+    const list = featuredOnly
+      ? placeholderProjects.filter((p) => p.featured !== false)
+      : placeholderProjects;
+    return list.map((p) => normalizeProject(p));
+  }
+
   try {
     const query = featuredOnly ? FEATURED_PROJECTS_QUERY : PROJECTS_QUERY;
     const projects = await client.fetch(query);
@@ -124,22 +135,28 @@ export async function getProjects(featuredOnly?: boolean): Promise<Project[]> {
     console.warn("[Sanity] Network query unavailable for projects, using cached local fallback.");
   }
 
-  if (featuredOnly) {
-    return placeholderProjects.filter((p) => p.featured).map((p) => normalizeProject(p));
-  }
-  return placeholderProjects.map((p) => normalizeProject(p));
+  const fallback = featuredOnly
+    ? placeholderProjects.filter((p) => p.featured !== false)
+    : placeholderProjects;
+  return fallback.map((p) => normalizeProject(p));
 }
 
 /**
- * Fetch a single project by slug.
+ * Fetch a single project by slug from Sanity.
  */
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
   "use cache";
-  cacheTag("projects");
+  cacheTag(`project-${slug}`);
   applyCacheLife("days");
 
-  // Normalize legacy slug aliases if needed
-  const targetSlug = slug === "aunvu-erp" ? "wholesale-distribution-erp-platform" : slug;
+  const targetSlug = slug.trim();
+
+  if (!isSanityConfigured) {
+    const fallback = placeholderProjects.find(
+      (p) => p.slug === targetSlug || p.aliases?.includes(slug)
+    );
+    return fallback ? normalizeProject(fallback) : null;
+  }
 
   try {
     const project = await client.fetch(PROJECT_BY_SLUG_QUERY, { slug: targetSlug });
@@ -165,6 +182,10 @@ export async function getPosts(): Promise<Post[]> {
   cacheTag("posts");
   applyCacheLife("days");
 
+  if (!isSanityConfigured) {
+    return placeholderPosts;
+  }
+
   try {
     const posts = await client.fetch(POSTS_QUERY);
     if (posts && posts.length > 0) {
@@ -184,6 +205,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   "use cache";
   cacheTag("posts");
   applyCacheLife("days");
+
+  if (!isSanityConfigured) {
+    return placeholderPosts.find((p) => p.slug === slug) || null;
+  }
 
   try {
     const post = await client.fetch(POST_BY_SLUG_QUERY, { slug });
@@ -205,6 +230,13 @@ export async function getExperiences(limit?: number): Promise<Experience[]> {
   "use cache";
   cacheTag("experiences");
   applyCacheLife("days");
+
+  if (!isSanityConfigured) {
+    if (limit) {
+      return placeholderExperiences.slice(0, limit).map((e) => normalizeExperience(e));
+    }
+    return placeholderExperiences.map((e) => normalizeExperience(e));
+  }
 
   try {
     const experiences = await client.fetch(EXPERIENCES_QUERY);
@@ -230,6 +262,10 @@ export async function getSkillCategories(): Promise<SkillCategory[]> {
   "use cache";
   cacheTag("skill-categories");
   applyCacheLife("weeks");
+
+  if (!isSanityConfigured) {
+    return placeholderSkillCategories;
+  }
 
   try {
     const skillCategories = await client.fetch(SKILL_CATEGORIES_QUERY);
@@ -258,6 +294,10 @@ export async function getHomeGlobalData(): Promise<{
   "use cache";
   cacheTag("home-global");
   applyCacheLife("days");
+
+  if (!isSanityConfigured) {
+    return placeholderHomeData;
+  }
 
   try {
     const homeData = await client.fetch(HOME_PAGE_QUERY);

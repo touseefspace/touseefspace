@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Mail } from "lucide-react";
+import { MapPin, Mail, Globe } from "lucide-react";
 import React from "react";
-import { BrandIcon } from "@/components/ui/BrandIcons";
 import type { SocialLink } from "@/lib/types";
 
 const footerNavLinks = [
@@ -104,7 +103,10 @@ export function Footer({ socialLinks = [] }: { socialLinks?: SocialLink[] }) {
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {displayLinks.map((link) => {
                 const darkObj = typeof link.iconDark === "object" && link.iconDark !== null ? link.iconDark : null;
-                const iconUrl = darkObj?.url || darkObj?.asset?.url || (typeof link.iconDark === "string" ? link.iconDark : null);
+                const lightObj = typeof link.iconLight === "object" && link.iconLight !== null ? link.iconLight : null;
+                const iconDarkUrl = darkObj?.url || darkObj?.asset?.url || (typeof link.iconDark === "string" ? link.iconDark : null);
+                const iconLightUrl = lightObj?.url || lightObj?.asset?.url || (typeof link.iconLight === "string" ? link.iconLight : null);
+
                 return (
                   <Link
                     key={link.name}
@@ -114,9 +116,30 @@ export function Footer({ socialLinks = [] }: { socialLinks?: SocialLink[] }) {
                     className="transition-transform duration-200 hover:scale-110"
                     aria-label={link.name}
                   >
-                    {iconUrl ? (
+                    {iconLightUrl && iconDarkUrl && iconLightUrl !== iconDarkUrl ? (
+                      <>
+                        <Image
+                          src={iconLightUrl}
+                          alt=""
+                          width={28}
+                          height={28}
+                          unoptimized
+                          aria-hidden="true"
+                          className="h-7 w-7 object-contain dark:hidden"
+                        />
+                        <Image
+                          src={iconDarkUrl}
+                          alt=""
+                          width={28}
+                          height={28}
+                          unoptimized
+                          aria-hidden="true"
+                          className="h-7 w-7 object-contain hidden dark:block"
+                        />
+                      </>
+                    ) : (iconDarkUrl || iconLightUrl) ? (
                       <Image
-                        src={iconUrl}
+                        src={(iconDarkUrl || iconLightUrl)!}
                         alt=""
                         width={28}
                         height={28}
@@ -125,12 +148,8 @@ export function Footer({ socialLinks = [] }: { socialLinks?: SocialLink[] }) {
                         className="h-7 w-7 object-contain"
                       />
                     ) : (
-                      <div className="flex items-center justify-center" aria-hidden="true">
-                        <BrandIcon
-                          name={link.name}
-                          url={link.url}
-                          size={28}
-                        />
+                      <div className="h-7 w-7 rounded-lg bg-(--bg-subtle) border border-(--border-subtle) flex items-center justify-center">
+                        <Globe size={16} className="text-(--ink-muted)" />
                       </div>
                     )}
                   </Link>

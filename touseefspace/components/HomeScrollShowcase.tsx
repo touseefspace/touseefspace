@@ -220,11 +220,26 @@ export default function HomeScrollShowcase({
               </div>
               <div className="grid grid-cols-4 gap-3 sm:gap-4 max-w-2xl">
                 {highlightedSkills.map((skill, i: number) => {
-                  const iconSrc =
-                    skill.iconDark?.url ||
-                    (typeof skill.icon === "string" ? skill.icon : skill.icon?.url) ||
-                    "";
+                  const darkObj =
+                    typeof skill.iconDark === "object" && skill.iconDark !== null ? skill.iconDark : null;
+                  const lightObj =
+                    typeof skill.iconLight === "object" && skill.iconLight !== null ? skill.iconLight : null;
+
+                  const iconDarkUrl =
+                    darkObj?.url ||
+                    darkObj?.asset?.url ||
+                    (typeof skill.iconDark === "string" ? skill.iconDark : null) ||
+                    (typeof skill.icon === "object" ? skill.icon?.url || skill.icon?.asset?.url : null) ||
+                    (typeof skill.icon === "string" ? skill.icon : null);
+
+                  const iconLightUrl =
+                    lightObj?.url ||
+                    lightObj?.asset?.url ||
+                    (typeof skill.iconLight === "string" ? skill.iconLight : null);
+
                   const skillTitle = (skill.name as string) || (skill.skill as string) || "";
+                  const isGitHub = skillTitle === "GitHub";
+
                   return (
                     <div
                       key={i}
@@ -232,14 +247,34 @@ export default function HomeScrollShowcase({
                       className="group aspect-square flex items-center justify-center rounded-2xl sm:rounded-3xl p-3 sm:p-4 transition-all duration-200 bg-(--bg-surface) border border-(--border-card) shadow-xs hover:border-(--border-strong) hover:bg-(--bg-subtle) hover:scale-105"
                     >
                       <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-md transition-all group-hover:scale-105">
-                        {iconSrc ? (
+                        {iconLightUrl && iconDarkUrl && iconLightUrl !== iconDarkUrl ? (
+                          <>
+                            <Image
+                              src={iconLightUrl}
+                              alt={skillTitle}
+                              width={56}
+                              height={56}
+                              unoptimized
+                              className="h-full w-full object-contain dark:hidden"
+                            />
+                            <Image
+                              src={iconDarkUrl}
+                              alt={skillTitle}
+                              width={56}
+                              height={56}
+                              unoptimized
+                              className="h-full w-full object-contain hidden dark:block"
+                            />
+                          </>
+                        ) : (iconDarkUrl || iconLightUrl) ? (
                           <Image
-                            src={iconSrc}
+                            src={(iconDarkUrl || iconLightUrl)!}
                             alt={skillTitle}
                             width={56}
                             height={56}
+                            unoptimized
                             className={`h-full w-full object-contain ${
-                              skillTitle === "GitHub" ? "dark:invert" : ""
+                              isGitHub ? "dark:invert" : ""
                             }`}
                           />
                         ) : (

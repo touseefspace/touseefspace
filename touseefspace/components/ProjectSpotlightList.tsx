@@ -39,7 +39,7 @@ export default function ProjectSpotlightList({ projects }: { projects: Project[]
           </div>
           <h2 className="text-xl font-bold text-(--ink-primary) mb-2">No projects found</h2>
           <p className="max-w-md text-sm text-(--ink-muted) leading-relaxed">
-            Create entries in the Projects collection in your Payload admin panel to see your work here.
+            Create entries in the Projects section in your Sanity Studio to see your work here.
           </p>
         </div>
       )}

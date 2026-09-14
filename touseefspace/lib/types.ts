@@ -60,6 +60,20 @@ export interface ExperienceSkill {
     };
     url?: string;
   };
+  iconDark?: {
+    asset?: {
+      _id?: string;
+      url?: string;
+    };
+    url?: string;
+  } | string;
+  iconLight?: {
+    asset?: {
+      _id?: string;
+      url?: string;
+    };
+    url?: string;
+  } | string;
 }
 
 export interface Experience {
@@ -149,6 +163,12 @@ export interface SocialLink {
       url?: string;
     };
   } | string;
+  iconLight?: {
+    url?: string;
+    asset?: {
+      url?: string;
+    };
+  } | string;
 }
 
 export interface PostAuthor {
@@ -172,6 +192,7 @@ export interface Post {
   readingTime?: number;
   estimatedReadTime?: number | string;
   featured?: boolean;
+  postType?: "technical" | "experience" | "essay" | string;
   tags?: string[];
   categories?: (string | PostCategory)[];
   author?: PostAuthor;

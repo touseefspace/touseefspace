@@ -109,6 +109,11 @@ export default async function BlogPostPage({ params }: PageProps) {
           {/* Article Header */}
           <header className="space-y-6">
             <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-(--ink-muted)">
+              {post.postType && post.postType !== "technical" && (
+                <span className="rounded bg-(--bg-subtle) border border-(--border-subtle) px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-(--ink-secondary)">
+                  {post.postType === "experience" ? "Field Note" : "Essay"}
+                </span>
+              )}
               {post.publishedAt && (
                 <span>
                   {new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -180,7 +185,11 @@ export default async function BlogPostPage({ params }: PageProps) {
                 />
               </div>
             ) : (
-              <BlogCoverPlaceholder title={post.title} tags={post.tags} />
+              <BlogCoverPlaceholder
+                title={post.title}
+                tags={post.tags}
+                postType={post.postType}
+              />
             )}
           </div>
 
@@ -191,8 +200,8 @@ export default async function BlogPostPage({ params }: PageProps) {
 
           {/* Author Footer Card */}
           <footer className="pt-10 border-t border-(--border-subtle) space-y-10">
-            <div className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-subtle)">
+            <div className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-6 sm:p-8 grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr] gap-x-4 sm:gap-x-6 gap-y-3 sm:gap-y-2 items-center sm:items-start">
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0 overflow-hidden rounded-2xl border border-(--border-subtle) bg-(--bg-subtle) sm:row-span-3 sm:self-center">
                 <Image
                   src="/touseef.png"
                   alt="Touseef Ahmed"
@@ -201,27 +210,27 @@ export default async function BlogPostPage({ params }: PageProps) {
                   className="object-cover"
                 />
               </div>
-              <div className="flex-1 space-y-2">
+              <div className="flex flex-col justify-center min-w-0">
                 <h2 className="text-base font-bold text-(--ink-primary)">
                   Written by Touseef Ahmed
                 </h2>
                 <p className="text-xs sm:text-sm font-mono text-(--ink-muted)">
                   AI Systems and Software Developer
                 </p>
-                <p className="text-sm text-(--ink-secondary) leading-relaxed">
-                  Designing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.
-                </p>
-                <div className="pt-2 flex items-center gap-4 text-xs font-mono">
-                  <Link href="/contact" className="text-(--ink-primary) font-semibold hover:underline">
-                    Get in touch →
-                  </Link>
-                  <Link href="https://github.com/touseefspace" target="_blank" className="text-(--ink-muted) hover:text-(--ink-primary)">
-                    GitHub
-                  </Link>
-                  <Link href="https://linkedin.com/in/touseefspace" target="_blank" className="text-(--ink-muted) hover:text-(--ink-primary)">
-                    LinkedIn
-                  </Link>
-                </div>
+              </div>
+              <p className="col-span-2 sm:col-span-1 text-sm text-(--ink-secondary) leading-relaxed">
+                Designing custom web applications and AI systems engineered to eliminate operational clutter — giving ambitious teams the space to scale with calm, dependable reliability.
+              </p>
+              <div className="col-span-2 sm:col-span-1 pt-1 sm:pt-2 flex items-center gap-4 text-xs font-mono">
+                <Link href="/contact" className="text-(--ink-primary) font-semibold hover:underline">
+                  Get in touch →
+                </Link>
+                <Link href="https://github.com/touseefspace" target="_blank" className="text-(--ink-muted) hover:text-(--ink-primary)">
+                  GitHub
+                </Link>
+                <Link href="https://linkedin.com/in/touseefspace" target="_blank" className="text-(--ink-muted) hover:text-(--ink-primary)">
+                  LinkedIn
+                </Link>
               </div>
             </div>
 

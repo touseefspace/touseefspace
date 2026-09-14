@@ -147,14 +147,17 @@ export function SkillsSkeleton() {
  */
 export function SocialsSkeleton() {
   return (
-    <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 animate-pulse">
-      {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="rounded-2xl p-5 flex items-center gap-4 bg-(--bg-surface) border border-(--border-card)">
-          <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle) border border-(--border-subtle)" />
-          <div className="min-w-0 flex-1 space-y-2">
-            <div className="h-4 w-24 bg-(--bg-subtle)" />
-            <div className="h-3 w-32 bg-(--bg-subtle)" />
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 animate-pulse">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className="rounded-2xl p-3.5 sm:p-5 flex items-center justify-between gap-2.5 sm:gap-4 bg-(--bg-surface) border border-(--border-card)">
+          <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+            <div className="h-6 w-6 sm:h-7 sm:w-7 shrink-0 rounded-lg bg-(--bg-subtle)" />
+            <div className="min-w-0 space-y-1.5">
+              <div className="h-3.5 w-16 sm:w-20 rounded bg-(--bg-subtle)" />
+              <div className="h-2.5 w-20 sm:w-28 rounded bg-(--bg-subtle)" />
+            </div>
           </div>
+          <div className="h-3.5 w-3.5 rounded bg-(--bg-subtle) shrink-0" />
         </div>
       ))}
     </div>

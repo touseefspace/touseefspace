@@ -1,7 +1,7 @@
 {
   "name": "touseefspace",
   "private": true,
-  "version": "4.1.5",
+  "version": "4.1.6",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
@@ -10,22 +10,16 @@
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
     "start": "sanity start",
-    "seed": "npx tsx scripts/seed-sanity.ts",
-    "clean-duplicates": "npx tsx scripts/clean-sanity-duplicates.ts",
-    "update-dark-icons": "npx tsx scripts/update-category-dark-icons.ts",
-    "dataset:sync-down": "npx tsx scripts/sync-datasets.ts sync-down",
-    "dataset:backup-prod": "npx tsx scripts/sync-datasets.ts backup-prod",
-    "dataset:backup-dev": "npx tsx scripts/sync-datasets.ts backup-dev",
-    "dataset:sync-up": "npx tsx scripts/sync-datasets.ts sync-up"
+    "seed": "npx tsx scripts/seed-sanity.ts"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
-    "@sanity/vision": "^6.12.0",
+    "@sanity/vision": "^6.13.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "sanity": "^6.12.0",
+    "sanity": "^6.13.2",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

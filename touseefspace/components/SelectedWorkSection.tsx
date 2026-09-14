@@ -325,7 +325,7 @@ function StageCardContent({
 }) {
   const imageAssetUrl =
     resolveSanityImageUrl(project.image, 1200) ||
-    "/placeholders/aunvu-dashboard.svg";
+    "/placeholders/erp-dashboard.svg";
 
   const imageAlt = project.image?.alt || `${project.title} Preview`;
   const formattedIndex = String(index).padStart(2, "0");

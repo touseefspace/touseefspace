@@ -193,7 +193,7 @@ export default function SkillsProficiencyClient({
       `}</style>
 
       {/* Desktop Sticky Filter Button (sm and up) */}
-      <div className="hidden sm:flex sticky top-20 z-30 justify-end w-full pointer-events-none mb-2 sm:mb-3">
+      <div className="hidden sm:flex sticky top-20 z-50 justify-end w-full pointer-events-none mb-2 sm:mb-3">
         <div className="relative pointer-events-auto">
           <button
             type="button"
@@ -201,7 +201,7 @@ export default function SkillsProficiencyClient({
             aria-expanded={filterMenuOpen}
             aria-label="Filter skills"
             title="Filter skills"
-            className={`relative h-11 w-11 sm:h-12 sm:w-12 rounded-full border shadow-xl hover:shadow-2xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer ${filterBtnClass}`}
+            className={`relative z-50 h-11 w-11 sm:h-12 sm:w-12 rounded-full border shadow-xl hover:shadow-2xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer ${filterBtnClass}`}
           >
             {filterMenuOpen ? (
               <X size={18} className="transition-transform duration-150" />
@@ -210,16 +210,7 @@ export default function SkillsProficiencyClient({
             )}
           </button>
 
-          {/* Backdrop overlay when open */}
-          {filterMenuOpen && (
-            <div
-              onClick={() => setFilterMenuOpen(false)}
-              aria-hidden="true"
-              className="fixed inset-0 z-40 bg-black/20 dark:bg-black/40 backdrop-blur-[1px] transition-opacity animate-in fade-in duration-150"
-            />
-          )}
-
-          {/* Floating Dropdown Popover (opens downward on desktop) */}
+          {/* Floating Dropdown Popover (opens downward on desktop, z-50) */}
           {filterMenuOpen && (
             <div
               role="dialog"
@@ -327,8 +318,17 @@ export default function SkillsProficiencyClient({
         </div>
       </div>
 
-      {/* Mobile Floating Filter Button (bottom-right on mobile screens) */}
-      <div className="sm:hidden fixed bottom-6 right-6 z-40">
+      {/* Global Backdrop overlay when open (z-40 so z-50 buttons and popovers stay crisp and unblurred) */}
+      {filterMenuOpen && (
+        <div
+          onClick={() => setFilterMenuOpen(false)}
+          aria-hidden="true"
+          className="fixed inset-0 z-40 bg-black/20 dark:bg-black/40 backdrop-blur-[1px] transition-opacity animate-in fade-in duration-150"
+        />
+      )}
+
+      {/* Mobile Floating Filter Button (bottom-right on mobile screens, z-50) */}
+      <div className="sm:hidden fixed bottom-6 right-6 z-50">
         <div className="relative">
           <button
             type="button"
@@ -336,7 +336,7 @@ export default function SkillsProficiencyClient({
             aria-expanded={filterMenuOpen}
             aria-label="Filter skills"
             title="Filter skills"
-            className={`relative h-12 w-12 rounded-full border shadow-xl hover:shadow-2xl flex items-center justify-center transition-all active:scale-95 cursor-pointer ${filterBtnClass}`}
+            className={`relative z-50 h-12 w-12 rounded-full border shadow-xl hover:shadow-2xl flex items-center justify-center transition-all active:scale-95 cursor-pointer ${filterBtnClass}`}
           >
             {filterMenuOpen ? (
               <X size={18} className="transition-transform duration-150" />
@@ -345,16 +345,7 @@ export default function SkillsProficiencyClient({
             )}
           </button>
 
-          {/* Backdrop overlay */}
-          {filterMenuOpen && (
-            <div
-              onClick={() => setFilterMenuOpen(false)}
-              aria-hidden="true"
-              className="fixed inset-0 z-40 bg-black/20 dark:bg-black/40 backdrop-blur-[1px] transition-opacity animate-in fade-in duration-150"
-            />
-          )}
-
-          {/* Mobile Popover Menu (opens upward from bottom button) */}
+          {/* Mobile Popover Menu (opens upward from bottom button, z-50) */}
           {filterMenuOpen && (
             <div
               role="dialog"
@@ -464,20 +455,60 @@ export default function SkillsProficiencyClient({
 
       {/* Responsive Category Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 w-full min-w-0">
-        {processedCategories.map((category) => (
-          <div
-            key={category.id || category._id || category.title}
-            className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-4 sm:p-5 shadow-xs flex flex-col min-w-0 w-full relative overflow-visible transition-all duration-200 space-y-3"
-          >
-            {/* Category Header */}
-            <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-(--border-subtle) min-w-0">
-              <h3 className="text-xs sm:text-sm font-bold text-(--ink-primary) tracking-tight truncate">
-                {category.title}
-              </h3>
-              <span className="text-[10px] font-mono text-(--ink-muted) bg-(--bg-subtle) px-2 py-0.5 rounded-full border border-(--border-subtle) shrink-0">
-                {category.skills.length}
-              </span>
-            </div>
+        {processedCategories.map((category) => {
+          const darkObj = typeof category.iconDark === "object" && category.iconDark !== null ? category.iconDark : null;
+          const lightObj = typeof category.iconLight === "object" && category.iconLight !== null ? category.iconLight : null;
+          const catIconDarkUrl = darkObj?.url || darkObj?.asset?.url || (typeof category.iconDark === "string" ? category.iconDark : null);
+          const catIconLightUrl = lightObj?.url || lightObj?.asset?.url || (typeof category.iconLight === "string" ? category.iconLight : null);
+
+          return (
+            <div
+              key={category.id || category._id || category.title}
+              className="rounded-3xl border border-(--border-card) bg-(--bg-surface) p-4 sm:p-5 shadow-xs flex flex-col min-w-0 w-full relative overflow-visible transition-all duration-200 space-y-3"
+            >
+              {/* Category Header with Dual-Theme Icon */}
+              <div className="flex items-center justify-between gap-3 pb-2.5 border-b border-(--border-subtle) min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  {catIconLightUrl && catIconDarkUrl && catIconLightUrl !== catIconDarkUrl ? (
+                    <>
+                      <Image
+                        src={catIconLightUrl}
+                        alt=""
+                        width={18}
+                        height={18}
+                        unoptimized
+                        aria-hidden="true"
+                        className="h-4.5 w-4.5 shrink-0 object-contain dark:hidden opacity-85"
+                      />
+                      <Image
+                        src={catIconDarkUrl}
+                        alt=""
+                        width={18}
+                        height={18}
+                        unoptimized
+                        aria-hidden="true"
+                        className="h-4.5 w-4.5 shrink-0 object-contain hidden dark:block opacity-85"
+                      />
+                    </>
+                  ) : (catIconDarkUrl || catIconLightUrl) ? (
+                    <Image
+                      src={(catIconDarkUrl || catIconLightUrl)!}
+                      alt=""
+                      width={18}
+                      height={18}
+                      unoptimized
+                      aria-hidden="true"
+                      className="h-4.5 w-4.5 shrink-0 object-contain opacity-85"
+                    />
+                  ) : null}
+                  <h3 className="text-xs sm:text-sm font-bold text-(--ink-primary) tracking-tight truncate">
+                    {category.title}
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono text-(--ink-muted) bg-(--bg-subtle) px-2 py-0.5 rounded-full border border-(--border-subtle) shrink-0">
+                  {category.skills.length}
+                </span>
+              </div>
 
             {/* Compact Icon Tray with Spotlight Heatmap Dimming */}
             <div className="flex-1 flex flex-wrap content-start items-start gap-2 sm:gap-2.5 w-full min-w-0 pt-0.5">
@@ -496,7 +527,8 @@ export default function SkillsProficiencyClient({
               })}
             </div>
           </div>
-        ))}
+        );
+      })}
       </div>
 
       {/* Bottom Skill Inspector Toast (aligned with filter icon on mobile, centered on desktop) */}

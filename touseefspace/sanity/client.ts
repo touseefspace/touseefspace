@@ -2,7 +2,13 @@ import { createClient } from "next-sanity";
 
 const isDev = process.env.NODE_ENV === "development";
 
-export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "52hp81x4";
+export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "";
+export const isSanityConfigured = Boolean(
+  projectId &&
+  projectId !== "your_sanity_project_id" &&
+  projectId.trim().length > 0
+);
+
 // Default to 'development' in dev mode to prevent accidental live data mutation
 export const dataset =
   process.env.NEXT_PUBLIC_SANITY_DATASET || (isDev ? "development" : "production");
@@ -10,7 +16,12 @@ export const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || "2026-02
 
 // Helpful safety diagnostics in development
 if (isDev && typeof window === "undefined") {
-  if (dataset === "production") {
+  if (!isSanityConfigured) {
+    console.info(
+      "\x1b[36m%s\x1b[0m",
+      "[Sanity Client] ℹ️ Running in Template Mode (NEXT_PUBLIC_SANITY_PROJECT_ID not set). Built-in offline data is active."
+    );
+  } else if (dataset === "production") {
     console.warn(
       "\x1b[33m%s\x1b[0m",
       "[Sanity Client] ⚠️ WARNING: Running in development mode but connected to PRODUCTION dataset! Set NEXT_PUBLIC_SANITY_DATASET='development' in .env.local to avoid mutating live data."
@@ -28,8 +39,8 @@ if (isDev && typeof window === "undefined") {
  * with SANITY_TOKEN so unpublished draft edits appear immediately.
  */
 export const client = createClient({
-  projectId,
-  dataset,
+  projectId: isSanityConfigured ? projectId : "template-mode",
+  dataset: isSanityConfigured ? dataset : "production",
   apiVersion,
   useCdn: false,
   perspective: isDev ? "drafts" : "published",

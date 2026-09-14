@@ -1,37 +1,37 @@
 /**
  * High-fidelity fallback placeholder data.
- * Used whenever Payload CMS collections are empty or during local development,
+ * Used whenever Sanity CMS datasets are empty or during local development,
  * ensuring the portfolio is always 100% complete, readable, and beautiful.
  */
 
 export const placeholderProjects = [
   {
-    id: "aunvu-erp",
-    title: "Aunvu / Wholesale Distribution ERP Platform",
-    slug: "wholesale-distribution-erp-platform",
-    aliases: ["aunvu-erp"],
-    client: "Regional Wholesale Distribution",
+    id: "heritage-law-firm",
+    title: "Heritage Corporate Law Firm Web Presence",
+    slug: "heritage-corporate-law-firm-web-presence",
+    aliases: ["heritage-law-firm"],
+    client: "Heritage Legal Partners",
     role: "Lead Full Stack Architect",
     period: "2024 - 2025",
-    summary: "A multi-branch inventory, sales reconciliation, and automated operational reporting system.",
-    problem: "Branch managers tracked regional stock across 12 warehouses using disconnected spreadsheets, causing 2-day inventory sync delays and recurring inventory discrepancies.",
-    solution: "Architected a real-time event-driven ERP with a central PostgreSQL ledger, barcode scanning workflows, and granular role-based permissions.",
-    outcome: "Cut inventory reconciliation time by 80% and eliminated unaccounted stock discrepancies across all 12 regional warehouses.",
+    summary: "A modern, high-speed corporate web presence, secure client intake portal, and editorial knowledge hub for a leading corporate law practice.",
+    problem: "The firm relied on an outdated, unoptimized website with disconnected intake forms, resulting in delayed consultation turnaround times and poor client engagement metrics.",
+    solution: "Engineered an editorial digital presence using Next.js 16, TypeScript, Tailwind CSS, and headless content modeling with instant contact flows.",
+    outcome: "Increased qualified client inquiries by 64% and reduced consultation onboarding latency from 48 hours to under 2 hours.",
     metrics: [
-      { label: "Audit Time Cut", value: "80%" },
-      { label: "Branches Unified", value: "12" },
-      { label: "Sync Latency", value: "<150ms" },
+      { label: "Inquiries Growth", value: "+64%" },
+      { label: "Onboarding Latency", value: "<2h" },
+      { label: "Lighthouse Score", value: "99/100" },
     ],
     technologies: [
       { name: "Next.js" },
       { name: "TypeScript" },
-      { name: "PostgreSQL" },
-      { name: "Payload CMS" },
       { name: "Tailwind CSS" },
+      { name: "PostgreSQL" },
+      { name: "Node.js" },
     ],
     image: {
-      url: "/placeholders/aunvu-dashboard.svg",
-      alt: "Aunvu ERP Platform Dashboard",
+      url: "/placeholders/heritage-law-firm.jpg",
+      alt: "Heritage Corporate Law Firm Web Presence",
     },
     githubUrl: "https://github.com/touseefspace",
     featured: true,
@@ -134,73 +134,35 @@ export const placeholderSkillCategories = [
   {
     id: "cat-web",
     title: "Custom Web Applications",
-    description: "High-performance web applications, modern interfaces, and internal operational tools.",
+    description: "High-performance web applications, responsive interfaces, and interactive user experiences.",
     skills: [
       { name: "Next.js", proficiency: 95 },
       { name: "React", proficiency: 94 },
       { name: "TypeScript", proficiency: 92 },
-      { name: "JavaScript", proficiency: 95 },
       { name: "Tailwind CSS", proficiency: 95 },
-      { name: "HTML5 & CSS3", proficiency: 95 },
       { name: "Node.js", proficiency: 90 },
-      { name: "Bootstrap", proficiency: 88 },
     ],
   },
   {
     id: "cat-ai",
-    title: "AI Workflows & Automation",
+    title: "AI Systems & Automation",
     description: "Practical LLM integrations, document intelligence, and automated extraction pipelines.",
     skills: [
       { name: "Python", proficiency: 92 },
       { name: "FastAPI", proficiency: 90 },
       { name: "Machine Learning & LLMs", proficiency: 88 },
-      { name: "n8n Workflow Automation", proficiency: 90 },
-      { name: "Jupyter Notebooks", proficiency: 85 },
-      { name: "Anaconda", proficiency: 82 },
+      { name: "n8n Workflow Automation", proficiency: 88 },
     ],
   },
   {
     id: "cat-cloud",
-    title: "Cloud Systems & Databases",
-    description: "Resilient database design, headless CMS architecture, and serverless backends.",
+    title: "Cloud, DevOps & Databases",
+    description: "Resilient database design, containerized deployments, and serverless backends.",
     skills: [
       { name: "PostgreSQL", proficiency: 92 },
       { name: "Supabase", proficiency: 90 },
-      { name: "MongoDB", proficiency: 85 },
-      { name: "Redis", proficiency: 84 },
-      { name: "Amazon DynamoDB", proficiency: 82 },
-      { name: "Firebase", proficiency: 85 },
-      { name: "Django", proficiency: 84 },
-    ],
-  },
-  {
-    id: "cat-devops",
-    title: "DevOps & Cloud Infrastructure",
-    description: "Containerized deployments, cloud services, automated CI/CD, and deployment infrastructure.",
-    skills: [
       { name: "Docker", proficiency: 88 },
-      { name: "Amazon Web Services (AWS)", proficiency: 85 },
-      { name: "Google Cloud Platform", proficiency: 82 },
       { name: "Git", proficiency: 92 },
-      { name: "GitHub", proficiency: 92 },
-    ],
-  },
-  {
-    id: "cat-tools",
-    title: "Developer Tooling & Collaboration",
-    description: "IDEs, version control workflows, automated testing, and developer collaboration.",
-    skills: [
-      { name: "Visual Studio Code", proficiency: 95 },
-      { name: "JetBrains IDEs", proficiency: 90 },
-      { name: "Developer Problem Solving", proficiency: 92 },
-    ],
-  },
-  {
-    id: "cat-mobile",
-    title: "Mobile & Platform Engineering",
-    description: "Cross-platform mobile applications, responsive viewports, and native developer SDKs.",
-    skills: [
-      { name: "Android Studio", proficiency: 82 },
     ],
   },
 ];
@@ -273,6 +235,7 @@ export const placeholderPosts = [
     estimatedReadTime: "6 min read",
     tags: ["Next.js", "PostgreSQL", "Architecture", "Systems"],
     featured: true,
+    postType: "technical",
     body: [
       {
         _key: "p1",
@@ -338,6 +301,7 @@ export const placeholderPosts = [
     estimatedReadTime: "5 min read",
     tags: ["AI Workflows", "Python", "Automation", "LLMs"],
     featured: false,
+    postType: "technical",
     body: [
       {
         _key: "p1",
@@ -378,6 +342,7 @@ export const placeholderPosts = [
     estimatedReadTime: "7 min read",
     tags: ["Next.js", "Performance", "Web Development"],
     featured: false,
+    postType: "technical",
     body: [
       {
         _key: "p1",

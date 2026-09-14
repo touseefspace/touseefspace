@@ -1,7 +1,7 @@
 import { revalidateTag } from "next/cache";
 
 /**
- * Reusable Payload CMS hook to revalidate a specific Next.js cache tag.
+ * Reusable Sanity CMS hook to revalidate a specific Next.js cache tag.
  * Leverages the Next.js 16 revalidateTag(tag, 'max') invalidation profile.
  */
 export const revalidateTagHook = (tag: string) => {
@@ -16,7 +16,7 @@ export const revalidateTagHook = (tag: string) => {
 };
 
 /**
- * Reusable Payload CMS hook to revalidate multiple Next.js cache tags.
+ * Reusable Sanity CMS hook to revalidate multiple Next.js cache tags.
  */
 export const revalidateTagsHook = (tags: string[]) => {
   return () => {

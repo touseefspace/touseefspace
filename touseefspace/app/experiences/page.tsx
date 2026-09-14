@@ -1,4 +1,4 @@
-import { GraduationCap, Briefcase as BriefcaseIcon } from "lucide-react";
+import { Briefcase as BriefcaseIcon } from "lucide-react";
 import ExperienceList from "@/components/ExperienceList";
 import { Metadata } from "next";
 import { getExperiences } from "@/lib/queries";
@@ -64,12 +64,7 @@ async function ExperiencesContainer() {
           <div className="md:col-span-4 lg:col-span-3">
             <div className="md:sticky md:top-28 space-y-3">
               <p className="section-label">01 / Delivery</p>
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle) flex items-center justify-center text-(--ink-primary) border border-(--border-subtle) shadow-xs">
-                  <BriefcaseIcon size={18} />
-                </div>
-                <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Professional Experience</h2>
-              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Professional Experience</h2>
               <p className="text-sm text-(--ink-muted) leading-relaxed">
                 Real-world delivery, freelance consulting, and engineering projects.
               </p>
@@ -90,12 +85,7 @@ async function ExperiencesContainer() {
           <div className="md:col-span-4 lg:col-span-3">
             <div className="md:sticky md:top-28 space-y-3">
               <p className="section-label">02 / Academic</p>
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-(--bg-subtle) flex items-center justify-center text-(--ink-primary) border border-(--border-subtle) shadow-xs">
-                  <GraduationCap size={18} />
-                </div>
-                <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Academic Foundations</h2>
-              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-(--ink-primary) tracking-tight">Academic Foundations</h2>
               <p className="text-sm text-(--ink-muted) leading-relaxed">
                 Formal computer science education and specialized focus areas.
               </p>

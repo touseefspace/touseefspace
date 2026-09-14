@@ -19,7 +19,7 @@ export default function ExperienceList({ experiences }: { experiences: Experienc
           </div>
           <h3 className="text-xl font-bold text-(--ink-primary) mb-2">No experiences found</h3>
           <p className="max-w-md text-sm text-(--ink-muted) leading-relaxed">
-            Create entries in the Experiences collection in your Payload admin panel to see your trajectory here.
+            Create entries in the Experiences section in your Sanity Studio to see your trajectory here.
           </p>
         </div>
       )}
@@ -56,20 +56,22 @@ function ExperienceCard({ exp }: { exp: Experience }) {
         <div className="lg:col-span-6 space-y-6">
           <div className="flex gap-4 sm:gap-5">
             {/* Logo */}
-            <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-2xl bg-(--bg-subtle) border border-(--border-subtle) p-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
-              {logoUrl ? (
+            {logoUrl ? (
+              <div className="shrink-0 overflow-hidden rounded-xl sm:rounded-2xl transition-transform duration-300 group-hover:scale-105 shadow-xs">
                 <Image 
                   src={logoUrl} 
                   alt={exp.company} 
-                  width={56}
-                  height={56}
-                  unoptimized
-                  className="h-full w-full object-contain" 
+                  width={0}
+                  height={0}
+                  sizes="120px"
+                  className="h-12 sm:h-14 w-auto max-w-25 sm:max-w-30 object-contain rounded-xl sm:rounded-2xl" 
                 />
-              ) : (
+              </div>
+            ) : (
+              <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-2xl bg-(--bg-subtle) border border-(--border-subtle) p-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-105 shadow-xs">
                 <span className="text-xl font-bold text-(--ink-muted)">{exp.company.charAt(0)}</span>
-              )}
-            </div>
+              </div>
+            )}
             
             <div>
               <h3 className="text-lg font-bold text-(--ink-primary) sm:text-xl md:text-2xl tracking-tight leading-tight mb-1">
@@ -120,12 +122,47 @@ function ExperienceCard({ exp }: { exp: Experience }) {
               <p className="text-[11px] font-mono uppercase tracking-wider text-(--ink-muted) border-b border-(--border-subtle) pb-1.5">Technologies Used</p>
               <div className="flex flex-wrap gap-2">
                 {exp.skillStack.map((skill, i) => {
-                  const skillIconUrl = skill.icon?.url || skill.icon?.asset?.url;
+                  const darkObj = typeof skill.iconDark === "object" && skill.iconDark !== null ? skill.iconDark : null;
+                  const lightObj = typeof skill.iconLight === "object" && skill.iconLight !== null ? skill.iconLight : null;
+                  const iconDarkUrl =
+                    darkObj?.url ||
+                    darkObj?.asset?.url ||
+                    (typeof skill.iconDark === "string" ? skill.iconDark : null) ||
+                    skill.icon?.url ||
+                    skill.icon?.asset?.url;
+                  const iconLightUrl =
+                    lightObj?.url ||
+                    lightObj?.asset?.url ||
+                    (typeof skill.iconLight === "string" ? skill.iconLight : null) ||
+                    skill.icon?.url ||
+                    skill.icon?.asset?.url;
+
                   return (
                     <div key={i} className="tech-tag">
-                      {skillIconUrl && (
+                      {iconLightUrl && iconDarkUrl && iconLightUrl !== iconDarkUrl ? (
+                        <>
+                          <Image 
+                            src={iconLightUrl} 
+                            alt="" 
+                            width={14}
+                            height={14}
+                            unoptimized
+                            aria-hidden="true"
+                            className="h-3.5 w-3.5 object-contain dark:hidden" 
+                          />
+                          <Image 
+                            src={iconDarkUrl} 
+                            alt="" 
+                            width={14}
+                            height={14}
+                            unoptimized
+                            aria-hidden="true"
+                            className="h-3.5 w-3.5 object-contain hidden dark:block" 
+                          />
+                        </>
+                      ) : (iconDarkUrl || iconLightUrl) ? (
                         <Image 
-                          src={skillIconUrl} 
+                          src={(iconDarkUrl || iconLightUrl)!} 
                           alt="" 
                           width={14}
                           height={14}
@@ -133,8 +170,8 @@ function ExperienceCard({ exp }: { exp: Experience }) {
                           aria-hidden="true"
                           className="h-3.5 w-3.5 object-contain" 
                         />
-                      )}
-                      <span>{skill.skill}</span>
+                      ) : null}
+                      <span>{skill.skill || skill.name}</span>
                     </div>
                   );
                 })}

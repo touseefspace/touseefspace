@@ -167,6 +167,7 @@ export const POSTS_QUERY = `*[_type == "post"] | order(publishedAt desc) {
   excerpt,
   estimatedReadTime,
   featured,
+  "postType": coalesce(postType, "technical"),
   tags,
   coverImage {
     asset-> {
@@ -185,6 +186,7 @@ export const POST_BY_SLUG_QUERY = `*[_type == "post" && slug.current == $slug][0
   excerpt,
   estimatedReadTime,
   featured,
+  "postType": coalesce(postType, "technical"),
   tags,
   coverImage {
     asset-> {
@@ -229,12 +231,40 @@ export const EXPERIENCES_QUERY = `*[_type == "experience"] | order(order asc, _c
           "_id": coalesce(@->icon.asset->_id, @->iconDark.asset->_id),
           "url": coalesce(@->icon.asset->url, @->iconDark.asset->url)
         }
+      },
+      "iconDark": {
+        "url": coalesce(@->iconDark.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconDark.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconDark.asset->url, @->icon.asset->url)
+        }
+      },
+      "iconLight": {
+        "url": coalesce(@->iconLight.asset->url, @->icon.asset->url),
+        "asset": {
+          "_id": coalesce(@->iconLight.asset->_id, @->icon.asset->_id),
+          "url": coalesce(@->iconLight.asset->url, @->icon.asset->url)
+        }
       }
     },
     _type != "reference" => {
       skill,
       "name": skill,
       icon {
+        "url": asset->url,
+        asset-> {
+          _id,
+          url
+        }
+      },
+      "iconDark": {
+        "url": asset->url,
+        asset-> {
+          _id,
+          url
+        }
+      },
+      "iconLight": {
         "url": asset->url,
         asset-> {
           _id,
