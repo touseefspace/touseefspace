@@ -1,19 +1,7 @@
-# 🪐 touseefspace — Developer Portfolio & Case Study Engine
+> [!NOTE]
+> **Personal Portfolio & Open-Source Template**: This repository powers my live personal production website and is shared as-is as an open-source reference and template. You are welcome to fork, customize, and deploy it for your own portfolio. Please see [Support & Contributions](#-support--contributions) to read more about how this repository is maintained.
 
-> **Live Production Website:** 🌐 **[https://touseefspace.com](https://touseefspace.com)**
-
-[![Live Website](https://img.shields.io/badge/Live-touseefspace.com-000000?style=flat&logo=safari&logoColor=white)](https://touseefspace.com)
-[![Version](https://img.shields.io/badge/Version-v4.1.6-emerald)](#)
-[![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
-[![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f?logo=sanity)](https://www.sanity.io/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Turbopack](https://img.shields.io/badge/Bundler-Turbopack-000000?logo=vercel)](https://turbo.build/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
----
-
-## 👋 About Me
+# 👋 About Me
 
 Hey! I'm **Touseef Ahmed**, an **AI Systems & Software Developer** based in the United Arab Emirates. 
 
@@ -24,6 +12,22 @@ I turn messy workflows into simple, reliable software spaces — engineering cus
 - 🐙 **GitHub**: [@touseefspace](https://github.com/touseefspace)
 - 🐦 **X / Twitter**: [@touseefspace](https://x.com/touseefspace)
 - 📬 **Email**: [hello@touseefspace.com](mailto:hello@touseefspace.com)
+
+---
+
+# 🪐 touseefspace — Developer Portfolio & Case Study Engine
+
+> **Live Production Website:** 🌐 **[https://touseefspace.com](https://touseefspace.com)**
+
+[![Live Website](https://img.shields.io/badge/Live-touseefspace.com-000000?style=flat&logo=safari&logoColor=white)](https://touseefspace.com)
+[![GitHub Stars](https://img.shields.io/github/stars/touseefspace/touseefspace?style=social)](https://github.com/touseefspace/touseefspace)
+[![Version](https://img.shields.io/badge/Version-v4.1.6-emerald)](#)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.2.4-black?logo=next.js)](https://nextjs.org/)
+[![Sanity v3](https://img.shields.io/badge/Sanity-v3-f03e2f?logo=sanity)](https://www.sanity.io/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Turbopack](https://img.shields.io/badge/Bundler-Turbopack-000000?logo=vercel)](https://turbo.build/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -204,13 +208,24 @@ Detailed reports will be generated in `touseefspace/.lighthouseci/`.
 
 ---
 
-## 💡 Support & Maintenance
+## 💡 Support & Contributions
 
-This repository is shared **as-is for inspiration, educational reference, and personal portfolio setups**. 
+This repository is shared **as-is as an open-source template and personal portfolio**. You are welcome to fork it, modify it, deploy it, and use it as a foundation for your own site.
 
-Because this codebase powers my personal production website:
-- **No Technical Support**: I do not provide individualized setup support, troubleshooting, or feature request fulfillment.
-- **Self-Service & AI-Friendly**: If you fork this project, please consult the [Quickstart Guide](#-quickstart-for-developers), the [Next.js Documentation](https://nextjs.org/docs), and the [Sanity Documentation](https://www.sanity.io/docs). If you use an AI coding assistant (Cursor, Antigravity, Claude Code), follow the guided workflow in **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** to customize your own instance effortlessly.
+Because this repository powers my personal production portfolio:
+- **No External Pull Requests / Code Merges**: To maintain design integrity and personal production stability, pull requests and external code contributions are not accepted into this upstream repo. Please feel free to fork and build your own version!
+- **No Individual Support**: Technical support, bug tracking, and personalized setup troubleshooting are not provided.
+- **Self-Service & AI-Friendly**: If you fork this project, please consult the [Quickstart Guide](#-quickstart-for-developers), [Next.js Docs](https://nextjs.org/docs), and [Sanity Docs](https://www.sanity.io/docs). Follow **[`AGENT_SETUP.md`](./AGENT_SETUP.md)** to configure your instance using AI coding assistants.
+
+---
+
+## ⭐ Show Your Support
+
+If you found this codebase, design system, or documentation helpful, inspiring, or useful for your own portfolio:
+
+- ⭐ **Star this repository on GitHub** to help other developers discover it!
+- 📢 **Share it** on X / Twitter or LinkedIn.
+- 💬 **Connect** with me on [LinkedIn](https://linkedin.com/in/touseefspace) or [X (@touseefspace)](https://x.com/touseefspace).
 
 ---
 
