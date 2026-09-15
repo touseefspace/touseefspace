@@ -30,7 +30,7 @@ export const placeholderProjects = [
       { name: "Node.js" },
     ],
     image: {
-      url: "/placeholders/heritage-law-firm.jpg",
+      url: "/placeholders/erp-dashboard.svg",
       alt: "Heritage Corporate Law Firm Web Presence",
     },
     githubUrl: "https://github.com/touseefspace",

@@ -107,7 +107,7 @@ export default function HomeScrollShowcase({
                     sizes="(max-width: 480px) 345px, (max-width: 768px) 400px, 420px"
                     quality={85}
                     className="object-cover object-center transition-all duration-700 group-hover:scale-[1.02]"
-                    priority
+                    loading="eager"
                   />
                   <div className="absolute inset-x-0 bottom-0 border-t border-(--border-subtle) bg-(--header-bg) p-4 backdrop-blur-md flex items-center justify-between">
                     <div className="flex items-center gap-2">

@@ -44,7 +44,7 @@ function applyCacheLife(profile: "days" | "weeks") {
 async function fetchSanity<T>(query: string, params?: Record<string, unknown>): Promise<T> {
   let timer: NodeJS.Timeout | undefined;
   const timeoutPromise = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => reject(new Error("Sanity network timeout")), 6000);
+    timer = setTimeout(() => reject(new Error("Sanity network timeout")), 15000);
   });
   try {
     return await Promise.race([client.fetch<T>(query, params || {}), timeoutPromise]);
